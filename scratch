@@ -1,0 +1,53 @@
+package uk.ac.ncl.dwa.view;
+
+import uk.ac.ncl.dwa.model.RoomListItem;
+import uk.ac.ncl.dwa.model.Rooms;
+import uk.ac.ncl.dwa.model.WorkshopTableModel;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.util.ArrayList;
+
+public class MainTable extends JTable {
+    String connectionString;
+
+    // Create WorkshopTableModel
+    WorkshopTableModel tableModel;
+
+    // Fetch room list using Rooms class
+
+    ArrayList<RoomListItem> roomList = rooms.loadRoomList(connectionString);
+
+    public MainTable(String connectionString) {
+        super();
+        this.connectionString = connectionString;
+        tableModel = new WorkshopTableModel(connectionString);
+
+        /**
+
+
+        // update the cell with the room_id from the selected row
+        roomColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            //@Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row) {
+                if (value != null) {
+                    String roomDescription = (String) value;
+                    for (RoomListItem room : roomList) {
+                        if (room.getDescription().equals(roomDescription)) {
+                            return super.getTableCellRendererComponent(table, room.getRoom_id(), isSelected,
+                                    hasFocus, row, 6);
+                        }
+                    }
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, 6);
+            }
+        });
+
+         **/
+
+    }
+
+}

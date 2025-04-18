@@ -1,7 +1,14 @@
 package uk.ac.ncl.dwa.model;
 
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Scanner;
+
+import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,4 +118,74 @@ public class Workshops extends ArrayList<Workshop> {
         id_index.put(workshop.getTitle(), this.size() - 1);
         return ret;
     }
+
+    public static void selected(String table, int[] columns, String connectionString) {
+
+        Connection connection = null;
+        try {
+            connection = (Connection) DriverManager.getConnection(connectionString);
+            String sql = "SELECT * FROM " + table;
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            String val;
+            StringBuilder result = new StringBuilder();
+            while (resultSet.next()) {
+                for (int i = 0; i < columns.length; i++) {
+                    val = resultSet.getString(columns[i]);
+                    result.append(" - ").append(val);
+                }
+                System.out.println(result);
+                val = "";
+                result = new StringBuilder();
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Press any Enter to continue...");
+        scanner.nextLine();
+    }
+
+    public void loadFromDatabase(String connectionString) {
+        Connection connection = null;
+        try {
+            connection = (Connection) DriverManager.getConnection(connectionString);
+            String sql = "SELECT * FROM workshops";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            this.clear(); // Clear existing data
+            while (resultSet.next()) {
+                Workshop workshop = new Workshop(
+                        LoggerFactory.getLogger(Workshop.class),
+                        resultSet.getString("slug"),
+                        resultSet.getString("title"),
+                        resultSet.getString("humandate"),
+                        resultSet.getString("humantime"),
+                        resultSet.getString("startdate"),
+                        resultSet.getString("enddate"),
+                        resultSet.getString("room_id"),
+                        resultSet.getString("language"),
+                        resultSet.getString("country"),
+                        resultSet.getBoolean("online"),
+                        resultSet.getBoolean("pilot"),
+                        resultSet.getString("carpentry_code"),
+                        resultSet.getString("curriculum_code"),
+                        resultSet.getString("flavour_id"),
+                        resultSet.getString("schedule"),
+                        resultSet.getString("inc_lesson_site"),
+                        resultSet.getString("pre_survey"),
+                        resultSet.getString("post_survey"),
+                        resultSet.getString("eventbrite")
+
+                        );
+                this.add(workshop);
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error loading workshops from database", e);
+        }
+    }
+
 }

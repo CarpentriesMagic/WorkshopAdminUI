@@ -1,4 +1,4 @@
-package uk.ac.ncl.dwa;
+package uk.ac.ncl.dwa.model;
 
 import org.mariadb.jdbc.Connection;
 import org.mariadb.jdbc.Statement;

@@ -1,4 +1,4 @@
-package uk.ac.ncl.dwa;
+package uk.ac.ncl.dwa.view;
 
 import org.mariadb.jdbc.Connection;
 
@@ -7,20 +7,14 @@ import java.awt.*;
 import java.sql.*;
 import java.util.Scanner;
 
-import static uk.ac.ncl.dwa.InsertFunctions.insertWorkshop;
+import static uk.ac.ncl.dwa.model.InsertFunctions.insertWorkshop;
+import static uk.ac.ncl.dwa.model.Workshops.selected;
 
 public class WorkshopAdmin {
-    static String dbServer = "192.168.0.153";
-    static int dbPort = 3306;
-    static String dbName = "workshopadmin";
-    static String dbUser = "jannetta";
-    static String dbPass = "j0nn3tt0";
+    String connectionString;
 
-    static String connectionString =String.format("jdbc:mariadb://%s:%d/%s?user=%s&password=%s",
-    dbServer, dbPort, dbName, dbUser, dbPass);
-
-    public WorkshopAdmin() {
-
+    public WorkshopAdmin(String connectionString) {
+        this.connectionString = connectionString;
     }
 
     private static int menu() {
@@ -38,69 +32,31 @@ public class WorkshopAdmin {
     }
 
 
-     private static void selected(String table, int[] columns) {
-
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT * FROM " + table;
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            String val;
-            StringBuilder result = new StringBuilder();
-            while (resultSet.next()) {
-                for (int i = 0; i < columns.length; i++) {
-                    val = resultSet.getString(columns[i]);
-                    result.append(" - ").append(val);
-                }
-                System.out.println(result);
-                val = "";
-                result = new StringBuilder();
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Press any Enter to continue...");
-        scanner.nextLine();
-    }
 
     public void noGUI() {
-        int selected = menu();
-        while (selected != 99) {
+        int itemSelected = menu();
+        while (itemSelected != 99) {
 
-            switch (selected) {
+            switch (itemSelected) {
                 case 1:
-                    selected("workshops", new int[]{1, 2});
+                    selected("workshops", new int[]{1, 2}, connectionString);
                     break;
                 case 2:
-                    selected("people", new int[]{1, 2, 3, 4, 6});
+                    selected("people", new int[]{1, 2, 3, 4, 6}, connectionString);
                     break;
                 case 6:
-                    selected("room", new int[]{1, 2, 3, 4, 5});
+                    selected("Room", new int[]{1, 2, 3, 4, 5}, connectionString);
                     break;
                 case 7:
                     insertWorkshop(connectionString);
                     break;
             }
-            selected = menu();
+            itemSelected = menu();
         }
     }
 
     public void runGUI(){
-        JFrame frame = new JFrame("Desperado Workshop Admin");
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        JLabel label = new JLabel("JFrame By Example");
-        JButton button = new JButton();
-        button.setText("Button");
-        panel.add(label);
-        panel.add(button);
-        frame.add(panel);
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        new MainFrame(connectionString);
     }
 
 
