@@ -2,6 +2,8 @@ package uk.ac.ncl.dwa.model;
 
 import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,5 +49,4 @@ public class Rooms extends ArrayList<Room> {
         }
         return result;
     }
-
 }

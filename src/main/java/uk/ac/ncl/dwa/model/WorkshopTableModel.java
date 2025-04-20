@@ -4,18 +4,23 @@ import javax.swing.table.AbstractTableModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ncl.dwa.controller.Globals;
+
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
 
 public class WorkshopTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
-    Workshops workshops = new Workshops();
     private Logger logger = LoggerFactory.getLogger(getClass());
+    Globals globals = Globals.getInstance();
+    Workshops workshops = globals.getWorkshops();
+    Set<Integer> dirtyRows = globals.getDirtyRows();
 
-    public WorkshopTableModel(String connectionString) {
+    public WorkshopTableModel() {
         super();
         logger.trace("Create WorkshopTableModel");
-        workshops.loadFromDatabase(connectionString);
-
-        //WorkshopTableModel tableModel = new WorkshopTableModel(connectionString);
+        workshops.loadFromDatabase(globals.getConnectionString());
         setWorkshops(workshops);
     }
 
@@ -40,6 +45,8 @@ public class WorkshopTableModel extends AbstractTableModel {
         }
 
         Workshop workshop = workshops.get(row);
+        globals.setDirty(true);
+        dirtyRows.add(row);
         switch (col) {
             case 0:
                 workshop.setSlug((String) value);
@@ -51,13 +58,52 @@ public class WorkshopTableModel extends AbstractTableModel {
                 workshop.setHumandate((String) value);
                 break;
             case 3:
-                workshop.setHumandate((String) value);
+                workshop.setHumantime((String) value);
                 break;
             case 4:
                 workshop.setStartdate((String) value);
                 break;
             case 5:
                 workshop.setEnddate((String) value);
+                break;
+            case 6:
+                workshop.setRoom_id(((String) value));
+                break;
+            case 7:
+                workshop.setLanguage((String) value);
+                break;
+            case 8:
+                workshop.setCountry((String) value);
+                break;
+            case 9:
+                workshop.setOnline((Boolean) value);
+                break;
+            case 10:
+                workshop.setPilot((Boolean) value);
+                break;
+            case 11:
+                workshop.setInc_lesson_site((String) value);
+                break;
+            case 12:
+                workshop.setPre_survey((String) value);
+                break;
+            case 13:
+                workshop.setPost_survey((String) value);
+                break;
+            case 14:
+                workshop.setCarpentry_code((String) value);
+                break;
+            case 15:
+                workshop.setCurriculum_code((String) value);
+                break;
+            case 16:
+                workshop.setFlavour_id((String) value);
+                break;
+            case 17:
+                workshop.setEventbrite((String) value);
+                break;
+            case 18:
+                workshop.setSchedule((String) value);
                 break;
         }
 
@@ -75,7 +121,7 @@ public class WorkshopTableModel extends AbstractTableModel {
             case 2:
                 return workshop.getHumandate();
             case 3:
-                return workshop.getHumandate();
+                return workshop.getHumantime();
             case 4:
                 return workshop.getStartdate();
             case 5:

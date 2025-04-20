@@ -1,6 +1,7 @@
 package uk.ac.ncl.dwa.view;
 
 import org.mariadb.jdbc.Connection;
+import uk.ac.ncl.dwa.controller.Globals;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +12,9 @@ import static uk.ac.ncl.dwa.model.InsertFunctions.insertWorkshop;
 import static uk.ac.ncl.dwa.model.Workshops.selected;
 
 public class WorkshopAdmin {
-    String connectionString;
+    Globals globals = Globals.getInstance();
 
-    public WorkshopAdmin(String connectionString) {
-        this.connectionString = connectionString;
+    public WorkshopAdmin() {
     }
 
     private static int menu() {
@@ -39,16 +39,16 @@ public class WorkshopAdmin {
 
             switch (itemSelected) {
                 case 1:
-                    selected("workshops", new int[]{1, 2}, connectionString);
+                    selected("workshops", new int[]{1, 2});
                     break;
                 case 2:
-                    selected("people", new int[]{1, 2, 3, 4, 6}, connectionString);
+                    selected("people", new int[]{1, 2, 3, 4, 6});
                     break;
                 case 6:
-                    selected("Room", new int[]{1, 2, 3, 4, 5}, connectionString);
+                    selected("Room", new int[]{1, 2, 3, 4, 5});
                     break;
                 case 7:
-                    insertWorkshop(connectionString);
+                    insertWorkshop();
                     break;
             }
             itemSelected = menu();
@@ -56,7 +56,7 @@ public class WorkshopAdmin {
     }
 
     public void runGUI(){
-        new MainFrame(connectionString);
+        new MainFrame();
     }
 
 

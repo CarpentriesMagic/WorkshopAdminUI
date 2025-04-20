@@ -31,7 +31,6 @@ public class Workshop {
 
     /**
      *
-     * @param logger
      * @param slug
      * @param title
      * @param humandate
@@ -52,7 +51,7 @@ public class Workshop {
      * @param eventbrite
      * @param schedule
      */
-    public Workshop(Logger logger, String slug, String title, String humandate, String humantime,
+    public Workshop(String slug, String title, String humandate, String humantime,
                     String startdate, String enddate, String room_id, String language, String country,
                     boolean online, boolean pilot, String inc_lesson_site, String pre_survey,
                     String post_survey, String carpentry_code, String curriculum_code, String flavour_id,

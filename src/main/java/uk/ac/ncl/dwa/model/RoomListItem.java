@@ -1,11 +1,11 @@
 package uk.ac.ncl.dwa.model;
 
 public class RoomListItem {
-
     String room_id;
     String description;
 
     public RoomListItem(String room_id, String description) {
+        super();
         this.room_id = room_id;
         this.description = description;
     }
@@ -24,6 +24,6 @@ public class RoomListItem {
     }
     @Override
     public String toString() {
-        return "RoomList [room_id=" + room_id + ", description=" + description + "]";
+        return room_id;
     }
 }

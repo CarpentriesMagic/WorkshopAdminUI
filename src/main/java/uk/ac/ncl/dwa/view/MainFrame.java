@@ -1,28 +1,27 @@
 package uk.ac.ncl.dwa.view;
 
-import com.sun.tools.javac.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import uk.ac.ncl.dwa.model.WorkshopTableModel;
+import uk.ac.ncl.dwa.controller.Globals;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
-public class MainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JFrame implements ActionListener, WindowListener {
     Logger logger = LoggerFactory.getLogger(MainFrame.class);
+    Globals globals = Globals.getInstance();
 
-    public MainFrame(String connectionString) {
+    public MainFrame() {
         this.setTitle("Desperado Workshop Admin");
         this.setLayout(new BorderLayout());
 
         // Create WorkshopTableModel
-        MainTable mainTable = new MainTable(connectionString);
+        MainTable mainTable = new MainTable();
 
         JScrollPane scrollPane = new JScrollPane(mainTable);
         // Create scroll bars
@@ -32,9 +31,6 @@ public class MainFrame extends JFrame implements ActionListener {
         scrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
         //  enable vertical scrolling
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        // Set preferred size for the table
-        //table.setPreferredScrollableViewportSize(new Dimension(800, 600));
 
         // Add components to the frame
         JPanel panel = new JPanel();
@@ -51,9 +47,9 @@ public class MainFrame extends JFrame implements ActionListener {
         this.add(scrollPane, BorderLayout.CENTER);
 
         // Frame settings
-        setSize(800, 600);
+        setSize(2048, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        logger.trace("MainFrame constructor");
+        addWindowListener(this);
         setVisible(true);
 
     }
@@ -68,5 +64,61 @@ public class MainFrame extends JFrame implements ActionListener {
         } else {
             logger.debug("Unknown action command: " + e.getActionCommand());
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        logger.info("Is dirty: " + globals.getDirty());
+        if (!globals.getDirty()) {
+            logger.debug("Window closing");
+            dispose();
+        } else {
+            logger.debug("Window closing cancelled");
+
+            var yesOrNo = JOptionPane.showConfirmDialog(this, "Would you like to save your changes?");
+            if (yesOrNo == 0) {
+                logger.info("Saving changes");
+                globals.getDirtyRows().forEach(row -> {
+                    //globals.getWorkshops().get(row).save(globals.getConnectionString());
+                    globals.getWorkshops().updateWorkshops(globals.getConnectionString());
+                });
+            }
+            if (yesOrNo == 1) {
+                logger.info("Exiting without saving");
+            }
+            if (yesOrNo == 2) {
+                JOptionPane.showMessageDialog(null, "You chose to cancel!");
+            }
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }

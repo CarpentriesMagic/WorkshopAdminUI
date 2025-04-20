@@ -2,21 +2,19 @@ package uk.ac.ncl.dwa.model;
 
 import org.mariadb.jdbc.Connection;
 import org.mariadb.jdbc.Statement;
+import uk.ac.ncl.dwa.controller.Globals;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class InsertFunctions {
+    private static Globals globals = Globals.getInstance();
 
-    public static void insertWorkshop(String connectionString) {
+    public static void insertWorkshop() {
         Connection connection = null;
-
-
-
-
         try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
+            connection = (Connection) DriverManager.getConnection(globals.getConnectionString());
             Statement stmt = connection.createStatement();
 
             connection.close();
