@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main {
-    static String dbServer = "192.168.0.228";
+    static String dbServer = "localhost";
     static int dbPort = 3306;
     static String dbName = "workshopadmin";
     static String dbUser = "workshopadmin";
@@ -27,6 +27,7 @@ public class Main {
             dbServer, dbPort, dbName, dbUser, dbPass);
 
     public static void main(String[] args) {
+        // Create properties file
         globals.setDirty(false);
         logger.info("Set dirty to " + globals.getDirty());
         globals.setConnectionString(connectionString);
