@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 public class Workshop {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
-            "room_id", "lang", "cntry", "online", "pilot", "carpentry_code", "curriculum_code", "flavour_id",
-            "schedule", "inc_lesson_site", "pre_survey", "post_survey", "eventbrite"};
+            "room_id", "lang", "cntry", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
+            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule"};
 
     private String slug;
     private String title;
@@ -28,6 +28,28 @@ public class Workshop {
     private String flavour_id = "";
     private String eventbrite = "";
     private String schedule = "";
+    private Boolean inserted = false;
+
+    public Workshop() {
+        this.logger = LoggerFactory.getLogger(getClass());
+        this.slug = "";
+        this.title = "";
+        this.humandate = "";
+        this.humantime = "";
+        this.startdate = "";
+        this.enddate = "";
+        this.room_id = "";
+        this.language = "en";
+        this.country = "gb";
+        this.online = false;
+        this.pilot = false;
+        this.inc_lesson_site = "";
+        this.pre_survey = "";
+        this.post_survey = "";
+        this.carpentry_code = "";
+        this.curriculum_code = "";
+        this.flavour_id = "";
+    }
 
     /**
      *
@@ -56,7 +78,6 @@ public class Workshop {
                     boolean online, boolean pilot, String inc_lesson_site, String pre_survey,
                     String post_survey, String carpentry_code, String curriculum_code, String flavour_id,
                     String eventbrite, String schedule) {
-        this.logger = logger;
         this.slug = slug;
         this.title = title;
         this.humandate = humandate;
@@ -234,7 +255,13 @@ public class Workshop {
         this.schedule = schedule;
     }
 
+    public Boolean getInserted() {
+        return inserted;
+    }
 
+    public void setInserted(Boolean inserted) {
+        this.inserted = inserted;
+    }
 
     public static String[] getColumnNames() {
         return columnNames;

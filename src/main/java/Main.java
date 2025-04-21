@@ -6,13 +6,17 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
+
+import static uk.ac.ncl.dwa.controller.Utilities.createPropertiesFile;
 
 public class Main {
-    static String dbServer = "localhost";
-    static int dbPort = 3306;
-    static String dbName = "workshopadmin";
-    static String dbUser = "workshopadmin";
-    static String dbPass = "w0rksh0p";
+    private static Properties properties;
+    static String dbServer;
+    static int dbPort;
+    static String dbName;
+    static String dbUser;
+    static String dbPass;
 
     static {
         // must set before the Logger
@@ -23,10 +27,17 @@ public class Main {
     }
     static Logger logger = LoggerFactory.getLogger(Main.class);
     static Globals globals = Globals.getInstance();
-    static String connectionString =String.format("jdbc:mariadb://%s:%d/%s?user=%s&password=%s",
-            dbServer, dbPort, dbName, dbUser, dbPass);
+    static String connectionString;
 
     public static void main(String[] args) {
+        properties = createPropertiesFile();
+        dbServer = properties.getProperty("dbServer");
+        dbPort = Integer.parseInt(properties.getProperty("dbPort"));
+        dbName = properties.getProperty("dbName");
+        dbUser = properties.getProperty("dbUser");
+        dbPass = properties.getProperty("dbPass");
+        connectionString = String.format("jdbc:mariadb://%s:%d/%s?user=%s&password=%s",
+                dbServer, dbPort, dbName, dbUser, dbPass);
         // Create properties file
         globals.setDirty(false);
         logger.info("Set dirty to " + globals.getDirty());

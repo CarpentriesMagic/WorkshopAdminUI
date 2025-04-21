@@ -6,20 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
-
 public class WorkshopTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private Logger logger = LoggerFactory.getLogger(getClass());
-    Globals globals = Globals.getInstance();
-    Workshops workshops = globals.getWorkshops();
+    Workshops workshops = Globals.getInstance().getWorkshops();
 
     public WorkshopTableModel() {
         super();
         logger.trace("Create WorkshopTableModel");
-        workshops.loadFromDatabase(globals.getConnectionString());
+        workshops.loadFromDatabase(Globals.getInstance().getConnectionString());
         setWorkshops(workshops);
     }
 
@@ -44,11 +39,15 @@ public class WorkshopTableModel extends AbstractTableModel {
         }
 
         Workshop workshop = workshops.get(row);
-        globals.setDirty(true);
-        logger.info("Setting dirty to " + globals.getDirty());
-        logger.info("Add row " + row + " to dirty rows");
-        globals.getDirtyRows().add(row);
-        globals.getDirtySlugs().add(workshop.getSlug());
+        Globals.getInstance().setDirty(true);
+        logger.info("Setting dirty to " + Globals.getInstance().getDirty());
+        if (workshop.getSlug().trim().isBlank()) {
+            logger.info("Add row " + row + " to inserted rows");
+            Globals.getInstance().getInsertedRows().add(row);
+        } else {
+            logger.info("Add row " + row + " to dirty rows");
+            Globals.getInstance().getDirtyRows().add(row);
+        }
         switch (col) {
             case 0:
                 workshop.setSlug((String) value);

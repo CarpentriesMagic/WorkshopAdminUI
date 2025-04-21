@@ -44,7 +44,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
             var yesOrNo = JOptionPane.showConfirmDialog(this, "Would you like to save your changes?");
             if (yesOrNo == 0) {
                 logger.info("Saving changes");
-                globals.getWorkshops().updateWorkshops(globals.getConnectionString());
+                globals.getWorkshops().updateWorkshops();
             }
             if (yesOrNo == 1) {
                 logger.info("Exiting without saving");

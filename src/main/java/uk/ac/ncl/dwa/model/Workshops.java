@@ -4,10 +4,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
@@ -180,10 +177,11 @@ public class Workshops extends ArrayList<Workshop> {
                         resultSet.getString("carpentry_code"),
                         resultSet.getString("curriculum_code"),
                         resultSet.getString("flavour_id"),
-                        resultSet.getString("schedule"),
-                        resultSet.getString("eventbrite")
+                        resultSet.getString("eventbrite"),
+                        resultSet.getString("schedule")
 
                 );
+                workshop.setInserted(true);
                 this.add(workshop);
             }
             connection.close();
@@ -192,21 +190,23 @@ public class Workshops extends ArrayList<Workshop> {
         }
     }
 
-    public void updateWorkshops(String connectionString) {
+    public boolean updateWorkshops() {
         Connection connection = null;
+        boolean success = false;
         logger.info("Updating " + Globals.getInstance().getDirtyRows().size() + " rows");
         Globals.getInstance().getDirtyRows().forEach(row -> {
             logger.info("Saving row: " + row);
         });
         try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "UPDATE workshops SET title = ?, humandate = ?, humantime = ?, startdate = ?, enddate = ?, " +
                     "room_id = ?, language = ?, country = ?, online = ?, pilot = ?, carpentry_code = ?, " +
                     "curriculum_code = ?, flavour_id = ?, schedule = ?, inc_lesson_site = ?, pre_survey = ?, " +
                     "post_survey = ?, eventbrite = ? WHERE slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            Globals.getInstance().getDirtyRows().forEach(row -> {
+            for (int row : Globals.getInstance().getDirtyRows()) {
+                logger.info("Updating row: " + row);
                 Workshop workshop = this.get(row);
                 logger.info("Updating workshop " + workshop.getSlug());
                 try {
@@ -231,13 +231,85 @@ public class Workshops extends ArrayList<Workshop> {
                     statement.setString(19, workshop.getSlug());
 
                     statement.executeUpdate();
+                    success = true;
                 } catch (SQLException e) {
+                    success = false;
                     throw new RuntimeException(e);
                 }
-            });
+            }
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating workshops in database", e);
+        }
+        return success;
+    }
+
+
+    public boolean insertWorkshops() {
+        Connection connection = null;
+        boolean success = false;
+        logger.info("Updating " + Globals.getInstance().getDirtyRows().size() + " rows");
+        Globals.getInstance().getInsertedRows().forEach(row -> {
+            logger.info("Saving row: " + row);
+        });
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "INSERT workshops VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            //Globals.getInstance().getInsertedRows().forEach(row -> {
+            for (int row : Globals.getInstance().getInsertedRows()) {
+                Workshop workshop = this.get(row);
+                logger.info("Inserting workshop " + workshop.getSlug());
+                try {
+                    statement.setString(1, workshop.getSlug());
+                    statement.setString(2, workshop.getTitle());
+                    statement.setString(3, workshop.getHumandate());
+                    statement.setString(4, workshop.getHumantime());
+                    statement.setString(5, workshop.getStartdate());
+                    statement.setString(6, workshop.getEnddate());
+                    statement.setString(7, workshop.getRoom_id());
+                    statement.setString(8, workshop.getLanguage());
+                    statement.setString(9, workshop.getCountry());
+                    statement.setBoolean(10, workshop.isOnline());
+                    statement.setBoolean(11, workshop.isPilot());
+                    statement.setString(12, workshop.getInc_lesson_site());
+                    statement.setString(13, workshop.getPre_survey());
+                    statement.setString(14, workshop.getPost_survey());
+                    statement.setString(15, workshop.getCarpentry_code());
+                    statement.setString(16, workshop.getCurriculum_code());
+                    statement.setString(17, workshop.getFlavour_id());
+                    statement.setString(18, workshop.getEventbrite());
+                    statement.setString(19, workshop.getSchedule());
+
+
+                    statement.executeUpdate();
+                    success = true;
+                } catch (SQLException e) {
+                    success = false;
+                    throw new RuntimeException(e);
+                }
+            }
+            success = true;
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating workshops in database", e);
+        }
+        return success;
+    }
+
+
+    public void deleteWorkshop(String slug) {
+        Connection connection = null;
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "DELETE FROM workshops WHERE slug = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, slug);
+            statement.executeUpdate();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting workshop from database", e);
         }
     }
 }
