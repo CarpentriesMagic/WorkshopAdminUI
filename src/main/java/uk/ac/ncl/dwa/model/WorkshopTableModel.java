@@ -15,7 +15,6 @@ public class WorkshopTableModel extends AbstractTableModel {
     private Logger logger = LoggerFactory.getLogger(getClass());
     Globals globals = Globals.getInstance();
     Workshops workshops = globals.getWorkshops();
-    Set<Integer> dirtyRows = globals.getDirtyRows();
 
     public WorkshopTableModel() {
         super();
@@ -46,7 +45,10 @@ public class WorkshopTableModel extends AbstractTableModel {
 
         Workshop workshop = workshops.get(row);
         globals.setDirty(true);
-        dirtyRows.add(row);
+        logger.info("Setting dirty to " + globals.getDirty());
+        logger.info("Add row " + row + " to dirty rows");
+        globals.getDirtyRows().add(row);
+        globals.getDirtySlugs().add(workshop.getSlug());
         switch (col) {
             case 0:
                 workshop.setSlug((String) value);

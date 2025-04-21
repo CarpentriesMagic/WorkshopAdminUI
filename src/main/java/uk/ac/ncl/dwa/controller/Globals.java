@@ -15,7 +15,8 @@ public class Globals {
     Boolean dirty = false;
     Workshops workshops = new Workshops();
     String connectionString;
-
+    Set<Integer> dirtyRows = new HashSet<>();
+    Set<String> dirtySlugs = new HashSet<>();
     /**
      * Dummy contructor to prevent instantiation.
      */
@@ -42,12 +43,6 @@ public class Globals {
         return dirtyRows;
     }
 
-    public void setDirtyRows(Set<Integer> dirtyRows) {
-        this.dirtyRows = dirtyRows;
-    }
-
-    Set<Integer> dirtyRows = new HashSet<>();
-
     public Workshops getWorkshops() {
         return workshops;
     }
@@ -63,4 +58,9 @@ public class Globals {
     public void setConnectionString(String connectionString) {
         this.connectionString = connectionString;
     }
+
+    public Set<String> getDirtySlugs() {
+        return dirtySlugs;
+    }
+
 }

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import uk.ac.ncl.dwa.controller.Globals;
 
 public class Workshops extends ArrayList<Workshop> {
     Logger logger = LoggerFactory.getLogger(getClass());
-    static Globals globals = Globals.getInstance();
+    //static Globals globals = Globals.getInstance();
 
     private static final long serialVersionUID = 1L;
 
@@ -24,6 +25,7 @@ public class Workshops extends ArrayList<Workshop> {
 
     /**
      * Find workshop using its ID
+     *
      * @param slug the ID of the workshop
      * @return the workshop with the provided ID
      */
@@ -124,7 +126,7 @@ public class Workshops extends ArrayList<Workshop> {
 
         Connection connection = null;
         try {
-            connection = (Connection) DriverManager.getConnection(globals.getConnectionString());
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "SELECT slug, title, humandate, humantime, startdate, starttime, room_id, language," +
                     "country, online, pilot, inc_lesson_site, pre_survey, post_survey, carpentry_code, flavour_id," +
                     "eventbrite, schedule FROM " + table;
@@ -181,7 +183,7 @@ public class Workshops extends ArrayList<Workshop> {
                         resultSet.getString("schedule"),
                         resultSet.getString("eventbrite")
 
-                        );
+                );
                 this.add(workshop);
             }
             connection.close();
@@ -192,8 +194,11 @@ public class Workshops extends ArrayList<Workshop> {
 
     public void updateWorkshops(String connectionString) {
         Connection connection = null;
+        logger.info("Updating " + Globals.getInstance().getDirtyRows().size() + " rows");
+        Globals.getInstance().getDirtyRows().forEach(row -> {
+            logger.info("Saving row: " + row);
+        });
         try {
-            logger.info("connection string: " + connectionString);
             connection = (Connection) DriverManager.getConnection(connectionString);
             String sql = "UPDATE workshops SET title = ?, humandate = ?, humantime = ?, startdate = ?, enddate = ?, " +
                     "room_id = ?, language = ?, country = ?, online = ?, pilot = ?, carpentry_code = ?, " +
@@ -201,30 +206,35 @@ public class Workshops extends ArrayList<Workshop> {
                     "post_survey = ?, eventbrite = ? WHERE slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            for (Workshop workshop : this) {
+            Globals.getInstance().getDirtyRows().forEach(row -> {
+                Workshop workshop = this.get(row);
                 logger.info("Updating workshop " + workshop.getSlug());
-                statement.setString(1, workshop.getTitle());
-                statement.setString(2, workshop.getHumandate());
-                statement.setString(3, workshop.getHumantime());
-                statement.setString(4, workshop.getStartdate());
-                statement.setString(5, workshop.getEnddate());
-                statement.setString(6, workshop.getRoom_id());
-                statement.setString(7, workshop.getLanguage());
-                statement.setString(8, workshop.getCountry());
-                statement.setBoolean(9, workshop.isOnline());
-                statement.setBoolean(10, workshop.isPilot());
-                statement.setString(11, workshop.getCarpentry_code());
-                statement.setString(12, workshop.getCurriculum_code());
-                statement.setString(13, workshop.getFlavour_id());
-                statement.setString(14, workshop.getSchedule());
-                statement.setString(15, workshop.getInc_lesson_site());
-                statement.setString(16, workshop.getPre_survey());
-                statement.setString(17, workshop.getPost_survey());
-                statement.setString(18, workshop.getEventbrite());
-                statement.setString(19, workshop.getSlug());
+                try {
+                    statement.setString(1, workshop.getTitle());
+                    statement.setString(2, workshop.getHumandate());
+                    statement.setString(3, workshop.getHumantime());
+                    statement.setString(4, workshop.getStartdate());
+                    statement.setString(5, workshop.getEnddate());
+                    statement.setString(6, workshop.getRoom_id());
+                    statement.setString(7, workshop.getLanguage());
+                    statement.setString(8, workshop.getCountry());
+                    statement.setBoolean(9, workshop.isOnline());
+                    statement.setBoolean(10, workshop.isPilot());
+                    statement.setString(11, workshop.getCarpentry_code());
+                    statement.setString(12, workshop.getCurriculum_code());
+                    statement.setString(13, workshop.getFlavour_id());
+                    statement.setString(14, workshop.getSchedule());
+                    statement.setString(15, workshop.getInc_lesson_site());
+                    statement.setString(16, workshop.getPre_survey());
+                    statement.setString(17, workshop.getPost_survey());
+                    statement.setString(18, workshop.getEventbrite());
+                    statement.setString(19, workshop.getSlug());
 
-                statement.executeUpdate();
-            }
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating workshops in database", e);
