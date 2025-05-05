@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.controller;
 
+import uk.ac.ncl.dwa.model.Rooms;
 import uk.ac.ncl.dwa.model.Workshops;
 
 import java.util.HashSet;
@@ -14,6 +15,7 @@ public class Globals {
     static Globals globals;
     Boolean dirty = false;
     Workshops workshops = new Workshops();
+    Rooms rooms = new Rooms();
     String connectionString;
     Set<Integer> dirtyRows = new HashSet<>();
     Set<Integer> insertedRows = new HashSet<>();
@@ -63,7 +65,7 @@ public class Globals {
         return insertedRows;
     }
 
-    public void setInsertedRows(Set<Integer> insertedRows) {
-        this.insertedRows = insertedRows;
+    public Rooms getRooms() {
+        return rooms;
     }
 }

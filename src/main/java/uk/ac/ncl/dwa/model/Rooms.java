@@ -13,6 +13,7 @@ public class Rooms extends ArrayList<Room> {
     Logger logger = LoggerFactory.getLogger(getClass());
     Rooms rooms = this;
 
+
     public Rooms() {
         super();
     }
@@ -49,4 +50,9 @@ public class Rooms extends ArrayList<Room> {
         }
         return result;
     }
+
+    public int getColumnCount() {
+        return Room.getColumnNames().length;
+    }
+
 }

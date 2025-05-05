@@ -7,6 +7,7 @@ public class Room {
     private String longitude;
     private String latitude;
     private String what_three_words;
+    private static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
 
     public Room(String room_id, String description, String longitude, String latitude, String what_three_words) {
         this.room_id = room_id;
@@ -14,6 +15,10 @@ public class Room {
         this.longitude = longitude;
         this.latitude = latitude;
         this.what_three_words = what_three_words;
+    }
+
+    public static String[] getColumnNames() {
+        return columnNames;
     }
 
     public String getRoom_id() {
