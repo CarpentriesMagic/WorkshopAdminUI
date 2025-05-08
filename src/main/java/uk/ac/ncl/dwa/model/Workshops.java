@@ -193,8 +193,8 @@ public class Workshops extends ArrayList<Workshop> {
     public boolean updateWorkshops() {
         Connection connection = null;
         boolean success = false;
-        logger.info("Updating " + Globals.getInstance().getDirtyRows().size() + " rows");
-        Globals.getInstance().getDirtyRows().forEach(row -> {
+        logger.info("Updating " + Globals.getInstance().getEditedRows("workshops").size() + " rows");
+        Globals.getInstance().getEditedRows("workshops").forEach(row -> {
             logger.info("Saving row: " + row);
         });
         try {
@@ -205,7 +205,7 @@ public class Workshops extends ArrayList<Workshop> {
                     "post_survey = ?, eventbrite = ? WHERE slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            for (int row : Globals.getInstance().getDirtyRows()) {
+            for (int row : Globals.getInstance().getEditedRows("workshops")) {
                 logger.info("Updating row: " + row);
                 Workshop workshop = this.get(row);
                 logger.info("Updating workshop " + workshop.getSlug());
@@ -234,7 +234,7 @@ public class Workshops extends ArrayList<Workshop> {
                     success = true;
                 } catch (SQLException e) {
                     success = false;
-                    throw new RuntimeException(e);
+                    //throw new RuntimeException(e);
                 }
             }
             connection.close();
@@ -248,8 +248,8 @@ public class Workshops extends ArrayList<Workshop> {
     public boolean insertWorkshops() {
         Connection connection = null;
         boolean success = false;
-        logger.info("Updating " + Globals.getInstance().getDirtyRows().size() + " rows");
-        Globals.getInstance().getInsertedRows().forEach(row -> {
+        logger.info("Updating " + Globals.getInstance().getEditedRows("workshops").size() + " rows");
+        Globals.getInstance().getInsertedRows("workshops").forEach(row -> {
             logger.info("Saving row: " + row);
         });
         try {
@@ -258,7 +258,7 @@ public class Workshops extends ArrayList<Workshop> {
             PreparedStatement statement = connection.prepareStatement(sql);
 
             //Globals.getInstance().getInsertedRows().forEach(row -> {
-            for (int row : Globals.getInstance().getInsertedRows()) {
+            for (int row : Globals.getInstance().getInsertedRows("workshops")) {
                 Workshop workshop = this.get(row);
                 logger.info("Inserting workshop " + workshop.getSlug());
                 try {

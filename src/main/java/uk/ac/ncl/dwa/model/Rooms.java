@@ -1,12 +1,15 @@
 package uk.ac.ncl.dwa.model;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ncl.dwa.controller.Globals;
 
 public class Rooms extends ArrayList<Room> {
     private static final long serialVersionUID = 1L;
@@ -55,4 +58,82 @@ public class Rooms extends ArrayList<Room> {
         return Room.getColumnNames().length;
     }
 
+    public String[] getColumnNames() {
+        return Room.getColumnNames();
+    }
+
+    public boolean updateRooms() {
+        Connection connection = null;
+        boolean success = false;
+        logger.info("Updating " + Globals.getInstance().getEditedRows("workshops").size() + " rows");
+        Globals.getInstance().getEditedRows("workshops").forEach(row -> {
+            logger.info("Saving row: " + row);
+        });
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "UPDATE rooms SET room_id = ?, description = ?, longitude = ?, latitude = ?, " +
+                    "what_three_words = ?, ";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            for (int row : Globals.getInstance().getEditedRows("workshops")) {
+                logger.info("Updating row: " + row);
+                Room room = this.get(row);
+                logger.info("Updating workshop " + room.getRoom_id());
+                try {
+                    statement.setString(1, room.getRoom_id());
+                    statement.setString(2, room.getDescription());
+                    statement.setString(3, room.getLongitude());
+                    statement.setString(4, room.getLatitude());
+                    statement.setString(5, room.getWhat_three_words());
+
+                    statement.executeUpdate();
+                    success = true;
+                } catch (SQLException e) {
+                    success = false;
+                    //throw new RuntimeException(e);
+                }
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating workshops in database", e);
+        }
+        return success;
+    }
+
+    public boolean insertRooms() {
+        Connection connection = null;
+        boolean success = false;
+        logger.info("Updating " + Globals.getInstance().getEditedRows("rooms").size() + " rows");
+        Globals.getInstance().getInsertedRows("rooms").forEach(row -> {
+            logger.info("Saving row: " + row);
+        });
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "INSERT room VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            //Globals.getInstance().getInsertedRows().forEach(row -> {
+            for (int row : Globals.getInstance().getInsertedRows("rooms")) {
+                Room room = this.get(row);
+                logger.info("Inserting room " + room.getRoom_id());
+                try {
+                    statement.setString(1, room.getRoom_id());
+                    statement.setString(2, room.getDescription());
+                    statement.setString(3, room.getLongitude());
+                    statement.setString(4, room.getLatitude());
+                    statement.setString(5, room.getWhat_three_words());
+                    statement.executeUpdate();
+                    success = true;
+                } catch (SQLException e) {
+                    success = false;
+                    throw new RuntimeException(e);
+                }
+            }
+            success = true;
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating rooms in database", e);
+        }
+        return success;
+    }
 }

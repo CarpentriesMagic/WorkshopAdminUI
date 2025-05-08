@@ -4,6 +4,7 @@ import uk.ac.ncl.dwa.model.Rooms;
 import uk.ac.ncl.dwa.model.Workshops;
 
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Set;
 
 /**
@@ -17,17 +18,26 @@ public class Globals {
     Workshops workshops = new Workshops();
     Rooms rooms = new Rooms();
     String connectionString;
-    Set<Integer> dirtyRows = new HashSet<>();
+    Hashtable<String, DirtyRows> dirtyRows = new Hashtable<>();
+    Set<Integer> editedRows = new HashSet<>();
     Set<Integer> insertedRows = new HashSet<>();
+
     /**
      * Dummy contructor to prevent instantiation.
      */
     private Globals() {
     }
 
+    /**
+     * Returns the single instance of the Globals class.
+     *
+     * @return the single instance of Globals
+     */
     public static Globals getInstance() {
         if (globals == null) {
             globals = new Globals();
+            globals.dirtyRows.put("workshops", new DirtyRows());
+            globals.dirtyRows.put("rooms", new DirtyRows());
         }
         return globals;
     }
@@ -41,8 +51,8 @@ public class Globals {
         this.dirty = dirty;
     }
 
-    public Set<Integer> getDirtyRows() {
-        return dirtyRows;
+    public Set<Integer> getEditedRows(String key) {
+        return dirtyRows.get(key).getEditedRows();
     }
 
     public Workshops getWorkshops() {
@@ -61,8 +71,8 @@ public class Globals {
         this.connectionString = connectionString;
     }
 
-    public Set<Integer> getInsertedRows() {
-        return insertedRows;
+    public Set<Integer> getInsertedRows(String key) {
+        return dirtyRows.get(key).getInsertedRows();
     }
 
     public Rooms getRooms() {

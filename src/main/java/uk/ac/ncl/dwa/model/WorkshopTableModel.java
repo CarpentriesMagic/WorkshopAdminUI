@@ -43,10 +43,10 @@ public class WorkshopTableModel extends AbstractTableModel {
         logger.info("Setting dirty to " + Globals.getInstance().getDirty());
         if (workshop.getSlug().trim().isBlank()) {
             logger.info("Add row " + row + " to inserted rows");
-            Globals.getInstance().getInsertedRows().add(row);
+            Globals.getInstance().getInsertedRows("workshops").add(row);
         } else {
             logger.info("Add row " + row + " to dirty rows");
-            Globals.getInstance().getDirtyRows().add(row);
+            Globals.getInstance().getEditedRows("workshops").add(row);
         }
         switch (col) {
             case 0:

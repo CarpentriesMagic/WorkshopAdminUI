@@ -1,5 +1,8 @@
 package uk.ac.ncl.dwa.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Room {
 
     private String room_id;
@@ -8,6 +11,7 @@ public class Room {
     private String latitude;
     private String what_three_words;
     private static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public Room(String room_id, String description, String longitude, String latitude, String what_three_words) {
         this.room_id = room_id;
@@ -15,6 +19,14 @@ public class Room {
         this.longitude = longitude;
         this.latitude = latitude;
         this.what_three_words = what_three_words;
+    }
+
+    public Room() {
+        this.room_id = "Room ID";
+        this.description = "";
+        this.longitude = "";
+        this.latitude = "";
+        this.what_three_words = "";
     }
 
     public static String[] getColumnNames() {

@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Workshop;
-import uk.ac.ncl.dwa.model.Workshops;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class WorkshopPanel extends JPanel implements java.awt.event.ActionListener {
+public class WorkshopPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(WorkshopPanel.class);
     WorkshopTable workshopTable = new WorkshopTable();
 
@@ -53,20 +53,23 @@ public class WorkshopPanel extends JPanel implements java.awt.event.ActionListen
             logger.info("Saving changes");
             boolean success1 = true;
             boolean success2 = true;
-            if (!globals.getDirtyRows().isEmpty()) {
+            if (!globals.getEditedRows("workshops").isEmpty()) {
                 success1 = globals.getWorkshops().updateWorkshops();
+                if (!success1) {
+                    JOptionPane.showMessageDialog(this, "Error updating workshops");
+                }
             }
-            if (!globals.getInsertedRows().isEmpty()) {
+            if (!globals.getInsertedRows("workshops").isEmpty()) {
                 success2 = globals.getWorkshops().insertWorkshops();
             }
             if (success1 && success2) {
                 globals.setDirty(false);
             }
             if (success1) {
-                globals.getDirtyRows().clear();
+                globals.getEditedRows("workshops").clear();
             }
             if (success2) {
-                globals.getInsertedRows().clear();
+                globals.getInsertedRows("workshops").clear();
             }
         } else if (e.getActionCommand().equals("Add")) {
             // Add action
@@ -74,7 +77,7 @@ public class WorkshopPanel extends JPanel implements java.awt.event.ActionListen
             Globals.getInstance().getWorkshops().add(new Workshop());
             logger.debug("Setting dirty to true");
             globals.setDirty(true);
-            globals.getInsertedRows().add(globals.getWorkshops().size() - 1);
+            globals.getInsertedRows("workshops").add(globals.getWorkshops().size() - 1);
             workshopTable.repaint();
         } else if (e.getActionCommand().equals("Delete")) {
             // Delete action
@@ -83,8 +86,8 @@ public class WorkshopPanel extends JPanel implements java.awt.event.ActionListen
             if (row != -1) {
                 String slug = Globals.getInstance().getWorkshops().get(row).getSlug();
                 globals.getWorkshops().remove(row);
-                globals.getInsertedRows().remove(row);
-                globals.getDirtyRows().remove(row);
+                globals.getInsertedRows("workshops").remove(row);
+                globals.getEditedRows("workshops").remove(row);
                 globals.getWorkshops().deleteWorkshop(slug);
                 workshopTable.repaint();
             } else {

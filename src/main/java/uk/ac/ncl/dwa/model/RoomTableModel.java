@@ -64,10 +64,10 @@ public class RoomTableModel extends AbstractTableModel {
         logger.info("Setting dirty to " + Globals.getInstance().getDirty());
         if (room.getRoom_id().trim().isBlank()) {
             logger.info("Add row " + row + " to inserted rows");
-            Globals.getInstance().getInsertedRows().add(row);
+            Globals.getInstance().getInsertedRows("rooms").add(row);
         } else {
             logger.info("Add row " + row + " to dirty rows");
-            Globals.getInstance().getDirtyRows().add(row);
+            Globals.getInstance().getEditedRows("rooms").add(row);
         }
         switch (col) {
             case 0:
@@ -88,9 +88,28 @@ public class RoomTableModel extends AbstractTableModel {
             default:
                 break;
         }
+        // Notify the table that the data has changed
+        fireTableCellUpdated(row, col);
+    }
+
+    @Override
+    public String getColumnName(int col) {
+        return rooms.getColumnNames()[col];
+    }
+
+    public String[] getColumnNames() {
+        return rooms.getColumnNames();
     }
 
     public void setRooms(Rooms rooms) {
         this.rooms = rooms;
     }
+
+    @Override
+    public boolean isCellEditable(int row, int col) {
+        // Allow editing for all cells
+        return true;
+    }
+
+
 }

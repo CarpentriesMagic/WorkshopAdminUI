@@ -31,7 +31,6 @@ public class Workshop {
     private Boolean inserted = false;
 
     public Workshop() {
-        this.logger = LoggerFactory.getLogger(getClass());
         this.slug = "";
         this.title = "";
         this.humandate = "";

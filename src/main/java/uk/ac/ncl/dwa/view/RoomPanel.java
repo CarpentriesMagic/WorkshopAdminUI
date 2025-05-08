@@ -2,10 +2,16 @@ package uk.ac.ncl.dwa.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.model.Room;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class RoomPanel extends JPanel {
+public class RoomPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(RoomPanel.class);
     RoomTable roomTable = new RoomTable();
 
@@ -27,9 +33,9 @@ public class RoomPanel extends JPanel {
         JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
-        btn_save.addActionListener(e -> logger.info("Save button clicked"));
-        btn_add.addActionListener(e -> logger.info("Add button clicked"));
-        btn_del.addActionListener(e -> logger.info("Delete button clicked"));
+        btn_save.addActionListener(this);
+        btn_add.addActionListener(this);
+        btn_del.addActionListener(this);
         panel.add(btn_save);
         panel.add(btn_add);
         panel.add(btn_del);
@@ -38,4 +44,43 @@ public class RoomPanel extends JPanel {
         this.add(panel);
         this.add(scrollPane);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        logger.debug(e.getActionCommand());
+        Globals globals = Globals.getInstance();
+        if (e.getActionCommand().equals("Save")) {
+            // Save action
+            logger.info("Saving changes");
+            boolean success1 = true;
+            boolean success2 = true;
+            if (!globals.getEditedRows("rooms").isEmpty()) {
+                success1 = globals.getRooms().updateRooms();
+                if (!success1) {
+                    JOptionPane.showMessageDialog(this, "Error updating rooms");
+                }
+            }
+            if (!globals.getInsertedRows("rooms").isEmpty()) {
+                success2 = globals.getRooms().insertRooms();
+            }
+            if (success1 && success2) {
+                globals.setDirty(false);
+            }
+            if (success1) {
+                globals.getEditedRows("rooms").clear();
+            }
+            if (success2) {
+                globals.getInsertedRows("rooms").clear();
+            }
+        } else if (e.getActionCommand().equals("Add")) {
+            // Add action
+            logger.info("Adding new Room");
+            Globals.getInstance().getRooms().add(new Room());
+            logger.debug("Setting dirty to true");
+            globals.setDirty(true);
+            globals.getInsertedRows("rooms").add(globals.getRooms().size() - 1);
+            roomTable.repaint();
+        }
+    }
+
 }
