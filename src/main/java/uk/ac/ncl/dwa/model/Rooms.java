@@ -65,37 +65,38 @@ public class Rooms extends ArrayList<Room> {
     public boolean updateRooms() {
         Connection connection = null;
         boolean success = false;
-        logger.info("Updating " + Globals.getInstance().getEditedRows("workshops").size() + " rows");
-        Globals.getInstance().getEditedRows("workshops").forEach(row -> {
+        logger.info("Updating " + Globals.getInstance().getEditedRows("rooms").size() + " rows");
+        Globals.getInstance().getEditedRows("rooms").forEach(row -> {
             logger.info("Saving row: " + row);
         });
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "UPDATE rooms SET room_id = ?, description = ?, longitude = ?, latitude = ?, " +
-                    "what_three_words = ?, ";
+            String sql = "UPDATE room SET description = ?, longitude = ?, latitude = ?, " +
+                    "what_three_words = ? WHERE room_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            for (int row : Globals.getInstance().getEditedRows("workshops")) {
+            for (int row : Globals.getInstance().getEditedRows("rooms")) {
                 logger.info("Updating row: " + row);
                 Room room = this.get(row);
-                logger.info("Updating workshop " + room.getRoom_id());
+                logger.info("Updating rooms " + room.getRoom_id());
                 try {
-                    statement.setString(1, room.getRoom_id());
-                    statement.setString(2, room.getDescription());
-                    statement.setString(3, room.getLongitude());
-                    statement.setString(4, room.getLatitude());
-                    statement.setString(5, room.getWhat_three_words());
+                    statement.setString(1, room.getDescription());
+                    statement.setString(2, room.getLongitude());
+                    statement.setString(3, room.getLatitude());
+                    statement.setString(4, room.getWhat_three_words());
+                    statement.setString(5, room.getRoom_id());
 
                     statement.executeUpdate();
                     success = true;
                 } catch (SQLException e) {
                     success = false;
-                    //throw new RuntimeException(e);
+                    throw new RuntimeException(e);
                 }
             }
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating workshops in database", e);
+            success = false;
+            throw new RuntimeException("Error updating rooms in database", e);
         }
         return success;
     }
@@ -136,4 +137,19 @@ public class Rooms extends ArrayList<Room> {
         }
         return success;
     }
+
+    public void deleteRoom(String key) {
+        Connection connection = null;
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "DELETE FROM room WHERE room_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, key);
+            statement.executeUpdate();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting workshop from database", e);
+        }
+    }
+
 }

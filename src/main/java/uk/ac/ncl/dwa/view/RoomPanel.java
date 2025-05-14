@@ -58,6 +58,7 @@ public class RoomPanel extends JPanel implements ActionListener {
                 success1 = globals.getRooms().updateRooms();
                 if (!success1) {
                     JOptionPane.showMessageDialog(this, "Error updating rooms");
+                    throw new RuntimeException("Error updating rooms from database");
                 }
             }
             if (!globals.getInsertedRows("rooms").isEmpty()) {
@@ -80,6 +81,21 @@ public class RoomPanel extends JPanel implements ActionListener {
             globals.setDirty(true);
             globals.getInsertedRows("rooms").add(globals.getRooms().size() - 1);
             roomTable.repaint();
+        }else if (e.getActionCommand().equals("Delete")) {
+            // Delete action
+            logger.info("Deleting selected room");
+            int row = roomTable.getSelectedRow();
+            if (row != -1) {
+                String room_id = Globals.getInstance().getRooms().get(row).getRoom_id();
+                globals.getRooms().remove(row);
+                globals.getInsertedRows("rooms").remove(row);
+                globals.getEditedRows("rooms").remove(row);
+                globals.getRooms().deleteRoom(room_id);
+                roomTable.repaint();
+                globals.setDirty(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "No row selected");
+            }
         }
     }
 

@@ -41,16 +41,14 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
         } else {
             logger.debug("Window closing cancelled");
 
-            var yesOrNo = JOptionPane.showConfirmDialog(this, "Would you like to save your changes?");
+            var yesOrNo = JOptionPane.showConfirmDialog(null,
+                    "Would you like to save your changes?", "Save", JOptionPane.YES_NO_OPTION);
             if (yesOrNo == 0) {
                 logger.info("Saving changes");
                 globals.getWorkshops().updateWorkshops();
             }
             if (yesOrNo == 1) {
                 logger.info("Exiting without saving");
-            }
-            if (yesOrNo == 2) {
-                JOptionPane.showMessageDialog(null, "You chose to cancel!");
             }
         }
     }
