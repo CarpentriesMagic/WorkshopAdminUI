@@ -148,7 +148,7 @@ public class Rooms extends ArrayList<Room> {
             statement.executeUpdate();
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting workshop from database", e);
+            throw new RuntimeException("Error deleting room from database", e);
         }
     }
 

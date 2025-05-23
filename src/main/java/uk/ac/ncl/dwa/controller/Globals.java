@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.controller;
 
+import uk.ac.ncl.dwa.model.Instructors;
 import uk.ac.ncl.dwa.model.Rooms;
 import uk.ac.ncl.dwa.model.Workshops;
 
@@ -17,6 +18,7 @@ public class Globals {
     Boolean dirty = false;
     Workshops workshops = new Workshops();
     Rooms rooms = new Rooms();
+    Instructors instructors = new Instructors();
     String connectionString;
     Hashtable<String, DirtyRows> dirtyRows = new Hashtable<>();
     Set<Integer> editedRows = new HashSet<>();
@@ -38,6 +40,7 @@ public class Globals {
             globals = new Globals();
             globals.dirtyRows.put("workshops", new DirtyRows());
             globals.dirtyRows.put("rooms", new DirtyRows());
+            globals.dirtyRows.put("instructors", new DirtyRows());
         }
         return globals;
     }
@@ -77,5 +80,9 @@ public class Globals {
 
     public Rooms getRooms() {
         return rooms;
+    }
+
+    public Instructors getInstructors() {
+        return instructors;
     }
 }

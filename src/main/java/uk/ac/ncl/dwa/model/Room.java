@@ -11,7 +11,7 @@ public class Room {
     private String latitude;
     private String what_three_words;
     private static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Room(String room_id, String description, String longitude, String latitude, String what_three_words) {
         this.room_id = room_id;

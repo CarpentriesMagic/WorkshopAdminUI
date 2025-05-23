@@ -5,12 +5,14 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 
 import javax.swing.table.AbstractTableModel;
+import java.io.Serial;
 
 public class RoomTableModel extends AbstractTableModel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
-    private Logger logger = LoggerFactory.getLogger(getClass());
-    Rooms rooms = Globals.getInstance().getRooms();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private Rooms rooms = Globals.getInstance().getRooms();
 
     public RoomTableModel() {
         super();
@@ -29,20 +31,14 @@ public class RoomTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Room room = rooms.get(rowIndex);
-        switch (columnIndex) {
-            case 0:
-                return room.getRoom_id();
-            case 1:
-                return room.getDescription();
-            case 2:
-                return room.getLongitude();
-            case 3:
-                return room.getLatitude();
-            case 4:
-                return room.getWhat_three_words();
-            default:
-                return null;
-        }
+        return switch (columnIndex) {
+            case 0 -> room.getRoom_id();
+            case 1 -> room.getDescription();
+            case 2 -> room.getLongitude();
+            case 3 -> room.getLatitude();
+            case 4 -> room.getWhat_three_words();
+            default -> null;
+        };
 
     }
 
