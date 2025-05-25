@@ -27,5 +27,7 @@ public class RoomTable extends JTable {
         getColumnModel().getColumn(3).setPreferredWidth(100);
         getColumnModel().getColumn(4).setPreferredWidth(100);
 
+        setRowHeight(20);
+
     }
 }

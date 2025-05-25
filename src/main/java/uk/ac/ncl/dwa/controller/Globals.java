@@ -1,10 +1,6 @@
 package uk.ac.ncl.dwa.controller;
 
-import uk.ac.ncl.dwa.model.Instructors;
-import uk.ac.ncl.dwa.model.Rooms;
-import uk.ac.ncl.dwa.model.Workshops;
-
-import java.util.HashSet;
+import uk.ac.ncl.dwa.model.*;
 import java.util.Hashtable;
 import java.util.Set;
 
@@ -14,20 +10,21 @@ import java.util.Set;
  * complexity.
  */
 public class Globals {
-    static Globals globals;
-    Boolean dirty = false;
-    Workshops workshops = new Workshops();
-    Rooms rooms = new Rooms();
-    Instructors instructors = new Instructors();
-    String connectionString;
-    Hashtable<String, DirtyRows> dirtyRows = new Hashtable<>();
-    Set<Integer> editedRows = new HashSet<>();
-    Set<Integer> insertedRows = new HashSet<>();
+    public static Globals globals;
+    private Boolean dirty = false;
+    private Workshops workshops = new Workshops();
+    private Rooms rooms = new Rooms();
+    private Instructors instructors = new Instructors();
+    private Helpers helpers = new Helpers();
+    private People people = new People();
+    private String connectionString;
+    private Hashtable<String, DirtyRows> dirtyRows = new Hashtable<>();
 
     /**
      * Dummy contructor to prevent instantiation.
      */
     private Globals() {
+        //rooms.loadFromDatabase(getInstance().getConnectionString());
     }
 
     /**
@@ -41,6 +38,8 @@ public class Globals {
             globals.dirtyRows.put("workshops", new DirtyRows());
             globals.dirtyRows.put("rooms", new DirtyRows());
             globals.dirtyRows.put("instructors", new DirtyRows());
+            globals.dirtyRows.put("helpers", new DirtyRows());
+            globals.dirtyRows.put("people", new DirtyRows());
         }
         return globals;
     }
@@ -84,5 +83,13 @@ public class Globals {
 
     public Instructors getInstructors() {
         return instructors;
+    }
+
+    public Helpers getHelpers() {
+        return helpers;
+    }
+
+    public People getPeople() {
+        return people;
     }
 }

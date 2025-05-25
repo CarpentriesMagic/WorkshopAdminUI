@@ -21,7 +21,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
         add(new MainTabbedPane());
 
         // Frame settings
-        setSize(2048, 600);
+        setSize(1024, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(this);
         setVisible(true);
@@ -45,7 +45,15 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
                     "Would you like to save your changes?", "Save", JOptionPane.YES_NO_OPTION);
             if (yesOrNo == 0) {
                 logger.info("Saving changes");
+                globals.getRooms().insertRooms();
+                globals.getRooms().updateRooms();
+                globals.getWorkshops().insertWorkshops();
                 globals.getWorkshops().updateWorkshops();
+                globals.getInstructors().insertInstructors();
+                globals.getInstructors().updateInstructors();
+                globals.getHelpers().insertHelpers();
+                globals.getHelpers().updateHelpers();
+
             }
             if (yesOrNo == 1) {
                 logger.info("Exiting without saving");

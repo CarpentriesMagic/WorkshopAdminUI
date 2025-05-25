@@ -8,7 +8,7 @@ public class Workshop {
     private static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
             "room_id", "lang", "cntry", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
             "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule"};
-
+    private String key; // slug before any changes made to record - needed for update
     private String slug;
     private String title;
     private String humandate;
@@ -52,31 +52,32 @@ public class Workshop {
 
     /**
      *
-     * @param slug
-     * @param title
-     * @param humandate
-     * @param humantime
-     * @param startdate
-     * @param enddate
-     * @param room_id
-     * @param language
-     * @param country
-     * @param online
-     * @param pilot
-     * @param inc_lesson_site
-     * @param pre_survey
-     * @param post_survey
-     * @param carpentry_code
-     * @param curriculum_code
-     * @param flavour_id
-     * @param eventbrite
-     * @param schedule
+     * @param slug A unique code, comprising a date followed by an institutional abbreviation, egj YYYY-MM-DD-institute
+     * @param title A title for the workshop
+     * @param humandate The dates of the workshop in human-readable format eg. Feb 02-03, 2025
+     * @param humantime The time in human-readable format eg. 09:00 to 17:00
+     * @param startdate The start date of the workshop in machine-readable format eg. 2025-05-01
+     * @param enddate The end date of the workshop in machine-readable format eg. 2025-05-02
+     * @param room_id An idea for the room in which the workshop will be held (foreign key to room table in database)
+     * @param language The language code of the language that will be used for the workshop
+     * @param country The country code of where the workshop will be held
+     * @param online True if the workshop will be online, otherwise false
+     * @param pilot True if the workshop will be a pilot otherwise false
+     * @param inc_lesson_site If the workshop uses an incubator lesson, an URL to the lesson website
+     * @param pre_survey The Carpentries-generated pre-workshop survey URL
+     * @param post_survey The Carpentries-generated post-workshop survey URL
+     * @param carpentry_code The Carpentries code for the workshop eg. swc, lc, dc, hpc
+     * @param curriculum_code The Carpentries curriculum that will be used eg. swc-gapminderj
+     * @param flavour_id The programming language that will be used. python or r
+     * @param eventbrite If using Eventbrite, the eventbrite generated jcode
+     * @param schedule The include filename (without an extension) to be used for the schedule
      */
     public Workshop(String slug, String title, String humandate, String humantime,
                     String startdate, String enddate, String room_id, String language, String country,
                     boolean online, boolean pilot, String inc_lesson_site, String pre_survey,
                     String post_survey, String carpentry_code, String curriculum_code, String flavour_id,
                     String eventbrite, String schedule) {
+        this.key = slug;
         this.slug = slug;
         this.title = title;
         this.humandate = humandate;
@@ -264,6 +265,14 @@ public class Workshop {
 
     public static String[] getColumnNames() {
         return columnNames;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getKey() {
+        return this.key;
     }
 
 }

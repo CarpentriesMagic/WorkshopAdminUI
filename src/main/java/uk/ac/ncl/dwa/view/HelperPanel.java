@@ -3,21 +3,20 @@ package uk.ac.ncl.dwa.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
-import uk.ac.ncl.dwa.model.Instructor;
-import uk.ac.ncl.dwa.model.Room;
+import uk.ac.ncl.dwa.model.Helper;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class InstructorPanel extends JPanel implements ActionListener {
-    Logger logger = LoggerFactory.getLogger(InstructorPanel.class);
-    InstructorTable instructorTable = new InstructorTable();
+public class HelperPanel extends JPanel implements ActionListener {
+    Logger logger = LoggerFactory.getLogger(HelperPanel.class);
+    HelperTable helperTable = new HelperTable();
 
-    public InstructorPanel() {
+    public HelperPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JScrollPane scrollPane = new JScrollPane(instructorTable);
+        JScrollPane scrollPane = new JScrollPane(helperTable);
         // Create scroll bars
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         //  enable horizontal scrolling
@@ -52,52 +51,52 @@ public class InstructorPanel extends JPanel implements ActionListener {
             case "Save" -> {
                 // Save action
                 logger.info("Saving changes");
-                boolean inserted = false;
-                boolean updated = false;
-                if (!globals.getInsertedRows("instructors").isEmpty()) {
-                    logger.info("There are instructors to be inserted");
-                    inserted = globals.getInstructors().insertInstructors();
-                    if (!inserted) {
-                        JOptionPane.showMessageDialog(this, "Error inserting instructors");
-                    } else {
-                        logger.debug("Instructors inserted");
-                        globals.getInsertedRows("instructors").clear();
-                    }
-                }
-                if (!globals.getEditedRows("instructors").isEmpty()) {
-                    logger.info("There are instructors to updated");
-                    updated = globals.getInstructors().updateInstructors();
+                boolean inserted;
+                boolean updated;
+                if (!globals.getEditedRows("helpers").isEmpty()) {
+                    logger.info("There are helpers to update");
+                    updated = globals.getHelpers().updateHelpers();
                     if (!updated) {
-                        JOptionPane.showMessageDialog(this, "Error updating instructors");
-//                        throw new RuntimeException("Error updating instructors from database");
+                        JOptionPane.showMessageDialog(this, "Error updating helpers");
+//                        throw new RuntimeException("Error updating helpers from database");
                     } else {
                         logger.debug("Clear dirty flag");
                         globals.setDirty(false);
                     }
                 }
+                if (!globals.getInsertedRows("helpers").isEmpty()) {
+                    logger.info("There are helpers to insert");
+                    inserted = globals.getHelpers().insertHelpers();
+                    if (!inserted) {
+                        JOptionPane.showMessageDialog(this, "Error inserting helpers");
+                    } else {
+                        logger.debug("Helpers inserted");
+                        globals.getInsertedRows("helpers").clear();
+                    }
+                }
             }
             case "Add" -> {
                 // Add action
-                logger.info("Adding new Instructor");
-                Globals.getInstance().getInstructors().add(new Instructor());
+                logger.info("Adding new Helper");
+                Globals.getInstance().getHelpers().add(new Helper());
                 logger.debug("Setting dirty to true");
                 globals.setDirty(true);
-                globals.getInsertedRows("instructors").add(globals.getInstructors().size() - 1);
-                instructorTable.repaint();
+                globals.getInsertedRows("helpers").add(globals.getHelpers().size() - 1);
+                helperTable.repaint();
             }
             case "Delete" -> {
                 // Delete action
-                int row = instructorTable.getSelectedRow();
+                int row = helperTable.getSelectedRow();
                 if (row != -1) {
-                    String person_id = Globals.getInstance().getInstructors().get(row).getPerson_id();
-                    String slug = Globals.getInstance().getInstructors().get(row).getSlug();
+                    String person_id = Globals.getInstance().getHelpers().get(row).getPerson_id();
+                    String slug = Globals.getInstance().getHelpers().get(row).getSlug();
                     if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this record?") == JOptionPane.YES_OPTION) {
-                        globals.getInstructors().remove(row);
-                        logger.info("Deleting selected instructor");
-                        globals.getInsertedRows("instructors").remove(row);
-                        globals.getEditedRows("instructors").remove(row);
-                        globals.getInstructors().deleteInstructor(person_id, slug);
-                        instructorTable.repaint();
+                        globals.getHelpers().remove(row);
+                        logger.info("Deleting selected helper");
+                        globals.getInsertedRows("helpers").remove(row);
+                        globals.getEditedRows("helpers").remove(row);
+                        globals.getHelpers().deleteHelper(person_id, slug);
+                        helperTable.repaint();
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");

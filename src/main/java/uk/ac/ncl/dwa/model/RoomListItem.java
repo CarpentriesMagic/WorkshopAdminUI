@@ -1,8 +1,8 @@
 package uk.ac.ncl.dwa.model;
 
 public class RoomListItem {
-    String room_id;
-    String description;
+    private String room_id;
+    private String description;
 
     public RoomListItem(String room_id, String description) {
         super();

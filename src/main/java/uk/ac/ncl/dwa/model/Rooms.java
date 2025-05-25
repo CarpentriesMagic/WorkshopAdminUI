@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
@@ -37,16 +37,15 @@ public class Rooms extends ArrayList<Room> {
         }
     }
 
-    public ArrayList<RoomListItem> loadRoomList(String connectionString) {
-        ArrayList<RoomListItem> result = new ArrayList<>();
+    public ArrayList<String> loadRoomList(String connectionString) {
+        ArrayList<String> result = new ArrayList<>();
         try (Connection conn = (Connection) DriverManager.getConnection(connectionString)) {
-            String sql = "SELECT * FROM room";
+            String sql = "SELECT room_id FROM room";
             var statement = conn.createStatement();
             var resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                RoomListItem roomList = new RoomListItem(resultSet.getString("room_id"),
-                        resultSet.getString("description"));
-                result.add(roomList);
+                String room = resultSet.getString("room_id");
+                result.add(room);
             }
         } catch (Exception e) {
             logger.error(e.toString());
@@ -103,7 +102,7 @@ public class Rooms extends ArrayList<Room> {
 
     public boolean insertRooms() {
         Connection connection = null;
-        boolean success = false;
+        AtomicBoolean success = new AtomicBoolean(false);
         logger.info("Updating " + Globals.getInstance().getEditedRows("rooms").size() + " rows");
         Globals.getInstance().getInsertedRows("rooms").forEach(row -> {
             logger.info("Saving row: " + row);
@@ -113,8 +112,8 @@ public class Rooms extends ArrayList<Room> {
             String sql = "INSERT room VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            //Globals.getInstance().getInsertedRows().forEach(row -> {
-            for (int row : Globals.getInstance().getInsertedRows("rooms")) {
+            Globals.getInstance().getInsertedRows("rooms").forEach(row -> {
+            //for (int row : Globals.getInstance().getInsertedRows("rooms")) {
                 Room room = this.get(row);
                 logger.info("Inserting room " + room.getRoom_id());
                 try {
@@ -124,18 +123,18 @@ public class Rooms extends ArrayList<Room> {
                     statement.setString(4, room.getLatitude());
                     statement.setString(5, room.getWhat_three_words());
                     statement.executeUpdate();
-                    success = true;
+                    success.set(true);
                 } catch (SQLException e) {
-                    success = false;
+                    success.set(false);
                     throw new RuntimeException(e);
                 }
-            }
-            success = true;
+            });
+            success.set(true);
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating rooms in database", e);
         }
-        return success;
+        return success.get();
     }
 
     public void deleteRoom(String key) {

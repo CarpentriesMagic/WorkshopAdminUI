@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.model;
 
+import java.io.Serial;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ public class Workshops extends ArrayList<Workshop> {
     Logger logger = LoggerFactory.getLogger(getClass());
     //static Globals globals = Globals.getInstance();
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // TODO	There should be a better way of doing this, but in the meantime ..
@@ -53,14 +55,14 @@ public class Workshops extends ArrayList<Workshop> {
      *
      * @return an array of string containing the names of all the workshops
      */
-    public String[] getWorkshopNames() {
+    public String[] getWorkshopNames(String connectionString) {
         ArrayList<String> names = new ArrayList<String>();
         names.add("All");
         this.forEach((ws) -> {
             names.add(ws.getSlug());
         });
         String[] ret = names.toArray(new String[0]);
-        logger.trace("Workshop names: " + ret.length);
+        logger.trace("Workshop names: {}", ret.length);
         return ret;
     }
 
@@ -97,8 +99,8 @@ public class Workshops extends ArrayList<Workshop> {
      * @return true if a workshop with the given ID was found, otherwise false
      */
     public boolean exists(String slug) {
-        for (int i = 0; i < this.size(); i++) {
-            if (get(i).getSlug().equals(slug))
+        for (Workshop workshop : this) {
+            if (workshop.getSlug().equals(slug))
                 return true;
         }
         return false;
@@ -132,8 +134,8 @@ public class Workshops extends ArrayList<Workshop> {
             String val;
             StringBuilder result = new StringBuilder();
             while (resultSet.next()) {
-                for (int i = 0; i < columns.length; i++) {
-                    val = resultSet.getString(columns[i]);
+                for (int column : columns) {
+                    val = resultSet.getString(column);
                     result.append(" - ").append(val);
                 }
                 System.out.println(result);
@@ -193,22 +195,22 @@ public class Workshops extends ArrayList<Workshop> {
     public boolean updateWorkshops() {
         Connection connection = null;
         boolean success = false;
-        logger.info("Updating " + Globals.getInstance().getEditedRows("workshops").size() + " rows");
+        logger.info("Updating {} rows", Globals.getInstance().getEditedRows("workshops").size());
         Globals.getInstance().getEditedRows("workshops").forEach(row -> {
-            logger.info("Saving row: " + row);
+            logger.info("Saving row: {}", row);
         });
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "UPDATE workshops SET title = ?, humandate = ?, humantime = ?, startdate = ?, enddate = ?, " +
                     "room_id = ?, language = ?, country = ?, online = ?, pilot = ?, carpentry_code = ?, " +
                     "curriculum_code = ?, flavour_id = ?, schedule = ?, inc_lesson_site = ?, pre_survey = ?, " +
-                    "post_survey = ?, eventbrite = ? WHERE slug = ?";
+                    "post_survey = ?, eventbrite = ?, slug = ? WHERE slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             for (int row : Globals.getInstance().getEditedRows("workshops")) {
-                logger.info("Updating row: " + row);
+                logger.info("Updating row: {}", row);
                 Workshop workshop = this.get(row);
-                logger.info("Updating workshop " + workshop.getSlug());
+                logger.info("Updating workshop {}", workshop.getSlug());
                 try {
                     statement.setString(1, workshop.getTitle());
                     statement.setString(2, workshop.getHumandate());
@@ -229,6 +231,7 @@ public class Workshops extends ArrayList<Workshop> {
                     statement.setString(17, workshop.getPost_survey());
                     statement.setString(18, workshop.getEventbrite());
                     statement.setString(19, workshop.getSlug());
+                    statement.setString(20, workshop.getKey());
 
                     statement.executeUpdate();
                     success = true;
@@ -248,10 +251,7 @@ public class Workshops extends ArrayList<Workshop> {
     public boolean insertWorkshops() {
         Connection connection = null;
         boolean success = false;
-        logger.info("Updating " + Globals.getInstance().getEditedRows("workshops").size() + " rows");
-        Globals.getInstance().getInsertedRows("workshops").forEach(row -> {
-            logger.info("Saving row: " + row);
-        });
+        logger.info("Inserting {} rows ", Globals.getInstance().getEditedRows("workshops").size());
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "INSERT workshops VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -260,7 +260,7 @@ public class Workshops extends ArrayList<Workshop> {
             //Globals.getInstance().getInsertedRows().forEach(row -> {
             for (int row : Globals.getInstance().getInsertedRows("workshops")) {
                 Workshop workshop = this.get(row);
-                logger.info("Inserting workshop " + workshop.getSlug());
+                logger.info("Inserting workshop {}", workshop.getSlug());
                 try {
                     statement.setString(1, workshop.getSlug());
                     statement.setString(2, workshop.getTitle());
@@ -284,9 +284,7 @@ public class Workshops extends ArrayList<Workshop> {
 
 
                     statement.executeUpdate();
-                    success = true;
                 } catch (SQLException e) {
-                    success = false;
                     throw new RuntimeException(e);
                 }
             }
@@ -299,17 +297,53 @@ public class Workshops extends ArrayList<Workshop> {
     }
 
 
-    public void deleteWorkshop(String slug) {
+    public void deleteWorkshop(String key) {
         Connection connection = null;
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "DELETE FROM workshops WHERE slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, slug);
+            statement.setString(1, key);
             statement.executeUpdate();
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting workshop from database", e);
         }
+    }
+
+    public ArrayList<String> loadSchedules() {
+        Connection connection = null;
+        ArrayList<String> ret = new ArrayList<>();
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "SELECT schedule_id FROM schedules";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ret.add(resultSet.getString("schedule_id"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ret;
+    }
+
+    public ArrayList<String> loadCurricula() {
+        Connection connection = null;
+        ArrayList<String> ret = new ArrayList<>();
+        try {
+            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
+            String sql = "SELECT curriculum_code FROM curriculum";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ret.add(resultSet.getString("curriculum_code"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ret;
     }
 }

@@ -114,48 +114,28 @@ public class WorkshopTableModel extends AbstractTableModel {
 
     public Object getValueAt(int row, int col) {
         Workshop workshop = workshops.get(row);
-        switch (col) {
-            case 0:
-                return workshop.getSlug();
-            case 1:
-                return workshop.getTitle();
-            case 2:
-                return workshop.getHumandate();
-            case 3:
-                return workshop.getHumantime();
-            case 4:
-                return workshop.getStartdate();
-            case 5:
-                return workshop.getEnddate();
-            case 6:
-                return workshop.getRoom_id();
-            case 7:
-                return workshop.getLanguage();
-            case 8:
-                return workshop.getCountry();
-            case 9:
-                return workshop.isOnline();
-            case 10:
-                return workshop.isPilot();
-            case 11:
-                return workshop.getInc_lesson_site();
-            case 12:
-                return workshop.getPre_survey();
-            case 13:
-                return workshop.getPost_survey();
-            case 14:
-                return workshop.getCarpentry_code();
-            case 15:
-                return workshop.getCurriculum_code();
-            case 16:
-                return workshop.getFlavour_id();
-            case 17:
-                return workshop.getEventbrite();
-            case 18:
-                return workshop.getSchedule();
-
-        }
-        return null;
+        return switch (col) {
+            case 0 -> workshop.getSlug();
+            case 1 -> workshop.getTitle();
+            case 2 -> workshop.getHumandate();
+            case 3 -> workshop.getHumantime();
+            case 4 -> workshop.getStartdate();
+            case 5 -> workshop.getEnddate();
+            case 6 -> workshop.getRoom_id();
+            case 7 -> workshop.getLanguage();
+            case 8 -> workshop.getCountry();
+            case 9 -> workshop.isOnline();
+            case 10 -> workshop.isPilot();
+            case 11 -> workshop.getInc_lesson_site();
+            case 12 -> workshop.getPre_survey();
+            case 13 -> workshop.getPost_survey();
+            case 14 -> workshop.getCarpentry_code();
+            case 15 -> workshop.getCurriculum_code();
+            case 16 -> workshop.getFlavour_id();
+            case 17 -> workshop.getEventbrite();
+            case 18 -> workshop.getSchedule();
+            default -> null;
+        };
 
     }
 

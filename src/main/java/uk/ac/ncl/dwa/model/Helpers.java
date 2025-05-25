@@ -4,6 +4,7 @@ import org.mariadb.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+
 import java.io.Serial;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Instructors  extends ArrayList<Instructor> {
+public class Helpers extends ArrayList<Helper> {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -21,48 +22,48 @@ public class Instructors  extends ArrayList<Instructor> {
         Connection connection = null;
         try {
             connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT slug, person_id FROM instructors order by slug";
+            String sql = "SELECT slug, person_id FROM helpers order by slug";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
             this.clear(); // Clear existing data
             while (resultSet.next()) {
-                Instructor instructor = new Instructor(
+                Helper helper = new Helper(
                         resultSet.getString("slug"),
                         resultSet.getString("person_id")
                 );
-                instructor.setInserted(true);
-                this.add(instructor);
+                helper.setInserted(true);
+                this.add(helper);
             }
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error loading workshops from database", e);
+            throw new RuntimeException("Error loading helpers from database", e);
         }
     }
 
     public int getColumnCount() {
-        return Instructor.getColumnNames().length;
+        return Helper.getColumnNames().length;
     }
 
-    public boolean insertInstructors() {
+    public boolean insertHelpers() {
         Connection connection = null;
         AtomicBoolean success = new AtomicBoolean(false);
-        logger.info("Inserting " + Globals.getInstance().getEditedRows("instructors").size() + " rows");
-        Globals.getInstance().getInsertedRows("instructors").forEach(row -> {
+        logger.info("Updating " + Globals.getInstance().getEditedRows("helpers").size() + " rows");
+        Globals.getInstance().getInsertedRows("helpers").forEach(row -> {
             logger.info("Saving row: " + row);
         });
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "INSERT instructors VALUES (?, ?)";
+            String sql = "INSERT helpers VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            Globals.getInstance().getInsertedRows("instructors").forEach(row -> {
-            //for (int row : Globals.getInstance().getInsertedRows("instructors")) {
-                Instructor instructor = this.get(row);
-                logger.info("Inserting instructor " + instructor.getPerson_id());
+            Globals.getInstance().getInsertedRows("helpers").forEach(row -> {
+            //for (int row : Globals.getInstance().getInsertedRows("helpers")) {
+                Helper helper = this.get(row);
+                logger.info("Inserting helper " + helper.getPerson_id());
                 try {
-                    statement.setString(1, instructor.getPerson_id());
-                    statement.setString(2, instructor.getSlug());
+                    statement.setString(1, helper.getPerson_id());
+                    statement.setString(2, helper.getSlug());
 
                     statement.executeUpdate();
                     success.set(true);
@@ -71,43 +72,41 @@ public class Instructors  extends ArrayList<Instructor> {
                     throw new RuntimeException(e);
                 }
             });
-            success.set(true);
+                    success.set(true);
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating instructors in database", e);
+            throw new RuntimeException("Error updating helpers in database", e);
         }
         return success.get();
     }
 
-    public boolean updateInstructors() {
+    public boolean updateHelpers() {
     Connection connection = null;
         AtomicBoolean success = new AtomicBoolean(true);
-        logger.info("Updating {} rows", Globals.getInstance().getEditedRows("instructors").size());
-        Globals.getInstance().getEditedRows("instructors").forEach(row -> {
+        logger.info("Updating {} rows", Globals.getInstance().getEditedRows("helpers").size());
+        Globals.getInstance().getEditedRows("helpers").forEach(row -> {
             logger.info("Saving row: {}", row);
         });
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "UPDATE instructors SET slug = ?, person_id = ? WHERE person_id = ? and slug = ?";
+            String sql = "UPDATE helpers SET slug = ?, person_id = ? WHERE person_id = ? and slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-//            for (int row : Globals.getInstance().getEditedRows("instructors")) {
-            Globals.getInstance().getEditedRows("instructors").forEach(row ->{
+            for (int row : Globals.getInstance().getEditedRows("helpers")) {
                 logger.info("Updating row: {}", row);
-                Instructor instructor = this.get(row);
-                logger.info("Updating instructors {}", instructor.getPerson_id());
+                Helper helper = this.get(row);
+                logger.info("Updating helpers {}", helper.getPerson_id());
                 try {
-                    statement.setString(1, instructor.getSlug());
-                    statement.setString(2, instructor.getPerson_id());
-                    statement.setString(3, instructor.getKey_person_id());
-                    statement.setString(4, instructor.getKey_slug());
+                    statement.setString(1, helper.getSlug());
+                    statement.setString(2, helper.getPerson_id());
+                    statement.setString(3, helper.getKey_person_id());
+                    statement.setString(4, helper.getKey_slug());
                     statement.executeUpdate();
                 } catch (SQLException e) {
                     logger.error("The record could not be updated");
                     success.set(false);
-//                    throw new RuntimeException(e);
                 }
-            });
+            }
             connection.close();
         } catch (SQLException e) {
             success.set(false);
@@ -117,22 +116,21 @@ public class Instructors  extends ArrayList<Instructor> {
 
 
     public String[] getColumnNames() {
-        return Instructor.getColumnNames();
+        return Helper.getColumnNames();
     }
 
-    public void deleteInstructor(String personId, String slug) {
+    public void deleteHelper(String personId, String slug) {
         Connection connection = null;
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "DELETE FROM instructors WHERE person_id = ? and slug = ?";
+            String sql = "DELETE FROM helpers WHERE person_id = ? and slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, personId);
             statement.setString(2, slug);
             statement.executeUpdate();
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting instructor/workshop from database", e);
+            throw new RuntimeException("Error deleting helper/workshop from database", e);
         }
     }
-
 }

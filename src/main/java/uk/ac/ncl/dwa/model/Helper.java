@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class Instructor implements Serializable {
+public class Helper implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     final Logger logger = LoggerFactory.getLogger(getClass());
@@ -17,12 +17,12 @@ public class Instructor implements Serializable {
     private Boolean inserted = false;
     private static final String[] columnNames = {"Slug", "Person_ID"};
 
-    public Instructor() {
-        person_id = "Person ID";
-        slug = "Slug";
+    public Helper() {
+        this.person_id = "Person ID";
+        this.slug = "Slug";
     }
 
-    public Instructor(String slug, String person_id) {
+    public Helper(String slug, String person_id) {
         this.person_id = person_id;
         this.slug = slug;
         key_slug = slug;
@@ -57,16 +57,11 @@ public class Instructor implements Serializable {
         this.inserted = inserted;
     }
 
-    public String getKey_slug() {
-        return key_slug;
-    }
-
-    public void setKey_slug(String key_slug) {
-        this.key_slug = key_slug;
-    }
-
     public String getKey_person_id() {
         return key_person_id;
     }
 
+    public String getKey_slug() {
+        return key_slug;
+    }
 }

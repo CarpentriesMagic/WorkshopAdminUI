@@ -3,7 +3,6 @@ package uk.ac.ncl.dwa.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
-
 import javax.swing.table.AbstractTableModel;
 import java.io.Serial;
 
@@ -13,10 +12,9 @@ public class InstructorTableModel extends AbstractTableModel {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     Instructors instructors = Globals.getInstance().getInstructors();
 
-
     public InstructorTableModel() {
         super();
-        logger.trace("Create RoomTableModel");
+        logger.trace("Create InstructorTableModel");
         instructors.loadFromDatabase(Globals.getInstance().getConnectionString());
         setInstructors(instructors);
     }
@@ -37,8 +35,8 @@ public class InstructorTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Instructor instructor = instructors.get(rowIndex);
         return switch (columnIndex) {
-            case 0 -> instructor.getPerson_id();
-            case 1 -> instructor.getSlug();
+            case 0 -> instructor.getSlug();
+            case 1 -> instructor.getPerson_id();
             default -> null;
         };
 
@@ -65,22 +63,16 @@ public class InstructorTableModel extends AbstractTableModel {
 
         Instructor instructor = instructors.get(row);
         Globals.getInstance().setDirty(true);
-        logger.info("Setting dirty to " + Globals.getInstance().getDirty());
+        logger.info("Setting dirty to {}", Globals.getInstance().getDirty());
         if (instructor.getPerson_id().isBlank()) {
             Globals.getInstance().getInsertedRows("instructors").add(row);
         } else {
-            logger.info("Add row " + row + " to dirty rows");
-            Globals.getInstance().getEditedRows("rooms").add(row);
+            logger.info("Add row {} to dirty rows", row);
+            Globals.getInstance().getEditedRows("instructors").add(row);
         }
         switch (col) {
-            case 0:
-                instructor.setPerson_id((String) value);
-                break;
-            case 1:
-                instructor.setSlug((String) value);
-                break;
-            default:
-                break;
+            case 0 -> instructor.setSlug((String) value);
+            case 1 -> instructor.setPerson_id(((String) value).split(",")[0]);
         }
         // Notify the table that the data has changed
         fireTableCellUpdated(row, col);
@@ -88,7 +80,6 @@ public class InstructorTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int col) {
-
         return instructors.getColumnNames()[col];
     }
 
