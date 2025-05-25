@@ -85,10 +85,10 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             int row = workshopTable.getSelectedRow();
             if (row != -1) {
                 String slug = Globals.getInstance().getWorkshops().get(row).getSlug();
+                globals.getWorkshops().deleteWorkshop(slug);
                 globals.getWorkshops().remove(row);
                 globals.getInsertedRows("workshops").remove(row);
                 globals.getEditedRows("workshops").remove(row);
-                globals.getWorkshops().deleteWorkshop(slug);
                 workshopTable.repaint();
             } else {
                 JOptionPane.showMessageDialog(this, "No row selected");

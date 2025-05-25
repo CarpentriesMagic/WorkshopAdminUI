@@ -69,19 +69,12 @@ public class HelperTableModel extends AbstractTableModel {
         if (helper.getPerson_id().isBlank()) {
             Globals.getInstance().getInsertedRows("helpers").add(row);
         } else {
-            logger.info("Add row " + row + " to dirty rows");
+            logger.info("Add row {} to dirty rows", row);
             Globals.getInstance().getEditedRows("helpers").add(row);
         }
         switch (col) {
-            case 0:
-                helper.setSlug((String) value);
-                break;
-            case 1:
-                helper.setPerson_id((String) value);
-                break;
-
-            default:
-                break;
+            case 0 -> helper.setSlug((String) value);
+            case 1 -> helper.setPerson_id(((String) value).split(",")[0]);
         }
         // Notify the table that the data has changed
         fireTableCellUpdated(row, col);

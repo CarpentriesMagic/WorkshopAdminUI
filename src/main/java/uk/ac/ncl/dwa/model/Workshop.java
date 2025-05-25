@@ -4,11 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Workshop {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
             "room_id", "lang", "cntry", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
             "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule"};
-    private String key; // slug before any changes made to record - needed for update
+    private String key; // slug before any changes made to record - needed for updating
     private String slug;
     private String title;
     private String humandate;
@@ -267,9 +267,6 @@ public class Workshop {
         return columnNames;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public String getKey() {
         return this.key;

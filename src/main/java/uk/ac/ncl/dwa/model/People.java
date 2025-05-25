@@ -113,7 +113,7 @@ public class People extends ArrayList<Person> {
                     statement.setString(3, person.getLastname());
                     statement.setString(4, person.getCertified());
                     statement.setString(5, person.getEmail());
-                    statement.setString(6, person.getPerson_id());
+                    statement.setString(6, person.getKey());
                     statement.executeUpdate();
                     success = true;
                 } catch (SQLException e) {
@@ -133,13 +133,13 @@ public class People extends ArrayList<Person> {
         return Person.getColumnNames();
     }
 
-    public boolean deletePerson(String personId, String slug) {
+    public boolean deletePerson(String key) {
         Connection connection = null;
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "DELETE FROM people WHERE person_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, personId);
+            statement.setString(1, key);
             statement.executeUpdate();
             connection.close();
             return true;
@@ -149,12 +149,12 @@ public class People extends ArrayList<Person> {
         }
     }
 
-    public static String[] listOfInstructors() {
+    public static String[] selectedList(int certvalue) {
         Connection connection = null;
         ArrayList<String> instructors = new ArrayList<>();
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "SELECT person_id, firstname, lastname FROM people WHERE certified > 0";
+            String sql = "SELECT person_id, firstname, lastname FROM people WHERE certified > " + certvalue;
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

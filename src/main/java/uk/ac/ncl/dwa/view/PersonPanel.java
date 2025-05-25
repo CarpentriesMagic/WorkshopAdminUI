@@ -51,16 +51,24 @@ public class PersonPanel extends JPanel implements ActionListener {
             case "Save" -> {
                 // Save action
                 logger.info("Saving changes");
+                boolean success1 = true;
                 boolean success2 = true;
                 if (!globals.getEditedRows("people").isEmpty()) {
                     logger.info("There are people to insert");
-                    success2 = globals.getPeople().insertPerson();
-                    if (!success2) {
+                    success1 = globals.getPeople().updatePerson();
+                    if (!success1) {
                         JOptionPane.showMessageDialog(this, "Error updating people");
-                        throw new RuntimeException("Error updating people from database");
-                    } else {
-                        logger.debug("Clear dirty flag");
-                        logger.debug("People inserted");
+                    }
+                    if (!globals.getInsertedRows("people").isEmpty()) {
+                        success2 = globals.getPeople().insertPerson();
+                    }
+                    if (success1 && success2) {
+                        globals.setDirty(false);
+                    }
+                    if (success1) {
+                        globals.getEditedRows("people").clear();
+                    }
+                    if (success2) {
                         globals.getInsertedRows("people").clear();
                     }
                 }
@@ -79,10 +87,9 @@ public class PersonPanel extends JPanel implements ActionListener {
                 int row = personTable.getSelectedRow();
                 if (row != -1) {
                     String person_id = Globals.getInstance().getPeople().get(row).getPerson_id();
-                    String slug = Globals.getInstance().getPeople().get(row).getTitle();
                     if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this record?") == JOptionPane.YES_OPTION) {
                         logger.info("Deleting selected person");
-                        if (globals.getPeople().deletePerson(person_id, slug)) {
+                        if (globals.getPeople().deletePerson(person_id)) {
                             globals.getPeople().remove(row);
                             globals.getInsertedRows("people").remove(row);
                             globals.getEditedRows("people").remove(row);

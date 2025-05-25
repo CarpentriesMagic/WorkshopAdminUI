@@ -1,13 +1,18 @@
 package uk.ac.ncl.dwa.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Person {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final String[] columnNames = {"Person_id", "title", "first name", "last name", "Certified", "Email"};
+    private String key; // person_id before any changes made to record - needed for updating
     private String person_id;
     private String title;
     private String firstname;
     private String lastname;
     private String certified;
     private String email;
-    private static final String[] columnNames = {"Person_id", "title", "first name", "last name", "Certified", "Email"};
     private Boolean inserted = false;
 
 
@@ -21,6 +26,7 @@ public class Person {
     }
 
     public Person(String person_id, String title, String firstname, String lastname, String certified, String email) {
+        this.key = person_id;
         this.person_id = person_id;
         this.title = title;
         this.firstname = firstname;
@@ -93,5 +99,8 @@ public class Person {
         return columnNames.length;
     }
 
+    public String getKey() {
+        return this.key;
+    }
 
 }

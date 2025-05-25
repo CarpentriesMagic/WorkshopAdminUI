@@ -38,7 +38,7 @@ public class InstructorTable extends JTable implements Serializable {
         /*
          * ComboBox for selecting slug
          */
-        String[] instructors = People.listOfInstructors();
+        String[] instructors = People.selectedList(1);
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);
         JComboBox<String> instructorComboBox = new JComboBox<>(instructors);
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
