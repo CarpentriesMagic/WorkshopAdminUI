@@ -41,7 +41,7 @@ public class HelperTable extends JTable implements Serializable {
          * certvalue 0 = helpers
          * certvalue 1 = instructors
          */
-        String[] instructors = People.selectedList(0);
+        String[] instructors = People.selectedList(2);
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);
         JComboBox<String> instructorComboBox = new JComboBox<>(instructors);
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));

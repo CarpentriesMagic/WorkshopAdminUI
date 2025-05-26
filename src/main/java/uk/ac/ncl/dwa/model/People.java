@@ -149,12 +149,29 @@ public class People extends ArrayList<Person> {
         }
     }
 
+    /**
+     * Select specific people from the database
+     * @param certvalue 1 for instructors, 2 for helpers, 0 for everybody else
+     * @return
+     */
     public static String[] selectedList(int certvalue) {
         Connection connection = null;
         ArrayList<String> instructors = new ArrayList<>();
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "SELECT person_id, firstname, lastname FROM people WHERE certified > " + certvalue;
+            String sql;
+            switch (certvalue) {
+                //INSTRUCTORS
+                case 1:sql = "SELECT person_id, firstname, lastname FROM people WHERE certified = " + certvalue;
+                    break;
+                // HELPERS
+                case 2: sql = "SELECT person_id, firstname, lastname FROM people WHERE certified > " + 0;
+                    break;
+                // EVERYONE
+                default:
+                    sql = "SELECT person_id, firstname, lastname FROM people";
+                    break;
+            }
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
