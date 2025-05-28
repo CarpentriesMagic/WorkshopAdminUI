@@ -11,20 +11,20 @@ import java.util.Set;
  */
 public class Globals {
     public static Globals globals;
+    private static Settings settings;
+    private static String connectionString;
     private Boolean dirty = false;
     private Workshops workshops = new Workshops();
     private Rooms rooms = new Rooms();
     private Instructors instructors = new Instructors();
     private Helpers helpers = new Helpers();
     private People people = new People();
-    private String connectionString;
     private Hashtable<String, DirtyRows> dirtyRows = new Hashtable<>();
 
     /**
      * Dummy contructor to prevent instantiation.
      */
     private Globals() {
-        //rooms.loadFromDatabase(getInstance().getConnectionString());
     }
 
     /**
@@ -35,15 +35,16 @@ public class Globals {
     public static Globals getInstance() {
         if (globals == null) {
             globals = new Globals();
+            Globals.connectionString = connectionString;
             globals.dirtyRows.put("workshops", new DirtyRows());
             globals.dirtyRows.put("rooms", new DirtyRows());
             globals.dirtyRows.put("instructors", new DirtyRows());
             globals.dirtyRows.put("helpers", new DirtyRows());
             globals.dirtyRows.put("people", new DirtyRows());
+
         }
         return globals;
     }
-
 
     public Boolean getDirty() {
         return dirty;
@@ -69,10 +70,6 @@ public class Globals {
         return connectionString;
     }
 
-    public void setConnectionString(String connectionString) {
-        this.connectionString = connectionString;
-    }
-
     public Set<Integer> getInsertedRows(String key) {
         return dirtyRows.get(key).getInsertedRows();
     }
@@ -91,5 +88,11 @@ public class Globals {
 
     public People getPeople() {
         return people;
+    }
+
+    public void setConnectionString(String connectionString) {
+        settings = new Settings();
+        settings.loadFromDatabase(connectionString);
+        Globals.connectionString = connectionString;
     }
 }

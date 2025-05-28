@@ -162,20 +162,21 @@ public class People extends ArrayList<Person> {
             String sql;
             switch (certvalue) {
                 //INSTRUCTORS
-                case 1:sql = "SELECT person_id, firstname, lastname FROM people WHERE certified = " + certvalue;
+                case 1:sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified = " + certvalue;
                     break;
                 // HELPERS
-                case 2: sql = "SELECT person_id, firstname, lastname FROM people WHERE certified > " + 0;
+                case 2: sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified > " + 0;
                     break;
                 // EVERYONE
                 default:
-                    sql = "SELECT person_id, firstname, lastname FROM people";
+                    sql = "SELECT person_id, title, firstname, lastname FROM people";
                     break;
             }
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 instructors.add(resultSet.getString("person_id") + "," +
+                        resultSet.getString("title") + " " +
                         resultSet.getString("firstname") + " " +
                         resultSet.getString("lastname"));
             }

@@ -39,6 +39,7 @@ public class HelperTableModel extends AbstractTableModel {
         return switch (columnIndex) {
             case 0 -> helper.getSlug();
             case 1 -> helper.getPerson_id();
+            case 2 -> helper.getName();
             default -> null;
         };
 
@@ -72,12 +73,19 @@ public class HelperTableModel extends AbstractTableModel {
             logger.info("Add row {} to dirty rows", row);
             Globals.getInstance().getEditedRows("helpers").add(row);
         }
+        String id = ((String) value).split(",")[0];
+        String name = ((String) value).split(",")[1];
         switch (col) {
             case 0 -> helper.setSlug((String) value);
-            case 1 -> helper.setPerson_id(((String) value).split(",")[0]);
+            case 1 -> {
+                helper.setPerson_id(id);
+                helper.setName(name.trim());
+            }
+            case 2 -> helper.setName(name);
         }
         // Notify the table that the data has changed
         fireTableCellUpdated(row, col);
+        fireTableCellUpdated(row, col + 1);
     }
 
     @Override

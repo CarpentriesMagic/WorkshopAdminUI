@@ -14,17 +14,20 @@ public class Helper implements Serializable {
     private String key_slug;
     private String person_id;
     private String slug;
+    private String name;
     private Boolean inserted = false;
-    private static final String[] columnNames = {"Slug", "Person_ID"};
+    private static final String[] columnNames = {"Slug", "Person_ID", "Name"};
 
     public Helper() {
         this.person_id = "Person ID";
         this.slug = "Slug";
+        this.name = "Name";
     }
 
-    public Helper(String slug, String person_id) {
+    public Helper(String slug, String person_id, String name) {
         this.person_id = person_id;
         this.slug = slug;
+        this.name = name;
         key_slug = slug;
         key_person_id = person_id;
     }
@@ -63,5 +66,12 @@ public class Helper implements Serializable {
 
     public String getKey_slug() {
         return key_slug;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
     }
 }

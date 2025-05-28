@@ -26,7 +26,7 @@ public class Main {
 
     }
     static Logger logger = LoggerFactory.getLogger(Main.class);
-    static Globals globals = Globals.getInstance();
+    static Globals globals;
     static String connectionString;
 
     public static void main(String[] args) {
@@ -38,10 +38,11 @@ public class Main {
         dbPass = properties.getProperty("dbPass");
         connectionString = String.format("jdbc:mariadb://%s:%d/%s?user=%s&password=%s",
                 dbServer, dbPort, dbName, dbUser, dbPass);
+        globals = Globals.getInstance();
+        globals.setConnectionString(connectionString);
         // Create properties file
         globals.setDirty(false);
         logger.info("Set dirty to " + globals.getDirty());
-        globals.setConnectionString(connectionString);
         String sourceFilename = "logging.properties";
         if (!Files.exists(Paths.get(sourceFilename))) {
             System.out.println("Logging configuration file " + sourceFilename + " not found");

@@ -1,54 +1,69 @@
 package uk.ac.ncl.dwa.view;
 
+import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Workshop;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class WorkshopPanel extends JPanel implements ActionListener {
-    Logger logger = LoggerFactory.getLogger(WorkshopPanel.class);
-    WorkshopTable workshopTable = new WorkshopTable();
+    private final Logger logger = LoggerFactory.getLogger(WorkshopPanel.class);
+    private JTextArea workshopEntryTextArea = new JTextArea("", 640, 480);
+    private WorkshopTable workshopTable = new WorkshopTable(workshopEntryTextArea);
 
     public WorkshopPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new MigLayout("","[50%][50%]","[fill][fill]"));
 
-        JScrollPane scrollPane = new JScrollPane(workshopTable);
+        JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
+        JPanel workshopEntryPanel = new JPanel(new MigLayout("fill", "[]", "[]"));
+        JScrollPane workshopTableScrollPane = new JScrollPane(workshopTable);
+        JScrollPane workshopEntryScrollPane = new JScrollPane(workshopEntryTextArea);
+        workshopTableScrollPane.setSize(100, 400);
+
         // Create scroll bars
-        scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         //  enable horizontal scrolling
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
+        workshopTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        workshopTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        workshopTableScrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
+        workshopTableScrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
         //  enable vertical scrolling
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        workshopTable.setFillsViewportHeight(true);
+        workshopEntryScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        workshopEntryScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        workshopEntryScrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
+        workshopEntryScrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
 
         // Add components to the frame
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        JButton btn_save = new JButton("Save");
-        JButton btn_add = new JButton("Add");
-        JButton btn_del = new JButton("Delete");
+        JPanel buttonPanel = new JPanel();
+        JButton btn_save = new JButton("Save Workshops");
+        JButton btn_add = new JButton("Add Workshop");
+        JButton btn_del = new JButton("Delete Workshop");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
-        panel.add(btn_save);
-        panel.add(btn_add);
-        panel.add(btn_del);
+        buttonPanel.add(btn_save);
+        buttonPanel.add(btn_add);
+        buttonPanel.add(btn_del);
 
         // Add panel and scroll pane to the frame
-        this.add(panel, BorderLayout.NORTH);
-        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(buttonPanel, "wrap");
+        workshopTablePanel.add(workshopTableScrollPane, "grow, push");
+        workshopEntryPanel.add(workshopEntryScrollPane, "grow, push");
+
+// Specify column placement explicitly
+        this.add(workshopTablePanel, "grow, push, cell 0 1");
+        this.add(workshopEntryPanel, "grow, push, cell 1 1, wrap");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
         Globals globals = Globals.getInstance();
-        if (e.getActionCommand().equals("Save")) {
+        if (e.getActionCommand().equals("Save Workshops")) {
             // Save action
             logger.info("Saving changes");
             boolean success1 = true;
@@ -71,7 +86,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             if (success2) {
                 globals.getInsertedRows("workshops").clear();
             }
-        } else if (e.getActionCommand().equals("Add")) {
+        } else if (e.getActionCommand().equals("Add Workshop")) {
             // Add action
             logger.info("Adding new workshop");
             Globals.getInstance().getWorkshops().add(new Workshop());
@@ -79,7 +94,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             globals.setDirty(true);
             globals.getInsertedRows("workshops").add(globals.getWorkshops().size() - 1);
             workshopTable.repaint();
-        } else if (e.getActionCommand().equals("Delete")) {
+        } else if (e.getActionCommand().equals("Delete Workshop")) {
             // Delete action
             logger.info("Deleting selected workshop");
             int row = workshopTable.getSelectedRow();

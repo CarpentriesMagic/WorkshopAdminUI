@@ -6,19 +6,21 @@ import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class WorkshopTable extends JTable {
+public class WorkshopTable extends JTable implements ListSelectionListener {
     WorkshopTableModel workshopTableModel;
     Logger logger = LoggerFactory.getLogger(WorkshopTable.class);
     Globals globals = Globals.getInstance();
     ArrayList<String> rooms;
+    JTextArea textArea;
 
-    public WorkshopTable() {
+    public WorkshopTable(JTextArea textArea) {
         super();
-
+        this.textArea = textArea;
         workshopTableModel = new WorkshopTableModel();
         setModel(workshopTableModel);
         // Create JTable and set its model
@@ -81,5 +83,36 @@ public class WorkshopTable extends JTable {
         TableColumn scheduleColumn = this.getColumnModel().getColumn(18);
         JComboBox<String> scheduleComboBox = new JComboBox<String>(schedules.toArray(new String[schedules.size()]));
         scheduleColumn.setCellEditor(new DefaultCellEditor(scheduleComboBox));
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        textArea.setText(getRecordAsString(getSelectedRow()));
+    }
+
+    public String getRecordAsString(int row) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Slug:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 0).toString()).append("\n");
+        stringBuilder.append("Title:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("\n");
+        stringBuilder.append("Human date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 2).toString()).append("\n");
+        stringBuilder.append("Human time:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 3).toString()).append("\n");
+        stringBuilder.append("Start date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 4).toString()).append("\n");
+        stringBuilder.append("End date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 5).toString()).append("\n");
+        stringBuilder.append("Room:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 6).toString()).append("\n");
+        stringBuilder.append("Language:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 7).toString()).append("\n");
+        stringBuilder.append("Country:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 8).toString()).append("\n");
+        stringBuilder.append("Online:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 9).toString()).append("\n");
+        stringBuilder.append("Pilot:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 10).toString()).append("\n");
+        stringBuilder.append("Lesson site:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 11).toString()).append("\n");
+        stringBuilder.append("Pre workshop:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 12).toString()).append("\n");
+        stringBuilder.append("Post workshop:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 13).toString()).append("\n");
+        stringBuilder.append("Carpentry:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 14).toString()).append("\n");
+        stringBuilder.append("Curriculum:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 15).toString()).append("\n");
+        stringBuilder.append("Flavour:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 16).toString()).append("\n");
+        stringBuilder.append("EventBrite:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 17).toString()).append("\n");
+        stringBuilder.append("Schedule:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 18).toString()).append("\n");
+        stringBuilder.append("Collaborative Doc:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 0).toString()).append("\n");
+
+        return stringBuilder.toString();
     }
 }

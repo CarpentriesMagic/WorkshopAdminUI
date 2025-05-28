@@ -21,7 +21,9 @@ public class Instructors  extends ArrayList<Instructor> {
         Connection connection = null;
         try {
             connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT slug, person_id FROM instructors order by slug";
+            String sql = "SELECT i.slug, i.person_id, p.title, p.firstname, p.lastname " +
+                    "FROM instructors as i " +
+                    "join people as p on p.person_id=i.person_id";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -29,8 +31,10 @@ public class Instructors  extends ArrayList<Instructor> {
             while (resultSet.next()) {
                 Instructor instructor = new Instructor(
                         resultSet.getString("slug"),
-                        resultSet.getString("person_id")
-                );
+                        resultSet.getString("person_id"),
+                        (resultSet.getString("title") + " " +
+                                resultSet.getString("firstname") + " " +
+                                resultSet.getString("lastname")).trim());
                 instructor.setInserted(true);
                 this.add(instructor);
             }
@@ -47,10 +51,7 @@ public class Instructors  extends ArrayList<Instructor> {
     public boolean insertInstructors() {
         Connection connection = null;
         AtomicBoolean success = new AtomicBoolean(false);
-        logger.info("Inserting " + Globals.getInstance().getEditedRows("instructors").size() + " rows");
-        Globals.getInstance().getInsertedRows("instructors").forEach(row -> {
-            logger.info("Saving row: " + row);
-        });
+        logger.info("Inserting {} rows", Globals.getInstance().getEditedRows("instructors").size());
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "INSERT instructors VALUES (?, ?)";

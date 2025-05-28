@@ -14,19 +14,22 @@ public class Instructor implements Serializable {
     private String key_slug;
     private String person_id;
     private String slug;
+    private String name;
     private Boolean inserted = false;
-    private static final String[] columnNames = {"Slug", "Person_ID"};
+    private static final String[] columnNames = {"Slug", "Person_ID", "Name"};
 
     public Instructor() {
         person_id = "Person ID";
         slug = "Slug";
+        name = "Name";
     }
 
-    public Instructor(String slug, String person_id) {
+    public Instructor(String slug, String person_id, String name) {
         this.person_id = person_id;
         this.slug = slug;
         key_slug = slug;
         key_person_id = person_id;
+        this.name = name;
     }
 
     public static String[] getColumnNames() {
@@ -69,4 +72,9 @@ public class Instructor implements Serializable {
         return key_person_id;
     }
 
+    public String getName() { return name; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

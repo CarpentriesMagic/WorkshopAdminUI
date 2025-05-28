@@ -37,6 +37,7 @@ public class InstructorTableModel extends AbstractTableModel {
         return switch (columnIndex) {
             case 0 -> instructor.getSlug();
             case 1 -> instructor.getPerson_id();
+            case 2 -> instructor.getName();
             default -> null;
         };
 
@@ -51,8 +52,9 @@ public class InstructorTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Allow editing for all cells
+        if (col < 2)
         return true;
+        else return false;
     }
 
     @Override
@@ -60,7 +62,6 @@ public class InstructorTableModel extends AbstractTableModel {
         if (instructors == null) {
             return;
         }
-
         Instructor instructor = instructors.get(row);
         Globals.getInstance().setDirty(true);
         logger.info("Setting dirty to {}", Globals.getInstance().getDirty());
@@ -70,12 +71,19 @@ public class InstructorTableModel extends AbstractTableModel {
             logger.info("Add row {} to dirty rows", row);
             Globals.getInstance().getEditedRows("instructors").add(row);
         }
+        String id = ((String) value).split(",")[0];
+        String name = ((String) value).split(",")[1];
         switch (col) {
             case 0 -> instructor.setSlug((String) value);
-            case 1 -> instructor.setPerson_id(((String) value).split(",")[0]);
+            case 1 -> {
+                instructor.setPerson_id(id);
+                instructor.setName(name.trim());
+            }
+            case 2 -> instructor.setName(name.trim());
         }
         // Notify the table that the data has changed
         fireTableCellUpdated(row, col);
+        fireTableCellUpdated(row, col + 1);
     }
 
     @Override

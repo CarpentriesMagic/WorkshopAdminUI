@@ -6,8 +6,6 @@ import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Room;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,9 +28,9 @@ public class RoomPanel extends JPanel implements ActionListener {
         // Add components to the frame
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        JButton btn_save = new JButton("Save");
-        JButton btn_add = new JButton("Add");
-        JButton btn_del = new JButton("Delete");
+        JButton btn_save = new JButton("Save Rooms");
+        JButton btn_add = new JButton("Add Room");
+        JButton btn_del = new JButton("Delete Room");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
@@ -50,7 +48,7 @@ public class RoomPanel extends JPanel implements ActionListener {
         logger.debug(e.getActionCommand());
         Globals globals = Globals.getInstance();
         switch (e.getActionCommand()) {
-            case "Save" -> {
+            case "Save Rooms" -> {
                 // Save action
                 logger.info("Saving changes");
                 boolean success1;
@@ -73,7 +71,7 @@ public class RoomPanel extends JPanel implements ActionListener {
                     globals.getInsertedRows("rooms").clear();
                 }
             }
-            case "Add" -> {
+            case "Add Room" -> {
                 // Add action
                 logger.info("Adding new Room");
                 Globals.getInstance().getRooms().add(new Room());
@@ -82,7 +80,7 @@ public class RoomPanel extends JPanel implements ActionListener {
                 globals.getInsertedRows("rooms").add(globals.getRooms().size() - 1);
                 roomTable.repaint();
             }
-            case "Delete" -> {
+            case "Delete Room" -> {
                 // Delete action
                 logger.info("Deleting selected room");
                 int row = roomTable.getSelectedRow();

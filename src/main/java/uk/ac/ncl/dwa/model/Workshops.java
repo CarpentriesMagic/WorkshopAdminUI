@@ -14,7 +14,6 @@ import uk.ac.ncl.dwa.controller.Globals;
 
 public class Workshops extends ArrayList<Workshop> {
     Logger logger = LoggerFactory.getLogger(getClass());
-    //static Globals globals = Globals.getInstance();
 
     @Serial
     private static final long serialVersionUID = 1L;

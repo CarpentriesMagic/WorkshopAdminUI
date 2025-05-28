@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Instructor;
-import uk.ac.ncl.dwa.model.Room;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

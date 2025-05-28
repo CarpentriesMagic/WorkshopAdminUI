@@ -22,7 +22,9 @@ public class Helpers extends ArrayList<Helper> {
         Connection connection = null;
         try {
             connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT slug, person_id FROM helpers order by slug";
+            String sql = "SELECT h.slug, h.person_id, p.title, p.firstname, p.lastname " +
+                    "FROM helpers as h " +
+                    "join people as p on p.person_id=h.person_id";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -30,8 +32,10 @@ public class Helpers extends ArrayList<Helper> {
             while (resultSet.next()) {
                 Helper helper = new Helper(
                         resultSet.getString("slug"),
-                        resultSet.getString("person_id")
-                );
+                        resultSet.getString("person_id"),
+                        (resultSet.getString("title") + " " +
+                                resultSet.getString("firstname") + " " +
+                                resultSet.getString("lastname")).trim());
                 helper.setInserted(true);
                 this.add(helper);
             }

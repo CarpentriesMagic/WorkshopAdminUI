@@ -24,8 +24,9 @@ public class HelperTable extends JTable implements Serializable {
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //  set column widths
-        getColumnModel().getColumn(0).setPreferredWidth(200);
-        getColumnModel().getColumn(1).setPreferredWidth(130);
+        getColumnModel().getColumn(0).setPreferredWidth(130);
+        getColumnModel().getColumn(1).setPreferredWidth(100);
+        getColumnModel().getColumn(2).setPreferredWidth(200);
 
         /*
          * ComboBox for selecting slug

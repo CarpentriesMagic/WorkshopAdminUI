@@ -1,11 +1,7 @@
 package uk.ac.ncl.dwa.view;
 
-import org.mariadb.jdbc.Connection;
 import uk.ac.ncl.dwa.controller.Globals;
 
-import javax.swing.*;
-import java.awt.*;
-import java.sql.*;
 import java.util.Scanner;
 
 import static uk.ac.ncl.dwa.model.InsertFunctions.insertWorkshop;
