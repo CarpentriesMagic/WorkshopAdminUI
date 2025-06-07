@@ -1,6 +1,8 @@
 package uk.ac.ncl.dwa.controller;
 
 import uk.ac.ncl.dwa.model.*;
+
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 
@@ -94,5 +96,9 @@ public class Globals {
         settings = new Settings();
         settings.loadFromDatabase(connectionString);
         Globals.connectionString = connectionString;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }

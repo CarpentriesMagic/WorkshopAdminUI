@@ -7,7 +7,7 @@ public class Workshop {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
             "room_id", "lang", "cntry", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
-            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule"};
+            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id"};
     private String key; // slug before any changes made to record - needed for updating
     private String slug;
     private String title;
@@ -28,6 +28,7 @@ public class Workshop {
     private String flavour_id = "";
     private String eventbrite = "";
     private String schedule = "";
+    private String internal_id = "";
     private Boolean inserted = false;
 
     public Workshop() {
@@ -48,6 +49,7 @@ public class Workshop {
         this.carpentry_code = "";
         this.curriculum_code = "";
         this.flavour_id = "";
+        this.internal_id = "";
     }
 
     /**
@@ -76,7 +78,7 @@ public class Workshop {
                     String startdate, String enddate, String room_id, String language, String country,
                     boolean online, boolean pilot, String inc_lesson_site, String pre_survey,
                     String post_survey, String carpentry_code, String curriculum_code, String flavour_id,
-                    String eventbrite, String schedule) {
+                    String eventbrite, String schedule, String internal_id) {
         this.key = slug;
         this.slug = slug;
         this.title = title;
@@ -97,6 +99,7 @@ public class Workshop {
         this.flavour_id = flavour_id;
         this.eventbrite = eventbrite;
         this.schedule = schedule;
+        this.internal_id = internal_id;
     }
 
     public String getSlug() {
@@ -272,4 +275,11 @@ public class Workshop {
         return this.key;
     }
 
+    public void setInternal_id(String internal_id) {
+        this.internal_id = internal_id;
+    }
+
+    public String getInternal_id() {
+        return internal_id;
+    }
 }

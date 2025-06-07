@@ -127,7 +127,7 @@ public class Workshops extends ArrayList<Workshop> {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
             String sql = "SELECT slug, title, humandate, humantime, startdate, starttime, room_id, language," +
                     "country, online, pilot, inc_lesson_site, pre_survey, post_survey, carpentry_code, flavour_id," +
-                    "eventbrite, schedule FROM " + table;
+                    "eventbrite, schedule, internal_id FROM " + table;
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             String val;
@@ -179,7 +179,8 @@ public class Workshops extends ArrayList<Workshop> {
                         resultSet.getString("curriculum_code"),
                         resultSet.getString("flavour_id"),
                         resultSet.getString("eventbrite"),
-                        resultSet.getString("schedule")
+                        resultSet.getString("schedule"),
+                        resultSet.getString("internal_id")
 
                 );
                 workshop.setInserted(true);
@@ -203,7 +204,7 @@ public class Workshops extends ArrayList<Workshop> {
             String sql = "UPDATE workshops SET title = ?, humandate = ?, humantime = ?, startdate = ?, enddate = ?, " +
                     "room_id = ?, language = ?, country = ?, online = ?, pilot = ?, carpentry_code = ?, " +
                     "curriculum_code = ?, flavour_id = ?, schedule = ?, inc_lesson_site = ?, pre_survey = ?, " +
-                    "post_survey = ?, eventbrite = ?, slug = ? WHERE slug = ?";
+                    "post_survey = ?, eventbrite = ?, slug = ?, internal_id = ? WHERE slug = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             for (int row : Globals.getInstance().getEditedRows("workshops")) {
@@ -230,7 +231,8 @@ public class Workshops extends ArrayList<Workshop> {
                     statement.setString(17, workshop.getPost_survey());
                     statement.setString(18, workshop.getEventbrite());
                     statement.setString(19, workshop.getSlug());
-                    statement.setString(20, workshop.getKey());
+                    statement.setString(20, workshop.getInternal_id());
+                    statement.setString(21, workshop.getKey());
 
                     statement.executeUpdate();
                     success = true;
@@ -253,7 +255,7 @@ public class Workshops extends ArrayList<Workshop> {
         logger.info("Inserting {} rows ", Globals.getInstance().getEditedRows("workshops").size());
         try {
             connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "INSERT workshops VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT workshops VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             //Globals.getInstance().getInsertedRows().forEach(row -> {
@@ -280,6 +282,7 @@ public class Workshops extends ArrayList<Workshop> {
                     statement.setString(17, workshop.getFlavour_id());
                     statement.setString(18, workshop.getEventbrite());
                     statement.setString(19, workshop.getSchedule());
+                    statement.setString(20, workshop.getInternal_id());
 
 
                     statement.executeUpdate();

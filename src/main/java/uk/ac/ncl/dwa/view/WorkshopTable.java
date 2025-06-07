@@ -91,8 +91,15 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     }
 
     public String getRecordAsString(int row) {
+        String collabdoc = globals.getSettings().get("collabdoc").toString();
+        String internaldoc = globals.getSettings().get("internal_id").toString();
+        String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
+        String internal_id = workshopTableModel.getValueAt(getSelectedRow(), 19).toString();
+        collabdoc = collabdoc.replace("<slug>", slug);
+        internaldoc = internaldoc.replace("<internal_id>", internal_id);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Slug:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 0).toString()).append("\n");
+        stringBuilder.append("Slug:\t\t").append(slug).append("\n");
+        stringBuilder.append("Internal ID:\t\t").append(internaldoc).append("\n");
         stringBuilder.append("Title:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("\n");
         stringBuilder.append("Human date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 2).toString()).append("\n");
         stringBuilder.append("Human time:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 3).toString()).append("\n");
@@ -111,7 +118,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Flavour:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 16).toString()).append("\n");
         stringBuilder.append("EventBrite:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 17).toString()).append("\n");
         stringBuilder.append("Schedule:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 18).toString()).append("\n");
-        stringBuilder.append("Collaborative Doc:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 0).toString()).append("\n");
+        stringBuilder.append("Collaborative Doc:\t").append(collabdoc).append("\n");
 
         return stringBuilder.toString();
     }

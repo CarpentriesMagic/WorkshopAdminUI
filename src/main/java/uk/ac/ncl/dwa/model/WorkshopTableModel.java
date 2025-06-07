@@ -106,6 +106,10 @@ public class WorkshopTableModel extends AbstractTableModel {
             case 18:
                 workshop.setSchedule((String) value);
                 break;
+            case 19:
+                workshop.setInternal_id((String) value);
+                break;
+
         }
 
         // Notify the table that the data has changed
@@ -134,6 +138,7 @@ public class WorkshopTableModel extends AbstractTableModel {
             case 16 -> workshop.getFlavour_id();
             case 17 -> workshop.getEventbrite();
             case 18 -> workshop.getSchedule();
+            case 19 -> workshop.getInternal_id();
             default -> null;
         };
 
