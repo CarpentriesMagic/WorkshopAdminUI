@@ -17,6 +17,7 @@ public class Main {
     static String dbName;
     static String dbUser;
     static String dbPass;
+    static String conn;
 
     static {
         // must set before the Logger
@@ -36,7 +37,8 @@ public class Main {
         dbName = properties.getProperty("dbName");
         dbUser = properties.getProperty("dbUser");
         dbPass = properties.getProperty("dbPass");
-        connectionString = String.format("jdbc:mariadb://%s:%d/%s?user=%s&password=%s",
+        conn = properties.getProperty("connectionString");
+        connectionString = String.format(conn,
                 dbServer, dbPort, dbName, dbUser, dbPass);
         globals = Globals.getInstance();
         globals.setConnectionString(connectionString);
