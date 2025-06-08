@@ -1,6 +1,8 @@
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
+import uk.ac.ncl.dwa.database.DBHandlerMysql;
 import uk.ac.ncl.dwa.view.WorkshopAdmin;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,10 @@ public class Main {
     static String connectionString;
 
     public static void main(String[] args) {
+        DBHandler dbHandler;
+
         properties = createPropertiesFile();
+
         dbServer = properties.getProperty("dbServer");
         dbPort = Integer.parseInt(properties.getProperty("dbPort"));
         dbName = properties.getProperty("dbName");
@@ -40,11 +45,20 @@ public class Main {
         conn = properties.getProperty("connectionString");
         connectionString = String.format(conn,
                 dbServer, dbPort, dbName, dbUser, dbPass);
+        if (properties.getProperty("dbType").equals("mysql")) {
+            dbHandler = new DBHandlerMysql(connectionString);
+        } else {
+            logger.error("Database server not specified in properties file");
+            System.exit(-1);
+        }
+
+
+
         globals = Globals.getInstance();
         globals.setConnectionString(connectionString);
         // Create properties file
         globals.setDirty(false);
-        logger.info("Set dirty to " + globals.getDirty());
+        logger.info("Set dirty to {}", globals.getDirty());
         String sourceFilename = "logging.properties";
         if (!Files.exists(Paths.get(sourceFilename))) {
             System.out.println("Logging configuration file " + sourceFilename + " not found");

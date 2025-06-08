@@ -1,32 +1,26 @@
 package uk.ac.ncl.dwa.model;
 
-import org.mariadb.jdbc.Connection;
+import uk.ac.ncl.dwa.database.DBController;
+import uk.ac.ncl.dwa.database.DBHandler;
+import uk.ac.ncl.dwa.database.DBHandlerMysql;
 
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class Settings extends HashMap<String, Object> {
+    String connectionString;
 
-    public Settings() {
+    public Settings(String connectionString) {
         super();
+        this.connectionString = connectionString;
     }
 
-    public void loadFromDatabase(String connectionString) {
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT keyvalue, value FROM settings";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                put(resultSet.getString("keyvalue"), resultSet.getString("value"));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public void loadFromDatabase() {
+        List<Object> settings = DBHandler.getInstance().select("settings", new String[]{"keyvalue", "value"}, new String[]{});
+        for (Object o : settings) {
+            Setting setting = (Setting) o;
+            put(setting.getKeyValue(), setting.getValue());
         }
     }
 }

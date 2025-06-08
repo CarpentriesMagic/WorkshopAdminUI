@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.controller;
 
+import uk.ac.ncl.dwa.database.DBController;
 import uk.ac.ncl.dwa.model.*;
 
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class Globals {
     private Helpers helpers = new Helpers();
     private People people = new People();
     private Hashtable<String, DirtyRows> dirtyRows = new Hashtable<>();
+    private static DBController dbController;
 
     /**
      * Dummy contructor to prevent instantiation.
@@ -93,8 +95,8 @@ public class Globals {
     }
 
     public void setConnectionString(String connectionString) {
-        settings = new Settings();
-        settings.loadFromDatabase(connectionString);
+        settings = new Settings(connectionString);
+        settings.loadFromDatabase();
         Globals.connectionString = connectionString;
     }
 
