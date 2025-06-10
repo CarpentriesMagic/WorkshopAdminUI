@@ -4,12 +4,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
 
 public class Rooms extends ArrayList<Room> {
     private static final long serialVersionUID = 1L;
@@ -19,6 +22,33 @@ public class Rooms extends ArrayList<Room> {
 
     public Rooms() {
         super();
+    }
+
+
+    public List<Object> loadFrmDatabase() {
+        List<Object> rooms = DBHandler.getInstance().select("room", Room.dbColumnNames, new String[]{});
+        logger.info("Loaded " + rooms.size() + " rooms");
+        for (Object o : rooms) {
+            Room room = (Room) o;
+            add(room);
+        }
+        return rooms;
+    }
+
+    public void loadFromDatabase() {
+        String[] columnNames = Room.dbColumnNames;
+        List<Object> settings = DBHandler.getInstance().select("room", columnNames, new String[]{});
+        for (Object o : settings) {
+            HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
+            Room room = new Room((String)settingObject.get(columnNames[0]),
+                    (String)settingObject.get(columnNames[1]),
+                    (String)settingObject.get(columnNames[2]),
+                    (String)settingObject.get(columnNames[3]),
+                    (String)settingObject.get(columnNames[4])
+            );
+            add(room);
+            logger.info("id {}, description {}",room.getRoom_id(), room.getDescription());
+        }
     }
 
     public void loadFromDatabase(String connectionString) {

@@ -5,8 +5,11 @@ import org.slf4j.LoggerFactory;
 
 public class Workshop {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
+    public static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
             "room_id", "lang", "cntry", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
+            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id"};
+    public static final String[] dbColumnNames = {"slug", "title", "humandate", "humantime", "startdate", "enddate",
+            "room_id", "language", "country", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
             "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id"};
     private String key; // slug before any changes made to record - needed for updating
     private String slug;

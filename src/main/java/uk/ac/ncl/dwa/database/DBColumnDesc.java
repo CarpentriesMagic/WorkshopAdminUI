@@ -1,5 +1,9 @@
 package uk.ac.ncl.dwa.database;
 
+/**
+ * @author Jannetta Steyn
+ *
+ */
 public class DBColumnDesc {
     public enum ColumnType {
         Text,

@@ -31,7 +31,7 @@ public class InstructorTable extends JTable implements Serializable {
         /*
          * ComboBox for selecting slug
          */
-        String[] workshops = globals.getWorkshops().getWorkshopNames(globals.getConnectionString());
+        String[] workshops = globals.getWorkshops().getWorkshopNames();
         TableColumn roomColumn = this.getColumnModel().getColumn(0);
         JComboBox<String> roomComboBox = new JComboBox<>(workshops);
         roomColumn.setCellEditor(new DefaultCellEditor(roomComboBox));

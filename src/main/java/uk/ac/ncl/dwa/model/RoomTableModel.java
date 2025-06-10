@@ -17,7 +17,7 @@ public class RoomTableModel extends AbstractTableModel {
     public RoomTableModel() {
         super();
         logger.trace("Create RoomTableModel");
-        rooms.loadFromDatabase(Globals.getInstance().getConnectionString());
+        rooms.loadFromDatabase();
         setRooms(rooms);
     }
 
@@ -73,10 +73,10 @@ public class RoomTableModel extends AbstractTableModel {
                 room.setDescription((String) value);
                 break;
             case 2:
-                room.setLatitude((String) value);
+                room.setLongitude((String) value);
                 break;
             case 3:
-                room.setLongitude((String) value);
+                room.setLatitude((String) value);
                 break;
             case 4:
                 room.setWhat_three_words((String) value);

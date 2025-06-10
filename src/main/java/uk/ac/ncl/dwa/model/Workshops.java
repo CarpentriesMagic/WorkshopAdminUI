@@ -11,6 +11,7 @@ import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
 
 public class Workshops extends ArrayList<Workshop> {
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -54,7 +55,7 @@ public class Workshops extends ArrayList<Workshop> {
      *
      * @return an array of string containing the names of all the workshops
      */
-    public String[] getWorkshopNames(String connectionString) {
+    public String[] getWorkshopNames() {
         ArrayList<String> names = new ArrayList<String>();
         names.add("All");
         this.forEach((ws) -> {
@@ -114,81 +115,40 @@ public class Workshops extends ArrayList<Workshop> {
      */
     @Override
     public boolean add(Workshop workshop) {
-        logger.trace("Add workshop: " + workshop.getTitle());
+        logger.trace("Add workshop: {}", workshop.getTitle());
         boolean ret = super.add(workshop);
         id_index.put(workshop.getTitle(), this.size() - 1);
         return ret;
     }
 
-    public static void selected(String table, int[] columns) {
-
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "SELECT slug, title, humandate, humantime, startdate, starttime, room_id, language," +
-                    "country, online, pilot, inc_lesson_site, pre_survey, post_survey, carpentry_code, flavour_id," +
-                    "eventbrite, schedule, internal_id FROM " + table;
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            String val;
-            StringBuilder result = new StringBuilder();
-            while (resultSet.next()) {
-                for (int column : columns) {
-                    val = resultSet.getString(column);
-                    result.append(" - ").append(val);
-                }
-                System.out.println(result);
-                val = "";
-                result = new StringBuilder();
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Press any Enter to continue...");
-        scanner.nextLine();
-    }
-
-    public void loadFromDatabase(String connectionString) {
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT * FROM workshops";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            this.clear(); // Clear existing data
-            while (resultSet.next()) {
-                Workshop workshop = new Workshop(
-                        resultSet.getString("slug"),
-                        resultSet.getString("title"),
-                        resultSet.getString("humandate"),
-                        resultSet.getString("humantime"),
-                        resultSet.getString("startdate"),
-                        resultSet.getString("enddate"),
-                        resultSet.getString("room_id"),
-                        resultSet.getString("language"),
-                        resultSet.getString("country"),
-                        resultSet.getBoolean("online"),
-                        resultSet.getBoolean("pilot"),
-                        resultSet.getString("inc_lesson_site"),
-                        resultSet.getString("pre_survey"),
-                        resultSet.getString("post_survey"),
-                        resultSet.getString("carpentry_code"),
-                        resultSet.getString("curriculum_code"),
-                        resultSet.getString("flavour_id"),
-                        resultSet.getString("eventbrite"),
-                        resultSet.getString("schedule"),
-                        resultSet.getString("internal_id")
-
-                );
-                workshop.setInserted(true);
-                this.add(workshop);
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error loading workshops from database", e);
+    public void loadFromDatabase() {
+        String[] columnNames = Workshop.dbColumnNames;
+        List<Object> settings = DBHandler.getInstance().select("workshops", columnNames, new String[]{});
+        for (Object o : settings) {
+            HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
+            Workshop workshop = new Workshop((String)settingObject.get(columnNames[0]),
+                    (String)settingObject.get(columnNames[1]),
+                    (String)settingObject.get(columnNames[2]),
+                    (String)settingObject.get(columnNames[3]),
+                    (String)settingObject.get(columnNames[4]),
+                    (String)settingObject.get(columnNames[5]),
+                    (String)settingObject.get(columnNames[6]),
+                    (String)settingObject.get(columnNames[7]),
+                    (String)settingObject.get(columnNames[8]),
+                    (((String) settingObject.get(columnNames[9])).equals("1")),
+                    (((String) settingObject.get(columnNames[10])).equals("1")),
+                    (String)settingObject.get(columnNames[11]),
+                    (String)settingObject.get(columnNames[12]),
+                    (String)settingObject.get(columnNames[13]),
+                    (String)settingObject.get(columnNames[14]),
+                    (String)settingObject.get(columnNames[15]),
+                    (String)settingObject.get(columnNames[16]),
+                    (String)settingObject.get(columnNames[17]),
+                    (String)settingObject.get(columnNames[18]),
+                    (String)settingObject.get(columnNames[19])
+                    );
+            add(workshop);
+            logger.info("Online {}, pilot {}",workshop.isOnline(), workshop.isPilot());
         }
     }
 

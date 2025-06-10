@@ -88,13 +88,22 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     @Override
     public void valueChanged(ListSelectionEvent e) {
         textArea.setText(getRecordAsString(getSelectedRow()));
+        updateUI();
     }
 
     public String getRecordAsString(int row) {
         String collabdoc = globals.getSettings().get("collabdoc").toString();
-        String internaldoc = globals.getSettings().get("internal_id").toString();
+        String internaldoc = (globals.getSettings().get("internal_id") != null?globals.getSettings().get("internal_id").toString():"");
         String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
-        String internal_id = workshopTableModel.getValueAt(getSelectedRow(), 19).toString();
+        String pre = workshopTableModel.getValueAt(getSelectedRow(), 12).toString();
+        if (pre == null || pre.isEmpty()) {
+            pre = globals.getSettings().get("pre_survey").toString() + slug;
+        }
+        String post = workshopTableModel.getValueAt(row, 13).toString();
+        if (post == null || post.isEmpty()) {
+            post = globals.getSettings().get("post_survey").toString() + slug;
+        }
+        String internal_id = (workshopTableModel.getValueAt(getSelectedRow(), 19) != null)?workshopTableModel.getValueAt(getSelectedRow(), 19).toString():"";
         collabdoc = collabdoc.replace("<slug>", slug);
         internaldoc = internaldoc.replace("<internal_id>", internal_id);
         StringBuilder stringBuilder = new StringBuilder();
@@ -111,8 +120,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Online:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 9).toString()).append("\n");
         stringBuilder.append("Pilot:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 10).toString()).append("\n");
         stringBuilder.append("Lesson site:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 11).toString()).append("\n");
-        stringBuilder.append("Pre workshop:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 12).toString()).append("\n");
-        stringBuilder.append("Post workshop:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 13).toString()).append("\n");
+        stringBuilder.append("Pre workshop:\t").append(pre).append("\n");
+        stringBuilder.append("Post workshop:\t").append(post).append("\n");
         stringBuilder.append("Carpentry:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 14).toString()).append("\n");
         stringBuilder.append("Curriculum:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 15).toString()).append("\n");
         stringBuilder.append("Flavour:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 16).toString()).append("\n");

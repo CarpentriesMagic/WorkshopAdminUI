@@ -10,7 +10,8 @@ public class Room {
     private String longitude;
     private String latitude;
     private String what_three_words;
-    private static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
+    public static final String[] dbColumnNames = {"room_id", "description", "longitude", "latitude", "what_three_words"};
+    public static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Room(String room_id, String description, String longitude, String latitude, String what_three_words) {

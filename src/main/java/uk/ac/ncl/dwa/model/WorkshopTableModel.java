@@ -14,7 +14,7 @@ public class WorkshopTableModel extends AbstractTableModel {
     public WorkshopTableModel() {
         super();
         logger.trace("Create WorkshopTableModel");
-        workshops.loadFromDatabase(Globals.getInstance().getConnectionString());
+        workshops.loadFromDatabase();
         setWorkshops(workshops);
     }
 
@@ -109,7 +109,6 @@ public class WorkshopTableModel extends AbstractTableModel {
             case 19:
                 workshop.setInternal_id((String) value);
                 break;
-
         }
 
         // Notify the table that the data has changed

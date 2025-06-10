@@ -1,7 +1,5 @@
 package uk.ac.ncl.dwa.database;
 
-import uk.ac.ncl.dwa.model.Setting;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,19 +18,22 @@ public class DBHandlerMysql extends DBHandler {
     public List<Object> select(String tableName, String[] columns, String[] where) {
         Connection connection;
         String sql = String.format("SELECT %s FROM %s", String.join(",", Arrays.asList(columns)), tableName);
-        List<Object> settings = new ArrayList<>();
+        List<Object> returnList = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(connectionString);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Setting setting = new Setting(resultSet.getString("keyvalue"), resultSet.getString("value"));
-                settings.add(setting);
+                HashMap<String, Object> recordSet = new HashMap<>();
+                for (String column : columns) {
+                    recordSet.put(column, resultSet.getString(column));
+                }
+                returnList.add(recordSet);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return settings;
+        return returnList;
     }
 
     @Override
