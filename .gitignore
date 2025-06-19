@@ -40,4 +40,4 @@ build/
 .DS_Store
 
 out/*
-*.log
+*.log*

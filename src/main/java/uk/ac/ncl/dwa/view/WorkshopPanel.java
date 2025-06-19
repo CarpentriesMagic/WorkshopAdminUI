@@ -16,26 +16,20 @@ public class WorkshopPanel extends JPanel implements ActionListener {
     private WorkshopTable workshopTable = new WorkshopTable(workshopEntryTextArea);
 
     public WorkshopPanel() {
+        super();
         setLayout(new MigLayout("","[50%][50%]","[fill][fill]"));
 
         JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         JPanel workshopEntryPanel = new JPanel(new MigLayout("fill", "[]", "[]"));
+        workshopEntryTextArea.setEditable(false);
         JScrollPane workshopTableScrollPane = new JScrollPane(workshopTable);
         JScrollPane workshopEntryScrollPane = new JScrollPane(workshopEntryTextArea);
-        workshopTableScrollPane.setSize(100, 400);
-
-        // Create scroll bars
-        //  enable horizontal scrolling
-        workshopTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        workshopTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        workshopTableScrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
-        workshopTableScrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
-        //  enable vertical scrolling
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, workshopTablePanel, workshopEntryPanel);
+        splitPane.setResizeWeight(0.5); // Initial divider position at 50%
+        splitPane.setContinuousLayout(true); // Smooth dragging
+        splitPane.setLeftComponent(workshopTableScrollPane);
+        splitPane.setRightComponent(workshopEntryScrollPane);
         workshopTable.setFillsViewportHeight(true);
-        workshopEntryScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        workshopEntryScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        workshopEntryScrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
-        workshopEntryScrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
 
         // Add components to the frame
         JPanel buttonPanel = new JPanel();
@@ -51,12 +45,8 @@ public class WorkshopPanel extends JPanel implements ActionListener {
 
         // Add panel and scroll pane to the frame
         this.add(buttonPanel, "wrap");
-        workshopTablePanel.add(workshopTableScrollPane, "grow, push");
-        workshopEntryPanel.add(workshopEntryScrollPane, "grow, push");
+        this.add(splitPane, "span, grow, push, wrap");
 
-// Specify column placement explicitly
-        this.add(workshopTablePanel, "grow, push, cell 0 1");
-        this.add(workshopEntryPanel, "grow, push, cell 1 1, wrap");
     }
 
     @Override

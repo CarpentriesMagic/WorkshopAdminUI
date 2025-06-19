@@ -25,20 +25,10 @@ public class Rooms extends ArrayList<Room> {
     }
 
 
-    public List<Object> loadFrmDatabase() {
-        List<Object> rooms = DBHandler.getInstance().select("room", Room.dbColumnNames, new String[]{});
-        logger.info("Loaded " + rooms.size() + " rooms");
-        for (Object o : rooms) {
-            Room room = (Room) o;
-            add(room);
-        }
-        return rooms;
-    }
-
-    public void loadFromDatabase() {
+    public List<Object> loadFromDatabase() {
         String[] columnNames = Room.dbColumnNames;
-        List<Object> settings = DBHandler.getInstance().select("room", columnNames, new String[]{});
-        for (Object o : settings) {
+        List<Object> rooms = DBHandler.getInstance().select("room", columnNames, new String[]{});
+        for (Object o : rooms) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Room room = new Room((String)settingObject.get(columnNames[0]),
                     (String)settingObject.get(columnNames[1]),
@@ -47,24 +37,9 @@ public class Rooms extends ArrayList<Room> {
                     (String)settingObject.get(columnNames[4])
             );
             add(room);
-            logger.info("id {}, description {}",room.getRoom_id(), room.getDescription());
+            logger.info("Load room {}",room.getRoom_id());
         }
-    }
-
-    public void loadFromDatabase(String connectionString) {
-        try (Connection conn = (Connection) DriverManager.getConnection(connectionString)) {
-            String sql = "SELECT * FROM room";
-            var statement = conn.createStatement();
-            var resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                Room room = new Room(resultSet.getString("room_id"), resultSet.getString("description"),
-                        resultSet.getString("longitude"), resultSet.getString("latitude"),
-                        resultSet.getString("what_three_words"));
-                rooms.add(room);
-            }
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
+        return rooms;
     }
 
     public ArrayList<String> loadRoomList(String connectionString) {

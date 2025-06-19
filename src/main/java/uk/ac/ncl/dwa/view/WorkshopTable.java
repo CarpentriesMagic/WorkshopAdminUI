@@ -88,12 +88,15 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     @Override
     public void valueChanged(ListSelectionEvent e) {
         textArea.setText(getRecordAsString(getSelectedRow()));
+        // TODO: updateUI is causing a nullpointerexception: Cannot invoke
+        //  "javax.swing.JTable.getColumnModel()" because "this.this$0.table" is null
         updateUI();
     }
 
     public String getRecordAsString(int row) {
         String collabdoc = globals.getSettings().get("collabdoc").toString();
-        String internaldoc = (globals.getSettings().get("internal_id") != null?globals.getSettings().get("internal_id").toString():"");
+        String internaldoc = (globals.getSettings().get("internal_id") != null?
+                globals.getSettings().get("internal_id").toString():"");
         String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
         String pre = workshopTableModel.getValueAt(getSelectedRow(), 12).toString();
         if (pre == null || pre.isEmpty()) {

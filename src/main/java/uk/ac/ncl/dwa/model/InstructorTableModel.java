@@ -71,15 +71,21 @@ public class InstructorTableModel extends AbstractTableModel {
             logger.info("Add row {} to dirty rows", row);
             Globals.getInstance().getEditedRows("instructors").add(row);
         }
-        String id = ((String) value).split(",")[0];
-        String name = ((String) value).split(",")[1];
+        logger.info("Value {}", ((String) value));
         switch (col) {
             case 0 -> instructor.setSlug((String) value);
             case 1 -> {
+                String id = ((String) value).split(",")[0];
+                String name = ((String) value).split(",")[1];
                 instructor.setPerson_id(id);
                 instructor.setName(name.trim());
             }
-            case 2 -> instructor.setName(name.trim());
+            case 2 -> {
+                String id = ((String) value).split(",")[0];
+                String name = ((String) value).split(",")[1];
+
+                instructor.setName(name.trim());
+            }
         }
         // Notify the table that the data has changed
         fireTableCellUpdated(row, col);

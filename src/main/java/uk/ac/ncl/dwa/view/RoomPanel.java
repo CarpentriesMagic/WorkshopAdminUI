@@ -14,15 +14,13 @@ public class RoomPanel extends JPanel implements ActionListener {
     RoomTable roomTable = new RoomTable();
 
     public RoomPanel() {
+        super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(roomTable);
-        // Create scroll bars
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
-        //  enable horizontal scrolling
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
-        //  enable vertical scrolling
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         // Add components to the frame

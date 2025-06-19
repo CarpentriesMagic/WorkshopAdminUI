@@ -148,7 +148,7 @@ public class Workshops extends ArrayList<Workshop> {
                     (String)settingObject.get(columnNames[19])
                     );
             add(workshop);
-            logger.info("Online {}, pilot {}",workshop.isOnline(), workshop.isPilot());
+            logger.info("Load workshop: {}",workshop.getSlug());
         }
     }
 

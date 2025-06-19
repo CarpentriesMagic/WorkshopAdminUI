@@ -13,10 +13,16 @@ import java.util.List;
 public class Settings extends HashMap<String, Object> {
     String connectionString;
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    public static String[] columnNames = {"keyValue", "value"};
+    public static String[] dbColumnNames = {"keyValue", "value"};
 
     public Settings(String connectionString) {
         super();
         this.connectionString = connectionString;
+    }
+
+    public int getColumnCount() {
+        return dbColumnNames.length;
     }
 
     public void loadFromDatabase() {

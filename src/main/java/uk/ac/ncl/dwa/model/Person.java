@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 public class Person {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final String[] columnNames = {"Person_id", "title", "first name", "last name", "Certified", "Email"};
+    private static final String[] dbColumnNames = {"person_id", "title", "first name", "last name", "Certified", "Email"};
     private String key; // person_id before any changes made to record - needed for updating
     private String person_id;
     private String title;
@@ -14,7 +15,6 @@ public class Person {
     private String certified;
     private String email;
     private Boolean inserted = false;
-
 
     public Person() {
         person_id = "Person ID";
