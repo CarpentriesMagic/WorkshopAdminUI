@@ -28,7 +28,9 @@ public class Settings extends ArrayList<Setting> {
         List<Object> settings = DBHandler.getInstance().select("settings", columnNames, "");
         for (Object o : settings) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
-            Setting setting = new Setting((String)settingObject.get(columnNames[0]), (String)settingObject.get(columnNames[1]), 's');
+            Setting setting = new Setting((String)settingObject.get(columnNames[0]),
+                    (String)settingObject.get(columnNames[1]),
+                    's');
             add(setting);
             logger.info("key {}, value {}",setting.getKeyValue(), setting.getValue());
         }
@@ -55,11 +57,10 @@ public class Settings extends ArrayList<Setting> {
                 new String[]{setting.getKeyValue(), setting.getValue()});
     }
 
-    public boolean updateSettings(String key, String newValue) {
+    public void updateSettings(String key, String newValue) {
         logger.debug("Updating settings for key={} to value={}", key, newValue);
         DBHandler.getInstance().update("settings", new String[]{"value"},
                 new String[]{newValue}, new String[]{"keyvalue='" + key + "'"});
-        return true;
     }
 
 
@@ -79,7 +80,8 @@ public class Settings extends ArrayList<Setting> {
     public Setting remove(int index) {
         Setting setting = get(index);
         logger.debug("Removing setting for key={}",setting.getKeyValue());
-        DBHandler.getInstance().delete("settings", "keyvalue", new String[]{setting.getKeyValue()});
+        DBHandler.getInstance().delete("settings", "keyvalue",
+                new String[]{setting.getKeyValue()});
         super.remove(index);
         return setting;
     }
@@ -87,7 +89,8 @@ public class Settings extends ArrayList<Setting> {
     @Override
     public boolean remove(Object o) {
         String key = (String)o;
-        DBHandler.getInstance().delete("settings", "keyvalue", new String[]{key});
+        DBHandler.getInstance().delete("settings", "keyvalue",
+                new String[]{key});
         super.remove(key);
         return true;
     }

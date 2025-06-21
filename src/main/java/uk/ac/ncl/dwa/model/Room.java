@@ -10,16 +10,18 @@ public class Room {
     private String longitude;
     private String latitude;
     private String what_three_words;
+    private char status = 'n'; // u - updated, n - new, s - saved
     public static final String[] dbColumnNames = {"room_id", "description", "longitude", "latitude", "what_three_words"};
     public static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public Room(String room_id, String description, String longitude, String latitude, String what_three_words) {
+    public Room(String room_id, String description, String longitude, String latitude, String what_three_words, char status) {
         this.room_id = room_id;
         this.description = description;
         this.longitude = longitude;
         this.latitude = latitude;
         this.what_three_words = what_three_words;
+        this.status = status;
     }
 
     public Room() {
@@ -72,5 +74,21 @@ public class Room {
 
     public void setWhat_three_words(String what_three_words) {
         this.what_three_words = what_three_words;
+    }
+
+    /**
+     * Return record status, u - update, n - new, s - saved
+     * @return record status
+     */
+    public char getStatus() {
+        return status;
+    }
+
+    /**
+     * Set record status,
+     * @param status u - update, n - new, s - saved
+     */
+    public void setStatus(char status) {
+        this.status = status;
     }
 }

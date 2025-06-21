@@ -1,11 +1,15 @@
 package uk.ac.ncl.dwa.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Setting {
     private String keyValue;
     private String value;
     private char status = 'n'; // u - updated, n - new, s - saved
     public static final String[] dbColumnNames = {"keyValue", "value"};
     public static final String[] columnNames = {"keyValue", "value"};
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Setting(String keyValue, String value, char status) {
         this.keyValue = keyValue;

@@ -15,8 +15,9 @@ public class Instructor implements Serializable {
     private String person_id;
     private String slug;
     private String name;
-    private Boolean inserted = false;
-    private static final String[] columnNames = {"Slug", "Person_ID", "Name"};
+    private char status = 'n'; // u - updated, n - new, s - saved
+    public static final String[] columnNames = {"Slug", "Person_ID", "Name"};
+    public static final String[] dbColumnNames = {"Slug", "Person_ID", "Name"};
 
     public Instructor() {
         person_id = "Person ID";
@@ -76,5 +77,13 @@ public class Instructor implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
     }
 }

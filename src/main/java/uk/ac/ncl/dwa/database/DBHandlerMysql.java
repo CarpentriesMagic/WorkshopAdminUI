@@ -71,7 +71,8 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
-    public boolean update(String tableName, String[] columns, String[] values, String[] where) {
+    public boolean update(String tableName, String[] columns,
+                          String[] values, String[] where) {
         Connection connection;
         String[] setString;
         if (columns.length != values.length) {

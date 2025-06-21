@@ -12,13 +12,10 @@ public class RoomTableModel extends AbstractTableModel {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private Rooms rooms = Globals.getInstance().getRooms();
+    private Rooms rooms = new Rooms();
 
     public RoomTableModel() {
         super();
-        logger.trace("Create RoomTableModel");
-        rooms.loadFromDatabase();
-        setRooms(rooms);
     }
 
     public int getColumnCount() {
@@ -107,5 +104,7 @@ public class RoomTableModel extends AbstractTableModel {
         return true;
     }
 
-
+    public Rooms getRooms() {
+        return rooms;
+    }
 }

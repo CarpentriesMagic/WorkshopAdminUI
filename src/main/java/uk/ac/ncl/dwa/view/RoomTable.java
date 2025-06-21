@@ -12,22 +12,23 @@ public class RoomTable extends JTable {
     @Serial
     private static final long serialVersionUID = 1L;
     Logger logger = LoggerFactory.getLogger(RoomTable.class);
-    Globals globals = Globals.getInstance();
+    private final RoomTableModel roomTableModel = new RoomTableModel();
 
     public RoomTable() {
         super();
-        RoomTableModel roomTableModel = new RoomTableModel();
         setModel(roomTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //  set column widths
         getColumnModel().getColumn(0).setPreferredWidth(130);
         getColumnModel().getColumn(1).setPreferredWidth(200);
         getColumnModel().getColumn(2).setPreferredWidth(100);
         getColumnModel().getColumn(3).setPreferredWidth(100);
         getColumnModel().getColumn(4).setPreferredWidth(100);
-
         setRowHeight(20);
+    }
 
+    @Override
+    public RoomTableModel getModel() {
+        return roomTableModel;
     }
 }
