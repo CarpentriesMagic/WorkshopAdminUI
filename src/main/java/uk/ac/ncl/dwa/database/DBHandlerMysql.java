@@ -20,6 +20,27 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
+    public List<Object> query(String sql, String[] columns) {
+        Connection connection;
+        List<Object> returnList = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(connectionString);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                HashMap<String, Object> recordSet = new HashMap<>();
+                for (String column : columns) {
+                    recordSet.put(column, resultSet.getString(column));
+                }
+                returnList.add(recordSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return returnList;
+    }
+
+    @Override
     public List<Object> select(String tableName, String[] columns, String where) {
         Connection connection;
         String sql;

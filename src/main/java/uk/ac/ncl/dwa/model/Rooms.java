@@ -28,7 +28,8 @@ public class Rooms extends ArrayList<Room> {
 
     public List<Object> loadFromDatabase() {
         String[] columnNames = Room.dbColumnNames;
-        List<Object> rooms = DBHandler.getInstance().select("room", columnNames, "");
+        List<Object> rooms = DBHandler.getInstance().select("room",
+                columnNames, "");
         for (Object o : rooms) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Room room = new Room((String)settingObject.get(columnNames[0]),

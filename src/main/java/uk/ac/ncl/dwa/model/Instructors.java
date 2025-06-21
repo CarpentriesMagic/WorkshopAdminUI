@@ -4,45 +4,48 @@ import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
+
 import java.io.Serial;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Instructors  extends ArrayList<Instructor> {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    
-    public void loadFromDatabase(String connectionString) {
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT i.slug, i.person_id, p.title, p.firstname, p.lastname " +
-                    "FROM instructors as i " +
-                    "join people as p on p.person_id=i.person_id";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
 
-            this.clear(); // Clear existing data
-            while (resultSet.next()) {
-                Instructor instructor = new Instructor(
-                        resultSet.getString("slug"),
-                        resultSet.getString("person_id"),
-                        (resultSet.getString("title") + " " +
-                                resultSet.getString("firstname") + " " +
-                                resultSet.getString("lastname")).trim());
-                instructor.setInserted(true);
-                this.add(instructor);
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error loading workshops from database", e);
-        }
+    public Instructors() {
+        super();
+        loadFromDatabase();
     }
+
+    public List<Object> loadFromDatabase() {
+        String[] columnNames = {"person_id", "slug", "firstname", "lastname"};
+        List<Object> instructors = DBHandler.getInstance().query(
+                "select i.person_id, slug, firstname, lastname from instructors as i join people as p on p.person_id=i.person_id",
+                new String[]{"person_id", "slug", "firstname", "lastname"});
+        for (Object o : instructors) {
+            HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
+            Instructor instructor = new Instructor((String)settingObject.get(columnNames[0]),
+                    (String)settingObject.get(columnNames[1]),
+                    (String)settingObject.get(columnNames[2]) + " " +
+                            (String)settingObject.get(columnNames[3]),
+                   's'
+            );
+            add(instructor);
+            logger.info("Load instructor {}", instructor.getName());
+        }
+        return instructors;
+    }
+
+
 
     public int getColumnCount() {
         return Instructor.getColumnNames().length;

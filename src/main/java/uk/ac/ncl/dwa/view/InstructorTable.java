@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.InstructorTableModel;
 import uk.ac.ncl.dwa.model.People;
+import uk.ac.ncl.dwa.model.RoomTableModel;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
@@ -15,15 +16,13 @@ public class InstructorTable extends JTable implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    Globals globals = Globals.getInstance();
+    private final InstructorTableModel instructorTableModel = new InstructorTableModel();
 
     public InstructorTable() {
         super();
-        InstructorTableModel instructorTableModel = new InstructorTableModel();
         setModel(instructorTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //  set column widths
         getColumnModel().getColumn(0).setPreferredWidth(130);
         getColumnModel().getColumn(1).setPreferredWidth(100);
         getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -31,7 +30,8 @@ public class InstructorTable extends JTable implements Serializable {
         /*
          * ComboBox for selecting slug
          */
-        String[] workshops = globals.getWorkshops().getWorkshopNames();
+
+        String[] workshops = Globals.getInstance().getWorkshops().getWorkshopNames();
         TableColumn roomColumn = this.getColumnModel().getColumn(0);
         JComboBox<String> roomComboBox = new JComboBox<>(workshops);
         roomColumn.setCellEditor(new DefaultCellEditor(roomComboBox));
@@ -45,5 +45,10 @@ public class InstructorTable extends JTable implements Serializable {
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
 
         setRowHeight(20);
+    }
+
+    @Override
+    public InstructorTableModel getModel() {
+        return instructorTableModel;
     }
 }
