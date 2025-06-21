@@ -123,7 +123,7 @@ public class Workshops extends ArrayList<Workshop> {
 
     public void loadFromDatabase() {
         String[] columnNames = Workshop.dbColumnNames;
-        List<Object> settings = DBHandler.getInstance().select("workshops", columnNames, new String[]{});
+        List<Object> settings = DBHandler.getInstance().select("workshops", columnNames, "");
         for (Object o : settings) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Workshop workshop = new Workshop((String)settingObject.get(columnNames[0]),

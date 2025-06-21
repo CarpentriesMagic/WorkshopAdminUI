@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class Globals {
     public static Globals globals;
-    private static Settings settings;
+//    private static Settings settings = new Settings();
     private static String connectionString;
     private Boolean dirty = false;
     private Workshops workshops = new Workshops();
@@ -45,6 +45,7 @@ public class Globals {
             globals.dirtyRows.put("instructors", new DirtyRows());
             globals.dirtyRows.put("helpers", new DirtyRows());
             globals.dirtyRows.put("people", new DirtyRows());
+            globals.dirtyRows.put("settings", new DirtyRows());
 
         }
         return globals;
@@ -94,13 +95,11 @@ public class Globals {
         return people;
     }
 
-    public void setConnectionString(String connectionString) {
-        settings = new Settings(connectionString);
-        settings.loadFromDatabase();
-        Globals.connectionString = connectionString;
-    }
+//    public Settings getSettings() {
+//        return settings;
+//    }
 
-    public Settings getSettings() {
-        return settings;
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
     }
 }

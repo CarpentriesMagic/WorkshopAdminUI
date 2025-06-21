@@ -4,6 +4,7 @@ import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.model.Settings;
 import uk.ac.ncl.dwa.model.Workshop;
 
 import javax.swing.*;
@@ -13,10 +14,13 @@ import java.awt.event.ActionListener;
 public class WorkshopPanel extends JPanel implements ActionListener {
     private final Logger logger = LoggerFactory.getLogger(WorkshopPanel.class);
     private JTextArea workshopEntryTextArea = new JTextArea("", 640, 480);
-    private WorkshopTable workshopTable = new WorkshopTable(workshopEntryTextArea);
+    private Settings settings;
+    private WorkshopTable workshopTable;
 
-    public WorkshopPanel() {
+    public WorkshopPanel(Settings settings) {
         super();
+        this.settings = settings;
+        workshopTable = new WorkshopTable(workshopEntryTextArea, settings);
         setLayout(new MigLayout("","[50%][50%]","[fill][fill]"));
 
         JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));

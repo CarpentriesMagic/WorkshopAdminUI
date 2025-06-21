@@ -11,6 +11,11 @@ public class Setting {
         this.value = value;
     }
 
+    public Setting() {
+        keyValue = "";
+        value = "";
+    }
+
     public String getKeyValue() {
         return keyValue;
     }

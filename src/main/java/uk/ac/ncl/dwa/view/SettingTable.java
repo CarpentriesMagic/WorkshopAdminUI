@@ -5,10 +5,10 @@ import uk.ac.ncl.dwa.model.SettingTableModel;
 import javax.swing.*;
 
 public class SettingTable extends JTable {
+    private SettingTableModel settingTableModel = new SettingTableModel();
 
     public SettingTable() {
         super();
-        SettingTableModel settingTableModel = new SettingTableModel();
         setModel(settingTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -16,4 +16,10 @@ public class SettingTable extends JTable {
         getColumnModel().getColumn(1).setPreferredWidth(400);
         setRowHeight(20);
     }
+
+    @Override
+    public SettingTableModel getModel() {
+        return settingTableModel;
+    }
+
 }

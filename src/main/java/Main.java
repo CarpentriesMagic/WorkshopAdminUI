@@ -22,6 +22,7 @@ public class Main {
     static String dbUser;
     static String dbPass;
     static String conn;
+    static String connectionString;
 
     static {
         // must set before the Logger
@@ -32,7 +33,6 @@ public class Main {
     }
     static Logger logger = LoggerFactory.getLogger(Main.class);
     static Globals globals;
-    static String connectionString;
     private static final String BACKING_STORE_AVAIL = "BackingStoreAvail";
 
     private static boolean backingStoreAvailable() {

@@ -75,6 +75,7 @@ public class RoomPanel extends JPanel implements ActionListener {
                 Globals.getInstance().getRooms().add(new Room());
                 logger.debug("Setting dirty to true");
                 globals.setDirty(true);
+                logger.debug("insert a new row in rooms");
                 globals.getInsertedRows("rooms").add(globals.getRooms().size() - 1);
                 roomTable.repaint();
             }

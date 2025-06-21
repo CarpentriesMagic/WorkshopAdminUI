@@ -8,8 +8,9 @@ public abstract class DBHandler {
         return instance;
     }
 
-    public abstract List<Object> select(String tableName, String[] columns, String[] where);
+    public abstract List<Object> select(String tableName, String[] columns, String where);
     public abstract List<Object> create(String tableName, DBColumnDesc[] columns);
-    public abstract List<Object> insert();
-    public abstract List<Object> update();
+    public abstract List<Object> insert(String tableName, String[] columns);
+    public abstract boolean update(String tableName, String[] columns, String[] values, String[] where);
+    public abstract boolean deleteOne(String tableName, String column, String where);
 }
