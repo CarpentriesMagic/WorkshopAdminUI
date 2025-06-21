@@ -18,7 +18,7 @@ public class SettingTableModel extends AbstractTableModel {
 
     public SettingTableModel() {
         super();
-        settings.loadFromDatabase();
+//        settings.loadFromDatabase();
     }
 
     @Override

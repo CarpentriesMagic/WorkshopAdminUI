@@ -48,15 +48,28 @@ public class SettingPanel extends JPanel implements ActionListener {
         Settings settings = settingTable.getModel().getSettings();
         switch (e.getActionCommand()) {
             case "Save Settings" -> {
-                if (settings.isDirty()) {
-                    logger.warn("Settings need saving");
-                }
-
+                settings.forEach(setting -> {
+                    switch (setting.getStatus()) {
+                        case 'n': settings.insertSetting(setting);
+                        case 'u': settings.updateSettings(setting.getKeyValue(), setting.getValue());
+                    }
+                    setting.setStatus('s');
+                });
+                settingTable.repaint();
             }
             case "Add Setting" -> {
-
+                logger.info("Adding new Setting");
+                settings.add(settings.size(), new Setting());
+                settingTable.repaint();
             }
             case "Delete Setting" -> {
+                int row = settingTable.getSelectedRow();
+                if (row != -1) {
+                    Setting setting = settingTable.getModel().getSettings().get(row);
+                    System.out.println(setting.getKeyValue() + " - " +  setting.getValue());
+                    settings.remove(row);
+                }
+                settingTable.repaint();
             }
         }
     }

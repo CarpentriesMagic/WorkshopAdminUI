@@ -100,15 +100,18 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
-    public boolean deleteOne(String tableName, String column, String where) {
+    public boolean delete(String tableName, String column, String[] where) {
         Connection connection;
         try {
             connection = (Connection) DriverManager.getConnection(connectionString);
             String sql = String.format("DELETE FROM %s " +
-                    "WHERE %s='%s'",
+                    "WHERE %s=?",
                     tableName, column, where);
             logger.info(sql);
             PreparedStatement statement = connection.prepareStatement(sql);
+            for (int i=0; i<where.length; i++) {
+                statement.setString(1, where[i]);
+            }
             statement.executeQuery();
             connection.close();
             return true;

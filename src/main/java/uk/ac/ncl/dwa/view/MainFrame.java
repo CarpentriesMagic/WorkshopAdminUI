@@ -36,7 +36,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 
     @Override
     public void windowClosing(WindowEvent e) {
-        if (!globals.getDirty()) {
+        if (!globals.getDirty() ) {
             logger.debug("Window closing");
             dispose();
         } else {

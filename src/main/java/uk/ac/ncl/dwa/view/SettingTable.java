@@ -5,7 +5,7 @@ import uk.ac.ncl.dwa.model.SettingTableModel;
 import javax.swing.*;
 
 public class SettingTable extends JTable {
-    private SettingTableModel settingTableModel = new SettingTableModel();
+    private final SettingTableModel settingTableModel = new SettingTableModel();
 
     public SettingTable() {
         super();

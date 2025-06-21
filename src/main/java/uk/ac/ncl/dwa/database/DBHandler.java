@@ -12,5 +12,5 @@ public abstract class DBHandler {
     public abstract List<Object> create(String tableName, DBColumnDesc[] columns);
     public abstract List<Object> insert(String tableName, String[] columns);
     public abstract boolean update(String tableName, String[] columns, String[] values, String[] where);
-    public abstract boolean deleteOne(String tableName, String column, String where);
+    public abstract boolean delete(String tableName, String column, String[] where);
 }

@@ -67,7 +67,7 @@ class SettingsTest {
     @Order (2)
     @org.junit.jupiter.api.Test
     void deleteSetting() {
-        settings.deleteSetting("testkey");
+        settings.remove("testkey");
         List<Object> returnSetting = settings.selectSetting("value='testValue'");
         assertEquals(0, returnSetting.size());
     }
@@ -75,21 +75,26 @@ class SettingsTest {
     @Order (1)
     @org.junit.jupiter.api.Test
     void insertSetting() {
-        settings.insertSetting(new Setting("testkey","testValue"));
+        settings.insertSetting(new Setting("testkey","testValue",'s'));
         List<Object> returnSetting = settings.selectSetting("value='testValue'");
         assertEquals(1, returnSetting.size());
+        settings.remove("testkey");
+        returnSetting = settings.selectSetting("value='testValue'");
+        assertEquals(0, returnSetting.size());
     }
 
     @org.junit.jupiter.api.Test
     void updateSettings() {
         // Insert a setting
-        settings.insertSetting(new Setting("testkey","testValue"));
+        settings.insertSetting(new Setting("testkey","testValue", 's'));
         // Find the inserted record
         List<Object> returnSetting = settings.selectSetting("value='testValue'");
         // Check that only one record with that key was found
         assertEquals(1, returnSetting.size());
         // Update the value of that setting
         settings.updateSettings("testkey", "newvalue");
-    }
+        settings.remove("testkey");
+        returnSetting = settings.selectSetting("value='newvalue'");
+        assertEquals(0, returnSetting.size());   }
 
 }

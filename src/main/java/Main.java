@@ -15,7 +15,6 @@ import java.util.prefs.Preferences;
 import static uk.ac.ncl.dwa.controller.Utilities.createPropertiesFile;
 
 public class Main {
-    private static Properties properties;
     static String dbServer;
     static int dbPort;
     static String dbName;
@@ -46,12 +45,13 @@ public class Main {
         }
         return true;
     }
+
     public static void main(String[] args) {
         System.out.println("Backing store: " + backingStoreAvailable());
         System.setProperty("sun.awt.backingStore", "NotUseful");
         DBHandler dbHandler;
 
-        properties = createPropertiesFile();
+        Properties properties = createPropertiesFile();
         dbServer = properties.getProperty("dbServer");
         dbPort = Integer.parseInt(properties.getProperty("dbPort"));
         dbName = properties.getProperty("dbName");
@@ -78,7 +78,6 @@ public class Main {
             System.exit(1);
         } else {
             logger.info("Logging model output to {}", sourceFilename);
-
             Options options = new Options();
             options.addOption("g", "gui", false, "Run GUI");
             CommandLineParser parser = new DefaultParser();
