@@ -16,7 +16,9 @@ public class Helper implements Serializable {
     private String slug;
     private String name;
     private Boolean inserted = false;
-    private static final String[] columnNames = {"Slug", "Person_ID", "Name"};
+    private char status = 'n';
+    public static final String[] columnNames = {"Slug", "Person_ID", "Name"};
+    public static final String[] dbColumnNames = {"Slug", "Person_ID", "Name"};
 
     public Helper() {
         this.person_id = "Person ID";
@@ -24,16 +26,13 @@ public class Helper implements Serializable {
         this.name = "Name";
     }
 
-    public Helper(String slug, String person_id, String name) {
+    public Helper(String slug, String person_id, String name, char status) {
         this.person_id = person_id;
         this.slug = slug;
         this.name = name;
-        key_slug = slug;
-        key_person_id = person_id;
-    }
-
-    public static String[] getColumnNames() {
-        return columnNames;
+        this.key_slug = slug;
+        this.key_person_id = person_id;
+        this.status = status;
     }
 
     public String getPerson_id() {
@@ -71,7 +70,29 @@ public class Helper implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
+    }
+
+    public void setKey_person_id(String key_person_id) {
+        this.key_person_id = key_person_id;
+    }
+
+    public void setKey_slug(String key_slug) {
+        this.key_slug = key_slug;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(",", new String[]{slug, person_id, name});
     }
 }

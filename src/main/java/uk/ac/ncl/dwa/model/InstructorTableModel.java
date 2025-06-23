@@ -94,4 +94,7 @@ public class InstructorTableModel extends AbstractTableModel {
         return instructors.getColumnNames()[col];
     }
 
+    public Instructors getInstructors() {
+        return instructors;
+    }
 }

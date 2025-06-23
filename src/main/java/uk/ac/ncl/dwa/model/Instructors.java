@@ -9,7 +9,6 @@ import uk.ac.ncl.dwa.database.DBHandler;
 import java.io.Serial;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,10 +26,13 @@ public class Instructors  extends ArrayList<Instructor> {
     }
 
     public List<Object> loadFromDatabase() {
-        String[] columnNames = {"person_id", "slug", "firstname", "lastname"};
+        String[] columnNames = {"slug", "person_id", "firstname", "lastname"};
         List<Object> instructors = DBHandler.getInstance().query(
-                "select i.person_id, slug, firstname, lastname from instructors as i join people as p on p.person_id=i.person_id",
-                new String[]{"person_id", "slug", "firstname", "lastname"});
+                "SELECT i.slug, i.person_id, firstname, lastname " +
+                        "FROM instructors as i " +
+                        "JOIN people as p on p.person_id=i.person_id " +
+                        "ORDER BY i.slug ",
+                new String[]{ "slug", "person_id", "firstname", "lastname"});
         for (Object o : instructors) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Instructor instructor = new Instructor((String)settingObject.get(columnNames[0]),
@@ -51,36 +53,21 @@ public class Instructors  extends ArrayList<Instructor> {
         return Instructor.getColumnNames().length;
     }
 
-    public boolean insertInstructors() {
-        Connection connection = null;
-        AtomicBoolean success = new AtomicBoolean(false);
-        logger.info("Inserting {} rows", Globals.getInstance().getEditedRows("instructors").size());
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "INSERT instructors VALUES (?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            Globals.getInstance().getInsertedRows("instructors").forEach(row -> {
-            //for (int row : Globals.getInstance().getInsertedRows("instructors")) {
-                Instructor instructor = this.get(row);
-                logger.info("Inserting instructor " + instructor.getPerson_id());
-                try {
-                    statement.setString(1, instructor.getPerson_id());
-                    statement.setString(2, instructor.getSlug());
-
-                    statement.executeUpdate();
-                    success.set(true);
-                } catch (SQLException e) {
-                    success.set(false);
-                    throw new RuntimeException(e);
-                }
-            });
-            success.set(true);
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating instructors in database", e);
+    public boolean insertInstructor(Instructor  instructor) {
+        if (DBHandler.getInstance().insert("instructors", new String[]{instructor.getPerson_id(),
+        instructor.getSlug()})) {
+            instructor.setStatus('s');
+            return true;
+        } else {
+            instructor.setStatus('n');
+            return false;
         }
-        return success.get();
+    }
+
+    public void updateInstructor(Instructor  instructor) {
+        DBHandler.getInstance().update("instructors", new String[]{"person_id", "slug"},
+                new String[]{instructor.getPerson_id(), instructor.getSlug()},
+                new String[]{"person_id='" + instructor.getKey_person_id() + "' AND slug='" + instructor.getKey_slug() + "'"});
     }
 
     public boolean updateInstructors() {
@@ -139,4 +126,13 @@ public class Instructors  extends ArrayList<Instructor> {
         }
     }
 
+    /**
+     * Add a new setting (also add to insertedRows array for later saving to database)
+     * @param index index at which the specified element is to be inserted
+     * @param element element to be inserted
+     */
+    @Override
+    public void add(int index, Instructor element) {
+        super.add(index, element);
+    }
 }

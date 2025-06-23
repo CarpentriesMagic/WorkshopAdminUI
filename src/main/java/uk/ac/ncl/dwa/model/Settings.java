@@ -32,7 +32,7 @@ public class Settings extends ArrayList<Setting> {
                     (String)settingObject.get(columnNames[1]),
                     's');
             add(setting);
-            logger.info("key {}, value {}",setting.getKeyValue(), setting.getValue());
+            logger.info("key {}, value {}",setting.getKey(), setting.getValue());
         }
     }
 
@@ -47,20 +47,23 @@ public class Settings extends ArrayList<Setting> {
     public HashMap<String, String> getHashMap() {
         HashMap<String, String> settings = new HashMap<>();
         for (Setting setting : this) {
-            settings.put(setting.getKeyValue(), setting.getValue());
+            settings.put(setting.getKey(), setting.getValue());
         }
         return settings;
     }
 
-    public void insertSetting(Setting setting) {
-        DBHandler.getInstance().insert("settings",
-                new String[]{setting.getKeyValue(), setting.getValue()});
+    public boolean insertSetting(Setting setting) {
+        if (DBHandler.getInstance().insert("settings",
+                new String[]{setting.getKey(), setting.getValue()})) {
+            setting.setStatus('s');
+            return true;
+        } else return false;
+
     }
 
-    public void updateSettings(String key, String newValue) {
-        logger.debug("Updating settings for key={} to value={}", key, newValue);
+    public void updateSettings(Setting setting) {
         DBHandler.getInstance().update("settings", new String[]{"value"},
-                new String[]{newValue}, new String[]{"keyvalue='" + key + "'"});
+                new String[]{setting.getValue()}, new String[]{"keyvalue='" + setting.getOriginal_keyValue() + "'"});
     }
 
 
@@ -73,15 +76,14 @@ public class Settings extends ArrayList<Setting> {
     public void add(int index, Setting element) {
         super.add(index, element);
         System.out.println(element.toString());
-        //DBHandler.getInstance().insert("settings",new String[]{element.getKeyValue(), element.getValue()});
     }
 
     @Override
     public Setting remove(int index) {
         Setting setting = get(index);
-        logger.debug("Removing setting for key={}",setting.getKeyValue());
-        DBHandler.getInstance().delete("settings", "keyvalue",
-                new String[]{setting.getKeyValue()});
+        logger.debug("Removing setting for key={}",setting.getKey());
+        DBHandler.getInstance().delete("settings", new String[]{"keyvalue"},
+                new String[]{setting.getKey()});
         super.remove(index);
         return setting;
     }
@@ -89,7 +91,8 @@ public class Settings extends ArrayList<Setting> {
     @Override
     public boolean remove(Object o) {
         String key = (String)o;
-        DBHandler.getInstance().delete("settings", "keyvalue",
+        DBHandler.getInstance().delete("settings",
+                new String[]{"keyvalue"},
                 new String[]{key});
         super.remove(key);
         return true;

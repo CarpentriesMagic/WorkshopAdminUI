@@ -2,15 +2,12 @@ package uk.ac.ncl.dwa.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
-import uk.ac.ncl.dwa.model.Room;
 import uk.ac.ncl.dwa.model.Setting;
 import uk.ac.ncl.dwa.model.Settings;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SettingPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(RoomPanel.class);
@@ -44,16 +41,21 @@ public class SettingPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
-        Globals globals = Globals.getInstance();
         Settings settings = settingTable.getModel().getSettings();
         switch (e.getActionCommand()) {
             case "Save Settings" -> {
                 settings.forEach(setting -> {
                     switch (setting.getStatus()) {
-                        case 'n': settings.insertSetting(setting);
-                        case 'u': settings.updateSettings(setting.getKeyValue(), setting.getValue());
+                        case 'n':
+                            if (settings.insertSetting(setting)) {
+                                setting.setStatus('s');
+                                setting.setOriginal_keyValue(setting.getKey());
+                            }
+                            break;
+                        case 'u':
+                            settings.updateSettings(setting);
+                            break;
                     }
-                    setting.setStatus('s');
                 });
                 settingTable.repaint();
             }
@@ -61,13 +63,14 @@ public class SettingPanel extends JPanel implements ActionListener {
                 logger.info("Adding new Setting");
                 settings.add(settings.size(), new Setting());
                 settingTable.repaint();
+
             }
             case "Delete Setting" -> {
                 int row = settingTable.getSelectedRow();
                 if (row != -1) {
-                    Setting setting = settingTable.getModel().getSettings().get(row);
-                    System.out.println(setting.getKeyValue() + " - " +  setting.getValue());
                     settings.remove(row);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No row selected");
                 }
                 settingTable.repaint();
             }

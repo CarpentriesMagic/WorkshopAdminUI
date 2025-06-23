@@ -45,14 +45,25 @@ public class RoomPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
-        Globals globals = Globals.getInstance();
         Rooms rooms = roomTable.getModel().getRooms();
         switch (e.getActionCommand()) {
             case "Save Rooms" -> {
                 rooms.forEach(room -> {
-                    switch (room.getStatus()) {
-                        case 'n': rooms.insertRoom(room);
-                        case 'u': rooms.updateRoom(room);
+                    if (room.getRoom_id() == null || room.getRoom_id().equals("")) {
+                        JOptionPane.showMessageDialog(this, "Record with empty Room ID could not be saved. Fix and save again. Other records should all be saved.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        switch (room.getStatus()) {
+                            case 'n':
+                                rooms.insertRoom(room);
+                                break;
+                            case 'u':
+                                rooms.updateRoom(room);
+                                break;
+                        }
+                        if (room.getStatus() == 'n') {
+                            room.setRoom_id("s");
+                            room.setKey(room.getRoom_id());
+                        }
                     }
                 });
             }
@@ -60,11 +71,11 @@ public class RoomPanel extends JPanel implements ActionListener {
                 rooms.add(rooms.size(), new Room());
             }
             case "Delete Room" -> {
-                // Delete action
-                logger.info("Deleting selected room");
                 int row = roomTable.getSelectedRow();
                 if (row != -1) {
                     rooms.remove(row);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No row selected");
                 }
             }
         }

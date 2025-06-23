@@ -53,31 +53,22 @@ public class RoomTableModel extends AbstractTableModel {
         }
 
         Room room = rooms.get(row);
-        Globals.getInstance().setDirty(true);
-        logger.info("Setting dirty to " + Globals.getInstance().getDirty());
-        if (room.getRoom_id().trim().isBlank()) {
-            logger.info("Add row " + row + " to inserted rows");
-            Globals.getInstance().getInsertedRows("rooms").add(row);
-        } else {
-            logger.info("Add row " + row + " to dirty rows");
-            Globals.getInstance().getEditedRows("rooms").add(row);
-        }
         switch (col) {
             case 0:
                 room.setRoom_id((String) value);
-                break;
+                if (room.getStatus() != 'n') room.setStatus('u');                break;
             case 1:
                 room.setDescription((String) value);
-                break;
+                if (room.getStatus() != 'n') room.setStatus('u');                break;
             case 2:
                 room.setLongitude((String) value);
-                break;
+                if (room.getStatus() != 'n') room.setStatus('u');                break;
             case 3:
                 room.setLatitude((String) value);
-                break;
+                if (room.getStatus() != 'n') room.setStatus('u');                break;
             case 4:
                 room.setWhat_three_words((String) value);
-                break;
+                if (room.getStatus() != 'n') room.setStatus('u');                break;
             default:
                 break;
         }

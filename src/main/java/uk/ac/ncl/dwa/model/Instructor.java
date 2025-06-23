@@ -10,28 +10,29 @@ public class Instructor implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     final Logger logger = LoggerFactory.getLogger(getClass());
-    private String key_person_id;
     private String key_slug;
     private String person_id;
     private String slug;
     private String name;
+    private String key_person_id;
     private char status = 'n'; // u - updated, n - new, s - saved
-    public static final String[] columnNames = {"Slug", "Person_ID", "Name"};
+    public static final String[] columnNames = {"slug", "Person_ID", "Name"};
     public static final String[] dbColumnNames = {"slug", "person_id"};
 
     public Instructor() {
         person_id = "Person ID";
         slug = "Slug";
         name = "Name";
+        status = 'n';
     }
 
     public Instructor(String slug, String person_id, String name, char status) {
         this.person_id = person_id;
         this.slug = slug;
-        key_slug = slug;
-        key_person_id = person_id;
         this.name = name;
         this.status = status;
+        this.key_person_id = person_id;
+        this.key_slug = slug;
     }
 
     public static String[] getColumnNames() {
@@ -62,10 +63,6 @@ public class Instructor implements Serializable {
         this.key_slug = key_slug;
     }
 
-    public String getKey_person_id() {
-        return key_person_id;
-    }
-
     public String getName() { return name; }
 
     public void setName(String name) {
@@ -78,5 +75,13 @@ public class Instructor implements Serializable {
 
     public void setStatus(char status) {
         this.status = status;
+    }
+
+    public String getKey_person_id() {
+        return key_person_id;
+    }
+
+    public void setKey_person_id(String key_person_id) {
+        this.key_person_id = key_person_id;
     }
 }

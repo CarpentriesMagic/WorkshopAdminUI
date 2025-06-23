@@ -3,6 +3,7 @@ package uk.ac.ncl.dwa.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.model.People;
 import uk.ac.ncl.dwa.model.Person;
 
 import javax.swing.*;
@@ -46,61 +47,36 @@ public class PersonPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
-        Globals globals = Globals.getInstance();
+        People people = personTable.getModel().getPeople();
         switch (e.getActionCommand()) {
             case "Save" -> {
-                // Save action
-                logger.info("Saving changes");
-                boolean success1 = true;
-                boolean success2 = true;
-                if (!globals.getEditedRows("people").isEmpty()) {
-                    logger.info("There are people to insert");
-                    success1 = globals.getPeople().updatePerson();
-                    if (!success1) {
-                        JOptionPane.showMessageDialog(this, "Error updating people");
+                people.forEach(person -> {
+                    switch (person.getStatus()) {
+                        case 'n':
+                            if (people.insertPerson(person)) {
+                                person.setStatus('s');
+                                person.setKey(person.getPerson_id());
+                            }
+                            break;
+                        case 'u': people.updatePerson(person);
+                            break;
                     }
-                    if (!globals.getInsertedRows("people").isEmpty()) {
-                        success2 = globals.getPeople().insertPerson();
-                    }
-                    if (success1 && success2) {
-                        globals.setDirty(false);
-                    }
-                    if (success1) {
-                        globals.getEditedRows("people").clear();
-                    }
-                    if (success2) {
-                        globals.getInsertedRows("people").clear();
-                    }
-                }
+                    personTable.repaint();
+                });
             }
             case "Add" -> {
-                // Add action
-                logger.info("Adding a new Person");
-                Globals.getInstance().getPeople().add(new Person());
-                logger.debug("Setting dirty to true");
-                globals.setDirty(true);
-                globals.getInsertedRows("people").add(globals.getPeople().size() - 1);
+                logger.info("Adding new Person");
+                people.add(people.size(), new Person());
                 personTable.repaint();
             }
             case "Delete" -> {
-                // Delete action
-                int row = personTable.getSelectedRow();
+                int row =  personTable.getSelectedRow();
                 if (row != -1) {
-                    String person_id = Globals.getInstance().getPeople().get(row).getPerson_id();
-                    if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this record?") == JOptionPane.YES_OPTION) {
-                        logger.info("Deleting selected person");
-                        if (globals.getPeople().deletePerson(person_id)) {
-                            globals.getPeople().remove(row);
-                            globals.getInsertedRows("people").remove(row);
-                            globals.getEditedRows("people").remove(row);
-                            personTable.repaint();
-                        } else {
-                            JOptionPane.showMessageDialog(this, "The person could not be deleted");
-                        }
-                    }
+                    people.remove(row);
                 } else {
-                    JOptionPane.showMessageDialog(this, "No row selected");
+                    JOptionPane.showMessageDialog(this, "Please select a row");
                 }
+                personTable.repaint();
             }
         }
     }

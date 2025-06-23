@@ -21,8 +21,8 @@ public class DBHandlerMysql extends DBHandler {
 
     @Override
     public List<Object> query(String sql, String[] columns) {
-        Connection connection;
         List<Object> returnList = new ArrayList<>();
+        Connection connection;
         try {
             connection = DriverManager.getConnection(connectionString);
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -42,7 +42,6 @@ public class DBHandlerMysql extends DBHandler {
 
     @Override
     public List<Object> select(String tableName, String[] columns, String where) {
-        Connection connection;
         String sql;
         if (where.isBlank()) {
             sql = String.format("SELECT %s FROM %s", String.join(",", Arrays.asList(columns)), tableName);
@@ -50,22 +49,23 @@ public class DBHandlerMysql extends DBHandler {
             sql = String.format("SELECT %s FROM %s WHERE %s", String.join(",", Arrays.asList(columns)), tableName, where);
             logger.info(sql);
         }
-        List<Object> returnList = new ArrayList<>();
-        try {
-            connection = DriverManager.getConnection(connectionString);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                HashMap<String, Object> recordSet = new HashMap<>();
-                for (String column : columns) {
-                    recordSet.put(column, resultSet.getString(column));
-                }
-                returnList.add(recordSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return returnList;
+//        List<Object> returnList = new ArrayList<>();
+//        Connection connection;
+//        try {
+//            connection = DriverManager.getConnection(connectionString);
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            ResultSet resultSet = statement.executeQuery();
+//            while (resultSet.next()) {
+//                HashMap<String, Object> recordSet = new HashMap<>();
+//                for (String column : columns) {
+//                    recordSet.put(column, resultSet.getString(column));
+//                }
+//                returnList.add(recordSet);
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+        return query(sql, columns);
     }
 
     @Override
@@ -74,27 +74,16 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
-    public List<Object> insert(String tableName, String[] columns) {
-        Connection connection;
+    public boolean insert(String tableName, String[] columns) {
         String values = String.join(",", Arrays.asList(columns));
         values = "'" + values.replaceAll(",","','") + "'";
         String sql = String.format("INSERT INTO %s VALUES (%s)", tableName, values);
-        logger.info(String.format(sql));
-        try {
-            connection = DriverManager.getConnection(connectionString);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
-            connection.close();
-            return List.of();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return executeSQL(sql);
     }
 
     @Override
     public boolean update(String tableName, String[] columns,
                           String[] values, String[] where) {
-        Connection connection;
         String[] setString;
         if (columns.length != values.length) {
             throw new RuntimeException("Columns and values arrays do not match!");
@@ -109,7 +98,12 @@ public class DBHandlerMysql extends DBHandler {
         logger.info(setS);
         String sql = String.format("UPDATE %s SET %s WHERE %s",
                 tableName, String.join(",", setString), where[0]);
+        return executeSQL(sql);
+    }
+
+    private boolean executeSQL(String sql) {
         logger.info(sql);
+        Connection connection;
         try {
             connection = DriverManager.getConnection(connectionString);
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -117,11 +111,34 @@ public class DBHandlerMysql extends DBHandler {
             connection.close();
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info(e.getMessage());
+            return false;
         }
     }
 
     @Override
+    public boolean delete(String tableName, String[] columns, String[] values) {
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection(connectionString);
+            String[] whereString = new String[columns.length];
+            for (int i=0; i<columns.length; i++) {
+                whereString[i] = columns[i] + "='" + values[i] + "'";
+            }
+            String sql = String.format("DELETE FROM %s " +
+                            "WHERE " + String.join(" AND ",whereString),
+                    tableName);
+            logger.info(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.executeQuery();
+            connection.close();
+            return true;
+        } catch (SQLException e) {
+            logger.info("Error deleting workshop from database:\n{}", e);
+            return false;
+        }
+    }
+
     public boolean delete(String tableName, String column, String[] where) {
         Connection connection;
         try {

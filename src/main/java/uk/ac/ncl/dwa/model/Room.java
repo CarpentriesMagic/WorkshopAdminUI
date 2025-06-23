@@ -10,6 +10,7 @@ public class Room {
     private String longitude;
     private String latitude;
     private String what_three_words;
+    private String key;
     private char status = 'n'; // u - updated, n - new, s - saved
     public static final String[] dbColumnNames = {"room_id", "description", "longitude", "latitude", "what_three_words"};
     public static final String[] columnNames = {"Room ID", "Description", "Longitude", "Latitude", "What3Words"};
@@ -22,14 +23,16 @@ public class Room {
         this.latitude = latitude;
         this.what_three_words = what_three_words;
         this.status = status;
+        this.key = room_id;
     }
 
     public Room() {
-        this.room_id = "Room ID";
+        this.room_id = "";
         this.description = "";
         this.longitude = "";
         this.latitude = "";
         this.what_three_words = "";
+        this.status = 'n';
     }
 
     public static String[] getColumnNames() {
@@ -90,5 +93,13 @@ public class Room {
      */
     public void setStatus(char status) {
         this.status = status;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

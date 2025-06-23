@@ -11,18 +11,10 @@ public class PersonTableModel extends AbstractTableModel {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    People people = Globals.getInstance().getPeople();
+    People people = new People();
 
-
-    public PersonTableModel() {
+    public PersonTableModel () {
         super();
-        logger.trace("Create InstructorTableModel");
-        people.loadFromDatabase(Globals.getInstance().getConnectionString());
-        setPeople(people);
-    }
-
-    private void setPeople(People people) {
-        this.people = people;
     }
 
     public int getColumnCount() {
@@ -68,32 +60,31 @@ public class PersonTableModel extends AbstractTableModel {
         }
 
         Person person = people.get(row);
-        Globals.getInstance().setDirty(true);
-        logger.info("Setting dirty to " + Globals.getInstance().getDirty());
-        if (person.getPerson_id().isBlank()) {
-            Globals.getInstance().getInsertedRows("people").add(row);
-        } else {
-            logger.info("Add row " + row + " to dirty rows");
-            Globals.getInstance().getEditedRows("people").add(row);
-        }
+
         switch (col) {
             case 0:
                 person.setPerson_id((String) value);
+                if (person.getStatus() == 's') person.setStatus('u');
                 break;
             case 1:
                 person.setTitle((String) value);
+                if (person.getStatus() == 's') person.setStatus('u');
                 break;
             case 2:
                 person.setFirstname((String) value);
+                if (person.getStatus() == 's') person.setStatus('u');
                 break;
             case 3:
                 person.setLastname((String) value);
+                if (person.getStatus() == 's') person.setStatus('u');
                 break;
             case 4:
                 person.setCertified((String) value);
+                if (person.getStatus() == 's') person.setStatus('u');
                 break;
             case 5:
                 person.setEmail((String) value);
+                if (person.getStatus() == 's') person.setStatus('u');
                 break;
             default:
                 break;
@@ -106,6 +97,10 @@ public class PersonTableModel extends AbstractTableModel {
     public String getColumnName(int col) {
 
         return people.getColumnNames()[col];
+    }
+
+    public People getPeople() {
+        return people;
     }
 
 }
