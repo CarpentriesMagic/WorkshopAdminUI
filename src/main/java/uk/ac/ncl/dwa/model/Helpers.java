@@ -68,41 +68,6 @@ public class Helpers extends ArrayList<Helper> {
         }
     }
 
-    public boolean updateHelpers() {
-    Connection connection = null;
-        AtomicBoolean success = new AtomicBoolean(true);
-        logger.info("Updating {} rows", Globals.getInstance().getEditedRows("helpers").size());
-        Globals.getInstance().getEditedRows("helpers").forEach(row -> {
-            logger.info("Saving row: {}", row);
-        });
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "UPDATE helpers SET slug = ?, person_id = ? WHERE person_id = ? and slug = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            for (int row : Globals.getInstance().getEditedRows("helpers")) {
-                logger.info("Updating row: {}", row);
-                Helper helper = this.get(row);
-                logger.info("Updating helpers {}", helper.getPerson_id());
-                try {
-                    statement.setString(1, helper.getSlug());
-                    statement.setString(2, helper.getPerson_id());
-                    statement.setString(3, helper.getKey_person_id());
-                    statement.setString(4, helper.getKey_slug());
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    logger.error("The record could not be updated");
-                    success.set(false);
-                }
-            }
-            connection.close();
-        } catch (SQLException e) {
-            success.set(false);
-        }
-        return success.get();
-    }
-
-
     public String[] getColumnNames() {
         return Helper.columnNames;
     }
@@ -113,8 +78,9 @@ public class Helpers extends ArrayList<Helper> {
         super.remove(index);
         if (helper.getStatus() == 's') {
             logger.debug("Removing helper for key={}", helper.getPerson_id());
-            DBHandler.getInstance().delete("helpers", new String[]{"person_id", "slug"},
-                    new String[]{helper.getPerson_id(), helper.getSlug()});
+            if (!DBHandler.getInstance().delete("helpers", new String[]{"person_id", "slug"},
+                    new String[]{helper.getPerson_id(), helper.getSlug()}))
+                helper = null;
         }
         return helper;
     }
@@ -122,10 +88,11 @@ public class Helpers extends ArrayList<Helper> {
     @Override
     public boolean remove(Object o) {
         String key = (String)o;
-        DBHandler.getInstance().delete("helpers", new String[]{"person_id"},
-                new String[]{key});
-        super.remove(key);
-        return true;
+        if (DBHandler.getInstance().delete("helpers", new String[]{"person_id"},
+                new String[]{key})) {
+            super.remove(key);
+            return true;
+        } else return false;
     }
 
 }

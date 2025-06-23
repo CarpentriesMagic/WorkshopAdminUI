@@ -86,10 +86,11 @@ public class Rooms extends ArrayList<Room> {
     public Room remove(int index) {
         Room room = get(index);
         logger.debug("Removing room_id={}",room.getRoom_id());
-        DBHandler.getInstance().delete("room", new String[]{"room_id"},
-                new String[]{room.getRoom_id()});
-        super.remove(index);
-        return room;
+        if (DBHandler.getInstance().delete("room", new String[]{"room_id"},
+                new String[]{room.getRoom_id()})) {
+            super.remove(index);
+            return room;
+        } else return null;
     }
 
     @Override

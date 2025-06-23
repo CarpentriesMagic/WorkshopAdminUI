@@ -73,7 +73,9 @@ public class RoomPanel extends JPanel implements ActionListener {
             case "Delete Room" -> {
                 int row = roomTable.getSelectedRow();
                 if (row != -1) {
-                    rooms.remove(row);
+                    if (rooms.remove(row) == null) {
+                        JOptionPane.showMessageDialog(this, "The room could not be removed.");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
