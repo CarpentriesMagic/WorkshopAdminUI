@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Room;
+import uk.ac.ncl.dwa.model.Rooms;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -44,57 +45,43 @@ public class RoomPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
-        Globals globals = Globals.getInstance();
+        Rooms rooms = roomTable.getModel().getRooms();
         switch (e.getActionCommand()) {
             case "Save Rooms" -> {
-                // Save action
-                logger.info("Saving changes");
-                boolean success1;
-                boolean success2 = true;
-                if (!globals.getEditedRows("rooms").isEmpty()) {
-                    success1 = globals.getRooms().updateRooms();
-                    if (!success1) {
-                        JOptionPane.showMessageDialog(this, "Error updating rooms");
-                        throw new RuntimeException("Error updating rooms from database");
+                rooms.forEach(room -> {
+                    if (room.getRoom_id() == null || room.getRoom_id().equals("")) {
+                        JOptionPane.showMessageDialog(this, "Record with empty Room ID could not be saved. Fix and save again. Other records should all be saved.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        switch (room.getStatus()) {
+                            case 'n':
+                                rooms.insertRoom(room);
+                                break;
+                            case 'u':
+                                rooms.updateRoom(room);
+                                break;
+                        }
+                        if (room.getStatus() == 'n') {
+                            room.setRoom_id("s");
+                            room.setKey(room.getRoom_id());
+                        }
                     }
-                }
-                if (!globals.getInsertedRows("rooms").isEmpty()) {
-                    success2 = globals.getRooms().insertRooms();
-                }
-                if (success2) {
-                    globals.setDirty(false);
-                }
-                globals.getEditedRows("rooms").clear();
-                if (success2) {
-                    globals.getInsertedRows("rooms").clear();
-                }
+                });
             }
             case "Add Room" -> {
-                // Add action
-                logger.info("Adding new Room");
-                Globals.getInstance().getRooms().add(new Room());
-                logger.debug("Setting dirty to true");
-                globals.setDirty(true);
-                globals.getInsertedRows("rooms").add(globals.getRooms().size() - 1);
-                roomTable.repaint();
+                rooms.add(rooms.size(), new Room());
             }
             case "Delete Room" -> {
-                // Delete action
-                logger.info("Deleting selected room");
                 int row = roomTable.getSelectedRow();
                 if (row != -1) {
-                    String room_id = Globals.getInstance().getRooms().get(row).getRoom_id();
-                    globals.getRooms().remove(row);
-                    globals.getInsertedRows("rooms").remove(row);
-                    globals.getEditedRows("rooms").remove(row);
-                    globals.getRooms().deleteRoom(room_id);
-                    roomTable.repaint();
-                    globals.setDirty(true);
+                    if (rooms.remove(row) == null) {
+                        JOptionPane.showMessageDialog(this, "The room could not be removed.");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
             }
         }
+        roomTable.repaint();
     }
 
 }

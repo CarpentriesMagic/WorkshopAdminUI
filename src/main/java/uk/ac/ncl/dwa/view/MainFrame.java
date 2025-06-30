@@ -3,6 +3,7 @@ package uk.ac.ncl.dwa.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.model.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +36,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 
     @Override
     public void windowClosing(WindowEvent e) {
-        if (!globals.getDirty()) {
+        if (!globals.getDirty() ) {
             logger.debug("Window closing");
             dispose();
         } else {
@@ -44,15 +45,15 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
             var yesOrNo = JOptionPane.showConfirmDialog(null,
                     "Would you like to save your changes?", "Save", JOptionPane.YES_NO_OPTION);
             if (yesOrNo == 0) {
-                logger.info("Saving changes");
-                globals.getRooms().insertRooms();
-                globals.getRooms().updateRooms();
-                globals.getWorkshops().insertWorkshops();
-                globals.getWorkshops().updateWorkshops();
-                globals.getInstructors().insertInstructors();
-                globals.getInstructors().updateInstructors();
-                globals.getHelpers().insertHelpers();
-                globals.getHelpers().updateHelpers();
+//                logger.info("Saving changes");
+//                globals.getRooms().insertRooms();
+//                globals.getRooms().updateRooms();
+//                globals.getWorkshops().insertWorkshops();
+//                globals.getWorkshops().updateWorkshops();
+//                globals.getInstructors().insertInstructors();
+//                globals.getInstructors().updateInstructors();
+//                globals.getHelpers().insertHelpers();
+//                globals.getHelpers().updateHelpers();
 
             }
             if (yesOrNo == 1) {

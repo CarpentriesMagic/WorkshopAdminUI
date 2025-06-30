@@ -11,18 +11,10 @@ public class HelperTableModel extends AbstractTableModel {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    Helpers helpers = Globals.getInstance().getHelpers();
-
+    Helpers helpers = new Helpers();
 
     public HelperTableModel() {
         super();
-        logger.trace("Create InstructorTableModel");
-        helpers.loadFromDatabase(Globals.getInstance().getConnectionString());
-        setHelpers(helpers);
-    }
-
-    private void setHelpers(Helpers helpers) {
-        this.helpers = helpers;
     }
 
     public int getColumnCount() {
@@ -31,7 +23,6 @@ public class HelperTableModel extends AbstractTableModel {
         else
             return helpers.getColumnCount();
     }
-
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -54,8 +45,8 @@ public class HelperTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Allow editing for all cells
-        return true;
+        if (helpers.get(row).getStatus() == 's') return false;
+        else return true;
     }
 
     @Override
@@ -73,15 +64,16 @@ public class HelperTableModel extends AbstractTableModel {
             logger.info("Add row {} to dirty rows", row);
             Globals.getInstance().getEditedRows("helpers").add(row);
         }
-        String id = ((String) value).split(",")[0];
-        String name = ((String) value).split(",")[1];
+        System.out.println("Value: " + value);
         switch (col) {
             case 0 -> helper.setSlug((String) value);
             case 1 -> {
+                String id = ((String) value).split(",")[0];
+                String name = ((String) value).split(",")[1];
                 helper.setPerson_id(id);
                 helper.setName(name.trim());
             }
-            case 2 -> helper.setName(name);
+//            case 2 -> helper.setName(name);
         }
         // Notify the table that the data has changed
         fireTableCellUpdated(row, col);
@@ -90,8 +82,11 @@ public class HelperTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int col) {
-
         return helpers.getColumnNames()[col];
+    }
+
+    public Helpers getHelpers() {
+        return helpers;
     }
 
 }

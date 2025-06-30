@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 public class Person {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private static final String[] columnNames = {"Person_id", "title", "first name", "last name", "Certified", "Email"};
-    private static final String[] dbColumnNames = {"person_id", "title", "first name", "last name", "Certified", "Email"};
+    public static final String[] columnNames = {"Person_id", "title", "first name", "last name", "Certified", "Email"};
+    public static final String[] dbColumnNames = {"person_id", "title", "firstname", "lastname", "Certified", "Email"};
     private String key; // person_id before any changes made to record - needed for updating
     private String person_id;
     private String title;
@@ -15,17 +15,18 @@ public class Person {
     private String certified;
     private String email;
     private Boolean inserted = false;
+    private char status = 'n'; // u - updated, n - new, s - saved
 
     public Person() {
-        person_id = "Person ID";
-        title = "title";
-        firstname = "first name";
+        person_id = "";
+        title = "";
+        firstname = "";
         lastname = "last name";
-        certified = "0 = no, 1 = yes?";
-        email = "email";
+        certified = "0";
+        email = "";
     }
 
-    public Person(String person_id, String title, String firstname, String lastname, String certified, String email) {
+    public Person(String person_id, String title, String firstname, String lastname, String certified, String email, char status) {
         this.key = person_id;
         this.person_id = person_id;
         this.title = title;
@@ -33,6 +34,7 @@ public class Person {
         this.lastname = lastname;
         this.certified = certified;
         this.email = email;
+        this.status = status;
     }
 
     public String getPerson_id() {
@@ -91,10 +93,6 @@ public class Person {
         this.inserted = inserted;
     }
 
-    public static String[] getColumnNames() {
-        return columnNames;
-    }
-
     public static int getColumnCount() {
         return columnNames.length;
     }
@@ -103,4 +101,23 @@ public class Person {
         return this.key;
     }
 
+    /**
+     * Return record status, u - update, n - new, s - saved
+     * @return record status
+     */
+    public char getStatus() {
+        return status;
+    }
+
+    /**
+     * Set record status,
+     * @param status u - update, n - new, s - saved
+     */
+    public void setStatus(char status) {
+        this.status = status;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

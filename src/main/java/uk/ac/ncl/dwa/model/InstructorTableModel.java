@@ -10,13 +10,10 @@ public class InstructorTableModel extends AbstractTableModel {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    Instructors instructors = Globals.getInstance().getInstructors();
+    Instructors instructors = new Instructors();
 
     public InstructorTableModel() {
         super();
-        logger.trace("Create InstructorTableModel");
-        instructors.loadFromDatabase(Globals.getInstance().getConnectionString());
-        setInstructors(instructors);
     }
 
     private void setInstructors(Instructors instructors) {
@@ -97,4 +94,7 @@ public class InstructorTableModel extends AbstractTableModel {
         return instructors.getColumnNames()[col];
     }
 
+    public Instructors getInstructors() {
+        return instructors;
+    }
 }

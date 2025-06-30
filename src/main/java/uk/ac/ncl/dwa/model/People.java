@@ -1,9 +1,11 @@
 package uk.ac.ncl.dwa.model;
 
 import java.sql.Connection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
 
 import java.io.Serial;
 import java.sql.DriverManager;
@@ -11,126 +13,95 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.HashMap;
+import java.util.List;
 
 public class People extends ArrayList<Person> {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public void loadFromDatabase(String connectionString) {
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(connectionString);
-            String sql = "SELECT person_id, title, firstname, lastname, certified, email" +
-                    " FROM people order by lastname";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+    public People() {
+        super();
+        loadFromDatabase();
+    }
 
-            this.clear(); // Clear existing data
-            while (resultSet.next()) {
-                Person person = new Person(
-                        resultSet.getString("person_id"),
-                        resultSet.getString("title"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        resultSet.getString("certified"),
-                        resultSet.getString("email")
-                );
-                person.setInserted(true);
-                this.add(person);
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error loading people from database", e);
+    public void loadFromDatabase() {
+        String[] columnNames = Person.dbColumnNames;
+        List<Object> people = DBHandler.getInstance().select("people", columnNames, "");
+        for (Object object : people) {
+            HashMap<String, Object> peopleMap = (HashMap<String, Object>) object;
+            Person person = new Person(
+                    (String) peopleMap.get(columnNames[0]),
+                    (String) peopleMap.get(columnNames[1]),
+                    (String) peopleMap.get(columnNames[2]),
+                    (String) peopleMap.get(columnNames[3]),
+                    (String) peopleMap.get(columnNames[4]),
+                    (String) peopleMap.get(columnNames[5]),
+                    's'
+            );
+            add(person);
         }
     }
 
     public int getColumnCount() {
-        return Person.getColumnNames().length;
+        return Person.columnNames.length;
     }
 
 
-    public boolean insertPerson() {
-        Connection connection = null;
-        AtomicBoolean success = new AtomicBoolean(false);
-        logger.info("Inserting {} rows", Globals.getInstance().getEditedRows("people").size());
-        Globals.getInstance().getInsertedRows("people").forEach(row -> {
-            logger.info("Saving row: {}", row);
-        });
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "INSERT people VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            Globals.getInstance().getInsertedRows("people").forEach(row -> {
-                //for (int row : Globals.getInstance().getInsertedRows("people")) {
-                Person person = this.get(row);
-                logger.info("Inserting person {}", person.getPerson_id());
-                try {
-                    statement.setString(1, person.getPerson_id());
-                    statement.setString(2, person.getTitle());
-                    statement.setString(3, person.getFirstname());
-                    statement.setString(4, person.getLastname());
-                    statement.setString(5, person.getCertified());
-                    statement.setString(6, person.getEmail());
-
-                    statement.executeUpdate();
-                    success.set(true);
-                } catch (SQLException e) {
-                    success.set(false);
-                    throw new RuntimeException(e);
-                }
-            });
-            success.set(true);
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating people in database", e);
-        }
-        return success.get();
+    public boolean insertPerson(Person person) {
+        logger.debug("Inserting person person id {}", person.getPerson_id());
+        String[] values = {person.getPerson_id(), person.getTitle(),
+                person.getFirstname(), person.getLastname(),
+                person.getCertified(), person.getEmail()};
+        if (DBHandler.getInstance().insert("people", values)) {
+            person.setStatus('s');
+            return true;
+        } else return false;
     }
 
-    public boolean updatePerson() {
-        Connection connection = null;
-        boolean success = false;
-        logger.info("Updating {} rows", Globals.getInstance().getEditedRows("people").size());
-        Globals.getInstance().getEditedRows("people").forEach(row -> {
-            logger.info("Saving row: {}", row);
-        });
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "UPDATE people SET title = ?, firstname = ?, lastname = ?, certified = ?," +
-                    "email = ? WHERE person_id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            for (int row : Globals.getInstance().getEditedRows("people")) {
-                logger.info("Updating row: {}", row);
-                Person person = this.get(row);
-                logger.info("Updating people {}", person.getPerson_id());
-                try {
-                    statement.setString(1, person.getTitle());
-                    statement.setString(2, person.getFirstname());
-                    statement.setString(3, person.getLastname());
-                    statement.setString(4, person.getCertified());
-                    statement.setString(5, person.getEmail());
-                    statement.setString(6, person.getKey());
-                    statement.executeUpdate();
-                    success = true;
-                } catch (SQLException e) {
-                    success = false;
-                    throw new RuntimeException(e);
-                }
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating people in database", e);
-        }
-        return success;
+    public void updatePerson(Person person) {
+        logger.debug("Updating person {}", person.getPerson_id());
+        String[] values = {person.getPerson_id(), person.getTitle(),
+                person.getFirstname(), person.getLastname(),
+                person.getCertified(), person.getEmail()};
+        DBHandler.getInstance().update("people", Person.dbColumnNames, values,
+                new String[]{"person_id='" + person.getKey() + "'"});
     }
 
+    /**
+     * Add a new setting (also add to insertedRows array for later saving to database)
+     * @param index index at which the specified element is to be inserted
+     * @param element element to be inserted
+     */
+    @Override
+    public void add(int index, Person element) {
+        super.add(index, element);
+        System.out.println(element.toString());
+    }
+
+    @Override
+    public Person remove(int index) {
+        Person person = get(index);
+        logger.debug("Removing person for key={}",person.getPerson_id());
+        DBHandler.getInstance().delete("people",
+                new String[]{"person_id"},
+                new String[]{person.getKey()});
+        super.remove(index);
+        return person;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        String key = (String)o;
+        DBHandler.getInstance().delete("people", new String[]{"person_id"},
+                new String[]{key});
+        super.remove(key);
+        return true;
+    }
 
     public String[] getColumnNames() {
-        return Person.getColumnNames();
+        return Person.columnNames;
     }
 
     public boolean deletePerson(String key) {
@@ -151,6 +122,7 @@ public class People extends ArrayList<Person> {
 
     /**
      * Select specific people from the database
+     *
      * @param certvalue 1 for instructors, 2 for helpers, 0 for everybody else
      * @return
      */
@@ -162,10 +134,12 @@ public class People extends ArrayList<Person> {
             String sql;
             switch (certvalue) {
                 //INSTRUCTORS
-                case 1:sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified = " + certvalue;
+                case 1:
+                    sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified = " + certvalue;
                     break;
                 // HELPERS
-                case 2: sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified > " + 0;
+                case 2:
+                    sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified > " + 0;
                     break;
                 // EVERYONE
                 default:
@@ -186,5 +160,7 @@ public class People extends ArrayList<Person> {
         }
         return instructors.toArray(new String[instructors.size()]);
     }
+
+
 
 }

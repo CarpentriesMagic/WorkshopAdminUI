@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Helper;
+import uk.ac.ncl.dwa.model.Helpers;
+import uk.ac.ncl.dwa.model.Person;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -46,61 +48,41 @@ public class HelperPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
-        Globals globals = Globals.getInstance();
+        Helpers helpers = helperTable.getModel().getHelpers();
         switch (e.getActionCommand()) {
             case "Save" -> {
-                // Save action
-                logger.info("Saving changes");
-                boolean inserted;
-                boolean updated;
-                if (!globals.getEditedRows("helpers").isEmpty()) {
-                    logger.info("There are helpers to update");
-                    updated = globals.getHelpers().updateHelpers();
-                    if (!updated) {
-                        JOptionPane.showMessageDialog(this, "Error updating helpers");
-//                        throw new RuntimeException("Error updating helpers from database");
-                    } else {
-                        logger.debug("Clear dirty flag");
-                        globals.setDirty(false);
+                helpers.forEach(helper -> {
+                    switch (helper.getStatus()) {
+                        case 'n':
+                            helper.setStatus('s');
+                            if (helpers.insertHelpers(helper)) {
+                                helper.setKey_slug(helper.getSlug());
+                                helper.setKey_person_id(helper.getPerson_id());
+                            } else {
+                                JOptionPane.showMessageDialog(this, "This is a duplicate entry. Please correct before trying to save again.", "Error", JOptionPane.ERROR_MESSAGE);
+                                helper.setStatus('n');
+                            }
+                            break;
+                        case 'u':
+//                            helper.updateHelper(helper);
+                            break;
                     }
-                }
-                if (!globals.getInsertedRows("helpers").isEmpty()) {
-                    logger.info("There are helpers to insert");
-                    inserted = globals.getHelpers().insertHelpers();
-                    if (!inserted) {
-                        JOptionPane.showMessageDialog(this, "Error inserting helpers");
-                    } else {
-                        logger.debug("Helpers inserted");
-                        globals.getInsertedRows("helpers").clear();
-                    }
-                }
+                    helperTable.repaint();
+                });
             }
             case "Add" -> {
-                // Add action
-                logger.info("Adding new Helper");
-                Globals.getInstance().getHelpers().add(new Helper());
-                logger.debug("Setting dirty to true");
-                globals.setDirty(true);
-                globals.getInsertedRows("helpers").add(globals.getHelpers().size() - 1);
+                logger.info("Adding new Person");
+                helpers.add(helpers.size(), new Helper());
                 helperTable.repaint();
             }
             case "Delete" -> {
-                // Delete action
                 int row = helperTable.getSelectedRow();
                 if (row != -1) {
-                    String person_id = Globals.getInstance().getHelpers().get(row).getPerson_id();
-                    String slug = Globals.getInstance().getHelpers().get(row).getSlug();
-                    if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this record?") == JOptionPane.YES_OPTION) {
-                        globals.getHelpers().remove(row);
-                        logger.info("Deleting selected helper");
-                        globals.getInsertedRows("helpers").remove(row);
-                        globals.getEditedRows("helpers").remove(row);
-                        globals.getHelpers().deleteHelper(person_id, slug);
-                        helperTable.repaint();
-                    }
+                    helpers.remove(row);
                 } else {
-                    JOptionPane.showMessageDialog(this, "No row selected");
+                    JOptionPane.showMessageDialog(null, "Please select a row");
                 }
+                helperTable.repaint();
             }
         }
     }

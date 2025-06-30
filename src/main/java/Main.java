@@ -15,7 +15,6 @@ import java.util.prefs.Preferences;
 import static uk.ac.ncl.dwa.controller.Utilities.createPropertiesFile;
 
 public class Main {
-    private static Properties properties;
     static String dbServer;
     static int dbPort;
     static String dbName;
@@ -23,6 +22,7 @@ public class Main {
     static String dbPass;
     static String dbType;
     static String conn;
+    static String connectionString;
 
     static {
         // must set before the Logger
@@ -33,7 +33,6 @@ public class Main {
     }
     static Logger logger = LoggerFactory.getLogger(Main.class);
     static Globals globals;
-    static String connectionString;
     private static final String BACKING_STORE_AVAIL = "BackingStoreAvail";
 
     private static boolean backingStoreAvailable() {
@@ -47,12 +46,13 @@ public class Main {
         }
         return true;
     }
+
     public static void main(String[] args) {
         System.out.println("Backing store: " + backingStoreAvailable());
         System.setProperty("sun.awt.backingStore", "NotUseful");
         DBHandler dbHandler;
 
-        properties = createPropertiesFile();
+        Properties properties = createPropertiesFile();
         dbServer = properties.getProperty("dbServer");
         dbPort = Integer.parseInt(properties.getProperty("dbPort"));
         dbName = properties.getProperty("dbName");
@@ -60,10 +60,11 @@ public class Main {
         dbPass = properties.getProperty("dbPass");
         dbType = properties.getProperty("dbType");
         conn = properties.getProperty("connectionString");
-        connectionString = String.format(conn,  dbType,
+
+        dbType = properties.getProperty("dbType");
+        connectionString = String.format(conn, dbType,
                 dbServer, dbPort, dbName, dbUser, dbPass);
         if (properties.getProperty("dbType").equals("mariadb")) {
-            System.out.println(connectionString);
             dbHandler = new DBHandlerMysql(connectionString);
         } else {
             logger.error("Database server not specified in properties file");
@@ -81,7 +82,6 @@ public class Main {
             System.exit(1);
         } else {
             logger.info("Logging model output to {}", sourceFilename);
-
             Options options = new Options();
             options.addOption("g", "gui", false, "Run GUI");
             CommandLineParser parser = new DefaultParser();

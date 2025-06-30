@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WorkshopTable extends JTable implements ListSelectionListener {
     WorkshopTableModel workshopTableModel;
@@ -17,9 +18,11 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     Globals globals = Globals.getInstance();
     ArrayList<String> rooms;
     JTextArea textArea;
+    Settings settingsObject;
 
-    public WorkshopTable(JTextArea textArea) {
+    public WorkshopTable(JTextArea textArea, Settings settings) {
         super();
+        this.settingsObject = settings;
         this.textArea = textArea;
         workshopTableModel = new WorkshopTableModel();
         setModel(workshopTableModel);
@@ -94,17 +97,18 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     }
 
     public String getRecordAsString(int row) {
-        String collabdoc = globals.getSettings().get("collabdoc").toString();
-        String internaldoc = (globals.getSettings().get("internal_id") != null?
-                globals.getSettings().get("internal_id").toString():"");
+        HashMap<String, String> settings = this.settingsObject.getHashMap();
+        String collabdoc = settings.get("collabdoc");
+        String internaldoc = (settings.get("internal_id") != null?
+                settings.get("internal_id"):"");
         String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
         String pre = workshopTableModel.getValueAt(getSelectedRow(), 12).toString();
         if (pre == null || pre.isEmpty()) {
-            pre = globals.getSettings().get("pre_survey").toString() + slug;
+            pre = settings.get("pre_survey") + slug;
         }
         String post = workshopTableModel.getValueAt(row, 13).toString();
         if (post == null || post.isEmpty()) {
-            post = globals.getSettings().get("post_survey").toString() + slug;
+            post = settings.get("post_survey") + slug;
         }
         String internal_id = (workshopTableModel.getValueAt(getSelectedRow(), 19) != null)?workshopTableModel.getValueAt(getSelectedRow(), 19).toString():"";
         collabdoc = collabdoc.replace("<slug>", slug);
