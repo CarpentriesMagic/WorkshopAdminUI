@@ -22,6 +22,7 @@ public class Main {
     static String dbPass;
     static String conn;
     static String connectionString;
+    static String dbType;
 
     static {
         // must set before the Logger
@@ -58,9 +59,10 @@ public class Main {
         dbUser = properties.getProperty("dbUser");
         dbPass = properties.getProperty("dbPass");
         conn = properties.getProperty("connectionString");
-        connectionString = String.format(conn,
+        dbType = properties.getProperty("dbType");
+        connectionString = String.format(conn, dbType,
                 dbServer, dbPort, dbName, dbUser, dbPass);
-        if (properties.getProperty("dbType").equals("mysql")) {
+        if (properties.getProperty("dbType").equals("mariadb")) {
             dbHandler = new DBHandlerMysql(connectionString);
         } else {
             logger.error("Database server not specified in properties file");
