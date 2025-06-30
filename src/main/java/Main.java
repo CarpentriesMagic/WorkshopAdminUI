@@ -21,6 +21,7 @@ public class Main {
     static String dbName;
     static String dbUser;
     static String dbPass;
+    static String dbType;
     static String conn;
 
     static {
@@ -57,10 +58,12 @@ public class Main {
         dbName = properties.getProperty("dbName");
         dbUser = properties.getProperty("dbUser");
         dbPass = properties.getProperty("dbPass");
+        dbType = properties.getProperty("dbType");
         conn = properties.getProperty("connectionString");
-        connectionString = String.format(conn,
+        connectionString = String.format(conn,  dbType,
                 dbServer, dbPort, dbName, dbUser, dbPass);
-        if (properties.getProperty("dbType").equals("mysql")) {
+        if (properties.getProperty("dbType").equals("mariadb")) {
+            System.out.println(connectionString);
             dbHandler = new DBHandlerMysql(connectionString);
         } else {
             logger.error("Database server not specified in properties file");
