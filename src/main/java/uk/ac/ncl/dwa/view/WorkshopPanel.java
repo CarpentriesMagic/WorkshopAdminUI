@@ -37,9 +37,9 @@ public class WorkshopPanel extends JPanel implements ActionListener {
 
         // Add components to the frame
         JPanel buttonPanel = new JPanel();
-        JButton btn_save = new JButton("Save Workshops");
-        JButton btn_add = new JButton("Add Workshop");
-        JButton btn_del = new JButton("Delete Workshop");
+        JButton btn_save = new JButton("Save ");
+        JButton btn_add = new JButton("Add");
+        JButton btn_del = new JButton("Delete");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
@@ -57,7 +57,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
         Globals globals = Globals.getInstance();
-        if (e.getActionCommand().equals("Save Workshops")) {
+        if (e.getActionCommand().equals("Save")) {
             // Save action
             logger.info("Saving changes");
             boolean success1 = true;
@@ -80,7 +80,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             if (success2) {
                 globals.getInsertedRows("workshops").clear();
             }
-        } else if (e.getActionCommand().equals("Add Workshop")) {
+        } else if (e.getActionCommand().equals("Add")) {
             // Add action
             logger.info("Adding new workshop");
             Globals.getInstance().getWorkshops().add(new Workshop());
@@ -88,7 +88,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             globals.setDirty(true);
             globals.getInsertedRows("workshops").add(globals.getWorkshops().size() - 1);
             workshopTable.repaint();
-        } else if (e.getActionCommand().equals("Delete Workshop")) {
+        } else if (e.getActionCommand().equals("Delete")) {
             // Delete action
             logger.info("Deleting selected workshop");
             int row = workshopTable.getSelectedRow();

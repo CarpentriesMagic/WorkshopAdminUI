@@ -90,10 +90,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
+        super.valueChanged(e);
         textArea.setText(getRecordAsString(getSelectedRow()));
-        // TODO: updateUI is causing a nullpointerexception: Cannot invoke
-        //  "javax.swing.JTable.getColumnModel()" because "this.this$0.table" is null
-        updateUI();
+
     }
 
     public String getRecordAsString(int row) {

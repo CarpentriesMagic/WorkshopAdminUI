@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.view;
 
+import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.Globals;
@@ -16,7 +17,8 @@ public class RoomPanel extends JPanel implements ActionListener {
 
     public RoomPanel() {
         super();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new MigLayout("","[50%][50%]","[fill][fill]"));
 
         JScrollPane scrollPane = new JScrollPane(roomTable);
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
@@ -26,10 +28,10 @@ public class RoomPanel extends JPanel implements ActionListener {
 
         // Add components to the frame
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        JButton btn_save = new JButton("Save Rooms");
-        JButton btn_add = new JButton("Add Room");
-        JButton btn_del = new JButton("Delete Room");
+//        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        JButton btn_save = new JButton("Save");
+        JButton btn_add = new JButton("Add");
+        JButton btn_del = new JButton("Delete");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
@@ -38,8 +40,8 @@ public class RoomPanel extends JPanel implements ActionListener {
         panel.add(btn_del);
 
         // Add panel and scroll pane to the frame
-        this.add(panel);
-        this.add(scrollPane);
+        this.add(panel, "wrap");
+        this.add(scrollPane, "span, grow, push, wrap");
     }
 
     @Override
@@ -47,7 +49,7 @@ public class RoomPanel extends JPanel implements ActionListener {
         logger.debug(e.getActionCommand());
         Rooms rooms = roomTable.getModel().getRooms();
         switch (e.getActionCommand()) {
-            case "Save Rooms" -> {
+            case "Save" -> {
                 rooms.forEach(room -> {
                     if (room.getRoom_id() == null || room.getRoom_id().equals("")) {
                         JOptionPane.showMessageDialog(this, "Record with empty Room ID could not be saved. Fix and save again. Other records should all be saved.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -67,10 +69,10 @@ public class RoomPanel extends JPanel implements ActionListener {
                     }
                 });
             }
-            case "Add Room" -> {
+            case "Add" -> {
                 rooms.add(rooms.size(), new Room());
             }
-            case "Delete Room" -> {
+            case "Delete" -> {
                 int row = roomTable.getSelectedRow();
                 if (row != -1) {
                     if (rooms.remove(row) == null) {
