@@ -71,11 +71,11 @@ public class Main {
             System.exit(-1);
         }
 
-        globals = Globals.getInstance();
-        globals.setConnectionString(connectionString);
+//        globals = Globals.getInstance();
+//        globals.setConnectionString(connectionString);
         // Create properties file
-        globals.setDirty(false);
-        logger.info("Set dirty to {}", globals.getDirty());
+//        globals.setDirty(false);
+//        logger.info("Set dirty to {}", globals.getDirty());
         String sourceFilename = "logging.properties";
         if (!Files.exists(Paths.get(sourceFilename))) {
             System.out.println("Logging configuration file " + sourceFilename + " not found");

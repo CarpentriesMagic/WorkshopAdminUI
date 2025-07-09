@@ -137,4 +137,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
 
         return stringBuilder.toString();
     }
+
+    public WorkshopTableModel getModel() {
+        return workshopTableModel;
+    }
 }

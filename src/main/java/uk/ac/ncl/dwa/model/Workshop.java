@@ -33,7 +33,18 @@ public class Workshop {
     private String schedule = "";
     private String internal_id = "";
     private Boolean inserted = false;
+    private char status = 'n';
 
+    public String[] asArray() {
+        return new String[]{slug, title, humandate, humantime,
+                startdate, enddate,
+                room_id, language, country,
+                (online?"true":"false"), (pilot?"true":"false"),
+                inc_lesson_site, pre_survey,
+                post_survey, carpentry_code,
+                curriculum_code, flavour_id,
+                eventbrite, schedule, internal_id};
+    }
     public Workshop() {
         this.slug = "";
         this.title = "";
@@ -273,6 +284,9 @@ public class Workshop {
         return columnNames;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getKey() {
         return this.key;
@@ -284,5 +298,13 @@ public class Workshop {
 
     public String getInternal_id() {
         return internal_id;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
     }
 }

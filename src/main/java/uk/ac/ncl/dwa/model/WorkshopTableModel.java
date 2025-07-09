@@ -162,4 +162,5 @@ public class WorkshopTableModel extends AbstractTableModel {
         // Allow editing for all cells
         return true;
     }
+
 }

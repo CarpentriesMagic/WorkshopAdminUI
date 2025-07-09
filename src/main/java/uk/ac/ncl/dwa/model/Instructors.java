@@ -51,8 +51,9 @@ public class Instructors  extends ArrayList<Instructor> {
     }
 
     public boolean insertInstructor(Instructor instructor) {
-        if (DBHandler.getInstance().insert("instructors", new String[]{instructor.getPerson_id(),
-                instructor.getSlug()})) {
+        if (DBHandler.getInstance().insert("instructors",
+                new String[]{instructor.getPerson_id(),
+                        instructor.getSlug()})) {
             instructor.setStatus('s');
             return true;
         } else {
