@@ -104,22 +104,6 @@ public class People extends ArrayList<Person> {
         return Person.columnNames;
     }
 
-    public boolean deletePerson(String key) {
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "DELETE FROM people WHERE person_id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, key);
-            statement.executeUpdate();
-            connection.close();
-            return true;
-        } catch (SQLException e) {
-            logger.debug("Error deleting person/workshop from database\n {}", e.getMessage());
-            return false;
-        }
-    }
-
     /**
      * Select specific people from the database
      *
@@ -127,37 +111,26 @@ public class People extends ArrayList<Person> {
      * @return
      */
     public static String[] selectedList(int certvalue) {
-        Connection connection = null;
         ArrayList<String> instructors = new ArrayList<>();
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql;
-            switch (certvalue) {
+            String where;
+            String sql = switch (certvalue) {
                 //INSTRUCTORS
-                case 1:
-                    sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified = " + certvalue;
-                    break;
+                case 1 -> where =  "certified = " + certvalue;
                 // HELPERS
-                case 2:
-                    sql = "SELECT person_id, title, firstname, lastname FROM people WHERE certified > " + 0;
-                    break;
+                case 2 -> where = "certified > " + 0;
                 // EVERYONE
-                default:
-                    sql = "SELECT person_id, title, firstname, lastname FROM people";
-                    break;
-            }
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                instructors.add(resultSet.getString("person_id") + "," +
-                        resultSet.getString("title") + " " +
-                        resultSet.getString("firstname") + " " +
-                        resultSet.getString("lastname"));
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting instructor/workshop from database", e);
-        }
+                default -> where = "";
+            };
+
+            List<Object> people = DBHandler.getInstance().select(
+                    "people", new String[]{"person_id", "title", "firstname", "lastname"}, where);
+            people.forEach(p -> {
+                HashMap<String, Object> personMap = (HashMap<String, Object>) p;
+                instructors.add(personMap.get("person_id") + "," +
+                        personMap.get("title") + " " +
+                        personMap.get("firstname") + " " +
+                        personMap.get("lastname"));
+            });
         return instructors.toArray(new String[instructors.size()]);
     }
 

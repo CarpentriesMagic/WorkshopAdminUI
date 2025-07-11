@@ -63,7 +63,11 @@ public class WorkshopPanel extends JPanel implements ActionListener {
                 workshops.forEach((workshop) -> {
                     switch (workshop.getStatus()) {
                         case 'u':
-                            workshops.updateWorkshop(workshop);
+                            if (workshops.updateWorkshop(workshop)) {
+                                workshop.setKey(workshop.getSlug());
+                            } else {
+                                JOptionPane.showMessageDialog(this, "This is a duplicate entry. Please correct before trying to save again.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
                             break;
                         case 'n':
                             workshop.setStatus('s');
@@ -75,27 +79,18 @@ public class WorkshopPanel extends JPanel implements ActionListener {
                     }
                 });
 
-
+            }
             case "Add" -> {
-                // Add action
-                logger.info("Adding new workshop");
-                Globals.getInstance().getWorkshops().add(new Workshop());
-                logger.debug("Setting dirty to true");
-                globals.setDirty(true);
-                globals.getInsertedRows("workshops").add(globals.getWorkshops().size() - 1);
-                workshopTable.repaint();
+                workshops.add(workshops.size(), new Workshop());
             }
             case "Delete" -> {
-                // Delete action
-                logger.info("Deleting selected workshop");
                 int row = workshopTable.getSelectedRow();
-                if (row != -1) {
-                    String slug = Globals.getInstance().getWorkshops().get(row).getSlug();
-                    globals.getWorkshops().deleteWorkshop(slug);
-                    globals.getWorkshops().remove(row);
-                    globals.getInsertedRows("workshops").remove(row);
-                    globals.getEditedRows("workshops").remove(row);
-                    workshopTable.repaint();
+                if (row != 1) {
+                    if (workshops.remove(row) == null) {
+                        JOptionPane.showMessageDialog(this, "Record could not be deleted. It may not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        logger.debug("Deleted workshop at row: " + row);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }

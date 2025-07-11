@@ -123,7 +123,8 @@ public class Workshops extends ArrayList<Workshop> {
 
     public void loadFromDatabase() {
         String[] columnNames = Workshop.dbColumnNames;
-        List<Object> settings = DBHandler.getInstance().select("workshops", columnNames, "");
+        List<Object> settings = DBHandler.getInstance().select(
+                "workshops", columnNames, "");
         for (Object o : settings) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Workshop workshop = new Workshop((String)settingObject.get(columnNames[0]),
@@ -171,52 +172,30 @@ public class Workshops extends ArrayList<Workshop> {
         return false;
     }
 
-    public void deleteWorkshop(String key) {
-        Connection connection = null;
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "DELETE FROM workshops WHERE slug = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, key);
-            statement.executeUpdate();
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting workshop from database", e);
-        }
-    }
-
     public ArrayList<String> loadSchedules() {
-        Connection connection = null;
         ArrayList<String> ret = new ArrayList<>();
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "SELECT schedule_id FROM schedules";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                ret.add(resultSet.getString("schedule_id"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        List<Object> schedules = DBHandler.getInstance().select(
+               "schedules",
+                new String[]{"schedule_id"},
+               "");
+        for (Object o : schedules) {
+            HashMap<String,Object> schedule = (HashMap<String, Object>) o;
+            String s = (String) schedule.get("schedule_id");
+            ret.add(s);
         }
         return ret;
     }
 
     public ArrayList<String> loadCurricula() {
-        Connection connection = null;
         ArrayList<String> ret = new ArrayList<>();
-        try {
-            connection = (Connection) DriverManager.getConnection(Globals.getInstance().getConnectionString());
-            String sql = "SELECT curriculum_code FROM curriculum";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                ret.add(resultSet.getString("curriculum_code"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        List<Object> curricula = DBHandler.getInstance().select(
+                "curriculum",
+                new String[]{"curriculum_code"},
+                "");
+        for (Object o : curricula) {
+            HashMap<String,Object> curriculum = (HashMap<String, Object>) o;
+            String s = (String) curriculum.get("curriculum_code");
+            ret.add(s);
         }
         return ret;
     }
