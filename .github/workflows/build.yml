@@ -19,7 +19,7 @@ jobs:
           distribution: 'corretto'
           cache: 'maven'
       - run: mvn clean package -DskipTests
-      - run: mkdir staging && mv target/yb-workload-sim.jar target/yb-workload-sim-${{ env.build-number }}.jar && cp target/*.jar staging
+      - run: mkdir staging && mv target/dwa.jar target/dwa-${{ env.build-number }}.jar && cp target/*.jar staging
       - uses: actions/upload-artifact@v4
         with:
           name: Package
