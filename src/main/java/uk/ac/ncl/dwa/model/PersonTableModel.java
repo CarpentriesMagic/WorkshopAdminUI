@@ -2,8 +2,6 @@ package uk.ac.ncl.dwa.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
-
 import javax.swing.table.AbstractTableModel;
 import java.io.Serial;
 
