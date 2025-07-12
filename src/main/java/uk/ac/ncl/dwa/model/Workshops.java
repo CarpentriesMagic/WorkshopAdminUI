@@ -1,16 +1,9 @@
 package uk.ac.ncl.dwa.model;
 
 import java.io.Serial;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
-
-import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.database.DBHandler;
 
 public class Workshops extends ArrayList<Workshop> {
@@ -21,6 +14,11 @@ public class Workshops extends ArrayList<Workshop> {
 
     // TODO	There should be a better way of doing this, but in the meantime ..
     Hashtable<String, Integer> id_index = new Hashtable<>();
+
+    public Workshops() {
+        super();
+        loadFromDatabase();
+    }
 
     /**
      * Find workshop using its ID
@@ -123,30 +121,30 @@ public class Workshops extends ArrayList<Workshop> {
 
     public void loadFromDatabase() {
         String[] columnNames = Workshop.dbColumnNames;
-        List<Object> settings = DBHandler.getInstance().select(
+        List<Object> workshops = DBHandler.getInstance().select(
                 "workshops", columnNames, "");
-        for (Object o : settings) {
-            HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
-            Workshop workshop = new Workshop((String)settingObject.get(columnNames[0]),
-                    (String)settingObject.get(columnNames[1]),
-                    (String)settingObject.get(columnNames[2]),
-                    (String)settingObject.get(columnNames[3]),
-                    (String)settingObject.get(columnNames[4]),
-                    (String)settingObject.get(columnNames[5]),
-                    (String)settingObject.get(columnNames[6]),
-                    (String)settingObject.get(columnNames[7]),
-                    (String)settingObject.get(columnNames[8]),
-                    (((String) settingObject.get(columnNames[9])).equals("1")),
-                    (((String) settingObject.get(columnNames[10])).equals("1")),
-                    (String)settingObject.get(columnNames[11]),
-                    (String)settingObject.get(columnNames[12]),
-                    (String)settingObject.get(columnNames[13]),
-                    (String)settingObject.get(columnNames[14]),
-                    (String)settingObject.get(columnNames[15]),
-                    (String)settingObject.get(columnNames[16]),
-                    (String)settingObject.get(columnNames[17]),
-                    (String)settingObject.get(columnNames[18]),
-                    (String)settingObject.get(columnNames[19])
+        for (Object o : workshops) {
+            HashMap<String,Object> workshopObject = (HashMap<String, Object>) o;
+            Workshop workshop = new Workshop((String)workshopObject.get(columnNames[0]),
+                    (String)workshopObject.get(columnNames[1]),
+                    (String)workshopObject.get(columnNames[2]),
+                    (String)workshopObject.get(columnNames[3]),
+                    (String)workshopObject.get(columnNames[4]),
+                    (String)workshopObject.get(columnNames[5]),
+                    (String)workshopObject.get(columnNames[6]),
+                    (String)workshopObject.get(columnNames[7]),
+                    (String)workshopObject.get(columnNames[8]),
+                    (((String) workshopObject.get(columnNames[9])).equals("1")),
+                    (((String) workshopObject.get(columnNames[10])).equals("1")),
+                    (String)workshopObject.get(columnNames[11]),
+                    (String)workshopObject.get(columnNames[12]),
+                    (String)workshopObject.get(columnNames[13]),
+                    (String)workshopObject.get(columnNames[14]),
+                    (String)workshopObject.get(columnNames[15]),
+                    (String)workshopObject.get(columnNames[16]),
+                    (String)workshopObject.get(columnNames[17]),
+                    (String)workshopObject.get(columnNames[18]),
+                    (String)workshopObject.get(columnNames[19])
                     );
             workshop.setStatus('s');
             add(workshop);
@@ -160,12 +158,12 @@ public class Workshops extends ArrayList<Workshop> {
                 "workshops",
                 Workshop.dbColumnNames,
                 workshop.asArray(),
-                new String[]{"slug=" + workshop.getKey()});
+                new String[]{"slug=\"" + workshop.getKey() + "\""});
     }
 
     public boolean insertWorkshop(Workshop workshop) {
         if (DBHandler.getInstance().insert("workshops",
-                Workshop.dbColumnNames)) {
+                workshop.asArray())) {
             workshop.setStatus('s');
             return true;
         }

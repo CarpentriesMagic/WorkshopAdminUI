@@ -1,21 +1,19 @@
 package uk.ac.ncl.dwa.model;
 
 import javax.swing.table.AbstractTableModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
+import java.io.Serial;
 
 public class WorkshopTableModel extends AbstractTableModel {
+
+    @Serial
     private static final long serialVersionUID = 1L;
-    private Logger logger = LoggerFactory.getLogger(getClass());
-    Workshops workshops = Globals.getInstance().getWorkshops();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private Workshops workshops = new Workshops();
 
     public WorkshopTableModel() {
         super();
-        logger.trace("Create WorkshopTableModel");
-        workshops.loadFromDatabase();
-        setWorkshops(workshops);
     }
 
     public int getColumnCount() {
@@ -39,15 +37,7 @@ public class WorkshopTableModel extends AbstractTableModel {
         }
 
         Workshop workshop = workshops.get(row);
-        Globals.getInstance().setDirty(true);
-        logger.info("Setting dirty to " + Globals.getInstance().getDirty());
-        if (workshop.getSlug().trim().isBlank()) {
-            logger.info("Add row " + row + " to inserted rows");
-            Globals.getInstance().getInsertedRows("workshops").add(row);
-        } else {
-            logger.info("Add row " + row + " to dirty rows");
-            Globals.getInstance().getEditedRows("workshops").add(row);
-        }
+        if (workshop.getStatus() != 'n') workshop.setStatus('u');
         switch (col) {
             case 0:
                 workshop.setSlug((String) value);
@@ -148,10 +138,6 @@ public class WorkshopTableModel extends AbstractTableModel {
         return workshops.getColumnNames()[col];
     }
 
-    public Workshops getWorkshops() {
-        return workshops;
-    }
-
     public void setWorkshops(Workshops workshops) {
         logger.trace("Set workshops object");
         this.workshops = workshops;
@@ -161,6 +147,10 @@ public class WorkshopTableModel extends AbstractTableModel {
     public boolean isCellEditable(int row, int col) {
         // Allow editing for all cells
         return true;
+    }
+
+    public Workshops getWorkshops() {
+        return workshops;
     }
 
 }

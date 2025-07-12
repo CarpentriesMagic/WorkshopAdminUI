@@ -39,7 +39,7 @@ public class Workshop {
         return new String[]{slug, title, humandate, humantime,
                 startdate, enddate,
                 room_id, language, country,
-                (online?"true":"false"), (pilot?"true":"false"),
+                (online?"1":"0"), (pilot?"1":"0"),
                 inc_lesson_site, pre_survey,
                 post_survey, carpentry_code,
                 curriculum_code, flavour_id,

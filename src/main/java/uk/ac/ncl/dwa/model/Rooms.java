@@ -1,17 +1,10 @@
 package uk.ac.ncl.dwa.model;
 
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import java.sql.Connection;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.database.DBHandler;
 
 public class Rooms extends ArrayList<Room> {
@@ -26,7 +19,7 @@ public class Rooms extends ArrayList<Room> {
     }
 
 
-    public List<Object> loadFromDatabase() {
+    public void loadFromDatabase() {
         String[] columnNames = Room.dbColumnNames;
         List<Object> rooms = DBHandler.getInstance().select("room",
                 columnNames, "");
@@ -42,7 +35,6 @@ public class Rooms extends ArrayList<Room> {
             add(room);
             logger.info("Load room {}",room.getRoom_id());
         }
-        return rooms;
     }
 
     public ArrayList<String> loadRoomList(String connectionString) {

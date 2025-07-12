@@ -2,11 +2,8 @@ package uk.ac.ncl.dwa.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Helper;
 import uk.ac.ncl.dwa.model.Helpers;
-import uk.ac.ncl.dwa.model.Person;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

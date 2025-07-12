@@ -1,10 +1,8 @@
 package uk.ac.ncl.dwa.model;
 
+import javax.swing.table.AbstractTableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
-
-import javax.swing.table.AbstractTableModel;
 import java.io.Serial;
 
 public class RoomTableModel extends AbstractTableModel {
@@ -56,19 +54,24 @@ public class RoomTableModel extends AbstractTableModel {
         switch (col) {
             case 0:
                 room.setRoom_id((String) value);
-                if (room.getStatus() != 'n') room.setStatus('u');                break;
+                if (room.getStatus() != 'n') room.setStatus('u');
+                break;
             case 1:
                 room.setDescription((String) value);
-                if (room.getStatus() != 'n') room.setStatus('u');                break;
+                if (room.getStatus() != 'n') room.setStatus('u');
+                break;
             case 2:
                 room.setLongitude((String) value);
-                if (room.getStatus() != 'n') room.setStatus('u');                break;
+                if (room.getStatus() != 'n') room.setStatus('u');
+                break;
             case 3:
                 room.setLatitude((String) value);
-                if (room.getStatus() != 'n') room.setStatus('u');                break;
+                if (room.getStatus() != 'n') room.setStatus('u');
+                break;
             case 4:
                 room.setWhat_three_words((String) value);
-                if (room.getStatus() != 'n') room.setStatus('u');                break;
+                if (room.getStatus() != 'n') room.setStatus('u');
+                break;
             default:
                 break;
         }

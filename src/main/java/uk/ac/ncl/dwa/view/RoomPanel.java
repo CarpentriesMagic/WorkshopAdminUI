@@ -3,10 +3,8 @@ package uk.ac.ncl.dwa.view;
 import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Room;
 import uk.ac.ncl.dwa.model.Rooms;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,11 +44,13 @@ public class RoomPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        logger.debug(e.getActionCommand());
+        logger.info(e.getActionCommand());
         Rooms rooms = roomTable.getModel().getRooms();
         switch (e.getActionCommand()) {
             case "Save" -> {
+                logger.info(rooms.size() + " rooms loaded");
                 rooms.forEach(room -> {
+                    logger.info(room.getRoom_id());
                     if (room.getRoom_id() == null || room.getRoom_id().equals("")) {
                         JOptionPane.showMessageDialog(this, "Record with empty Room ID could not be saved. Fix and save again. Other records should all be saved.", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {

@@ -1,6 +1,5 @@
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.database.DBHandler;
 import uk.ac.ncl.dwa.database.DBHandlerMysql;
 import uk.ac.ncl.dwa.view.WorkshopAdmin;
@@ -32,7 +31,6 @@ public class Main {
 
     }
     static Logger logger = LoggerFactory.getLogger(Main.class);
-    static Globals globals;
     private static final String BACKING_STORE_AVAIL = "BackingStoreAvail";
 
     private static boolean backingStoreAvailable() {

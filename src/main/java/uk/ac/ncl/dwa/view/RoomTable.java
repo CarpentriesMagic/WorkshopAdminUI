@@ -2,9 +2,7 @@ package uk.ac.ncl.dwa.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.RoomTableModel;
-
 import javax.swing.*;
 import java.io.Serial;
 

@@ -3,7 +3,6 @@ package uk.ac.ncl.dwa.view;
 import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import uk.ac.ncl.dwa.model.Settings;
 import uk.ac.ncl.dwa.model.Workshop;
 import uk.ac.ncl.dwa.model.Workshops;
@@ -22,7 +21,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
         super();
         this.settings = settings;
         workshopTable = new WorkshopTable(workshopEntryTextArea, settings);
-        setLayout(new MigLayout("","[50%][50%]","[fill][fill]"));
+        setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
 
         JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         JPanel workshopEntryPanel = new JPanel(new MigLayout("fill", "[]", "[]"));
@@ -38,7 +37,7 @@ public class WorkshopPanel extends JPanel implements ActionListener {
 
         // Add components to the frame
         JPanel buttonPanel = new JPanel();
-        JButton btn_save = new JButton("Save ");
+        JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
         btn_save.addActionListener(this);
@@ -56,40 +55,42 @@ public class WorkshopPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        logger.debug(e.getActionCommand());
+        logger.info(e.getActionCommand());
         Workshops workshops = workshopTable.getModel().getWorkshops();
+        logger.info("{} workshops loaded", workshops.size());
         switch (e.getActionCommand()) {
             case "Save" -> {
-                workshops.forEach((workshop) -> {
-                    switch (workshop.getStatus()) {
-                        case 'u':
-                            if (workshops.updateWorkshop(workshop)) {
-                                workshop.setKey(workshop.getSlug());
-                            } else {
-                                JOptionPane.showMessageDialog(this, "This is a duplicate entry. Please correct before trying to save again.", "Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                            break;
-                        case 'n':
-                            workshop.setStatus('s');
-                            if (workshops.insertWorkshop(workshop)) {
-                                workshop.setKey(workshop.getSlug());
-                            } else {
-                                JOptionPane.showMessageDialog(this, "This is a duplicate entry. Please correct before trying to save again.", "Error", JOptionPane.ERROR_MESSAGE);
-                            }
+                workshops.forEach(workshop -> {
+                    logger.info(workshop.getSlug());
+                    if (workshop.getSlug() == null || workshop.getSlug().equals("")) {
+                        JOptionPane.showMessageDialog(this, "Record with empty slug could not be saved. Fix and save again. Other records should all be saved.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        switch (workshop.getStatus()) {
+                            case 'u':
+                                if (!workshops.updateWorkshop(workshop)) {
+                                    JOptionPane.showMessageDialog(this, "Something went wrong. The workshop couldn't be saved.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                                break;
+                            case 'n':
+                                if (!workshops.insertWorkshop(workshop)) {
+                                    JOptionPane.showMessageDialog(this, "This is a duplicate entry. Please correct before trying to save again.", "Error", JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    workshop.setStatus('s');
+                                    workshop.setKey(workshop.getSlug());
+                                }
+                        }
                     }
                 });
-
             }
             case "Add" -> {
+                logger.info("Adding new workshop number {}",workshops.size());
                 workshops.add(workshops.size(), new Workshop());
             }
             case "Delete" -> {
                 int row = workshopTable.getSelectedRow();
-                if (row != 1) {
+                if (row != -1) {
                     if (workshops.remove(row) == null) {
-                        JOptionPane.showMessageDialog(this, "Record could not be deleted. It may not exist.", "Error", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        logger.debug("Deleted workshop at row: " + row);
+                        JOptionPane.showMessageDialog(this, "The workshop could not be removed.");
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
@@ -97,5 +98,6 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             }
             default -> logger.debug("Unknown action command: " + e.getActionCommand());
         }
+        workshopTable.repaint();
     }
 }

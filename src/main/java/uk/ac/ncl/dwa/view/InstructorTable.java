@@ -2,7 +2,7 @@ package uk.ac.ncl.dwa.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
 import uk.ac.ncl.dwa.model.InstructorTableModel;
 import uk.ac.ncl.dwa.model.People;
 import uk.ac.ncl.dwa.model.RoomTableModel;
@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.table.TableColumn;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 public class InstructorTable extends JTable implements Serializable {
     @Serial
@@ -28,16 +29,14 @@ public class InstructorTable extends JTable implements Serializable {
         getColumnModel().getColumn(2).setPreferredWidth(200);
 
         /*
-         * ComboBox for selecting slug
+         * ComboBox for selecting workshop slug
          */
-
-        String[] workshops = Globals.getInstance().getWorkshops().getWorkshopNames();
-        TableColumn roomColumn = this.getColumnModel().getColumn(0);
-        JComboBox<String> roomComboBox = new JComboBox<>(workshops);
-        roomColumn.setCellEditor(new DefaultCellEditor(roomComboBox));
-
+        String[] workshopList = DBHandler.getInstance().selectStringArray("workshops", "slug", "");
+        TableColumn workshop = this.getColumnModel().getColumn(0);
+        JComboBox<String> workshopComboBox = new JComboBox<>(workshopList);
+        workshop.setCellEditor(new DefaultCellEditor(workshopComboBox));
         /*
-         * ComboBox for selecting slug
+         * ComboBox for selecting instructor
          */
         String[] instructors = People.selectedList(1);
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);

@@ -2,20 +2,19 @@ package uk.ac.ncl.dwa.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
+import uk.ac.ncl.dwa.database.DBHandler;
 import uk.ac.ncl.dwa.model.*;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class WorkshopTable extends JTable implements ListSelectionListener {
     WorkshopTableModel workshopTableModel;
     Logger logger = LoggerFactory.getLogger(WorkshopTable.class);
-    Globals globals = Globals.getInstance();
     ArrayList<String> rooms;
     JTextArea textArea;
     Settings settingsObject;
@@ -49,10 +48,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting room
          */
-        rooms = globals.getRooms().loadRoomList(globals.getConnectionString());
+        String[] roomsList = DBHandler.getInstance().selectStringArray("room", "room_id", "");
         TableColumn roomColumn = this.getColumnModel().getColumn(6);
-        JComboBox<String> roomComboBox = new JComboBox<>();
-        rooms.forEach(roomComboBox::addItem);
+        JComboBox<String> roomComboBox = new JComboBox<>(roomsList);
         roomColumn.setCellEditor(new DefaultCellEditor(roomComboBox));
 
         /*
@@ -66,9 +64,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting curriculum
          */
-        ArrayList<String> curriculum = globals.getWorkshops().loadCurricula();
+        String[] curriculaList = DBHandler.getInstance().selectStringArray("curriculum", "curriculum_code", "");
         TableColumn currColumn = this.getColumnModel().getColumn(15);
-        JComboBox<String> currComboBox = new JComboBox<>(curriculum.toArray(new String[curriculum.size()]));
+        JComboBox<String> currComboBox = new JComboBox<>(curriculaList);
         currColumn.setCellEditor(new DefaultCellEditor(currComboBox));
 
         /*
@@ -82,9 +80,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting schedule to include
          */
-        ArrayList<String> schedules = globals.getWorkshops().loadSchedules();
+        String[] schedules = DBHandler.getInstance().selectStringArray("schedules", "schedule_id", "");
         TableColumn scheduleColumn = this.getColumnModel().getColumn(18);
-        JComboBox<String> scheduleComboBox = new JComboBox<String>(schedules.toArray(new String[schedules.size()]));
+        JComboBox<String> scheduleComboBox = new JComboBox<String>(schedules);
         scheduleColumn.setCellEditor(new DefaultCellEditor(scheduleComboBox));
     }
 

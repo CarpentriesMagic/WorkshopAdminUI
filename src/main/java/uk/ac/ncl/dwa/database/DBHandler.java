@@ -9,6 +9,7 @@ public abstract class DBHandler {
     }
 
     public abstract List<Object> select(String tableName, String[] columns, String where);
+    public abstract String[] selectStringArray(String tableName, String column, String where);
     public abstract List<Object> query(String sql, String[] columns);
     public abstract List<Object> create(String tableName, DBColumnDesc[] columns);
     public abstract boolean insert(String tableName, String[] columns);

@@ -2,7 +2,6 @@ package uk.ac.ncl.dwa.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
 import javax.swing.table.AbstractTableModel;
 import java.io.Serial;
 
@@ -60,14 +59,6 @@ public class InstructorTableModel extends AbstractTableModel {
             return;
         }
         Instructor instructor = instructors.get(row);
-        Globals.getInstance().setDirty(true);
-        logger.info("Setting dirty to {}", Globals.getInstance().getDirty());
-        if (instructor.getPerson_id().isBlank()) {
-            Globals.getInstance().getInsertedRows("instructors").add(row);
-        } else {
-            logger.info("Add row {} to dirty rows", row);
-            Globals.getInstance().getEditedRows("instructors").add(row);
-        }
         logger.info("Value {}", ((String) value));
         switch (col) {
             case 0 -> instructor.setSlug((String) value);

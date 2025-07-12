@@ -2,8 +2,6 @@ package uk.ac.ncl.dwa.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ncl.dwa.controller.Globals;
-
 import javax.swing.table.AbstractTableModel;
 import java.io.Serial;
 
@@ -56,14 +54,6 @@ public class HelperTableModel extends AbstractTableModel {
         }
 
         Helper helper = helpers.get(row);
-        Globals.getInstance().setDirty(true);
-        logger.info("Setting dirty to " + Globals.getInstance().getDirty());
-        if (helper.getPerson_id().isBlank()) {
-            Globals.getInstance().getInsertedRows("helpers").add(row);
-        } else {
-            logger.info("Add row {} to dirty rows", row);
-            Globals.getInstance().getEditedRows("helpers").add(row);
-        }
         System.out.println("Value: " + value);
         switch (col) {
             case 0 -> helper.setSlug((String) value);

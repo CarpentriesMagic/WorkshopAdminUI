@@ -40,6 +40,17 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
+    public String[] selectStringArray(String tableName, String column, String where) {
+        List<Object>  objectList = select(tableName, new String[]{column}, where);
+        String[] ret = new String[objectList.size()];
+        for (Object o: objectList) {
+            HashMap<String, Object> object = (HashMap<String, Object>) o;
+            ret[objectList.indexOf(o)] = object.get(column).toString();
+        }
+        return ret;
+    }
+
+    @Override
     public List<Object> select(String tableName, String[] columns, String where) {
         String sql;
         if (where.isBlank()) {
@@ -48,22 +59,6 @@ public class DBHandlerMysql extends DBHandler {
             sql = String.format("SELECT %s FROM %s WHERE %s", String.join(",", Arrays.asList(columns)), tableName, where);
             logger.info(sql);
         }
-//        List<Object> returnList = new ArrayList<>();
-//        Connection connection;
-//        try {
-//            connection = DriverManager.getConnection(connectionString);
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                HashMap<String, Object> recordSet = new HashMap<>();
-//                for (String column : columns) {
-//                    recordSet.put(column, resultSet.getString(column));
-//                }
-//                returnList.add(recordSet);
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
         return query(sql, columns);
     }
 
