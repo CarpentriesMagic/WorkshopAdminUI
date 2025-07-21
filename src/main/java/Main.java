@@ -2,6 +2,7 @@ import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import uk.ac.ncl.dwa.database.DBHandler;
 import uk.ac.ncl.dwa.database.DBHandlerMysql;
+import uk.ac.ncl.dwa.database.DBHandlerSQLite;
 import uk.ac.ncl.dwa.view.WorkshopAdmin;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +65,8 @@ public class Main {
                 dbServer, dbPort, dbName, dbUser, dbPass);
         if (properties.getProperty("dbType").equals("mariadb")) {
             dbHandler = new DBHandlerMysql(connectionString);
+        } else if (properties.getProperty("dbType").equals("sqlite")) {
+            dbHandler = new DBHandlerSQLite(connectionString);
         } else {
             logger.error("Database server not specified in properties file");
             System.exit(-1);
