@@ -52,15 +52,14 @@ public class Main {
         DBHandler dbHandler;
 
         Properties properties = createPropertiesFile();
-        dbServer = properties.getProperty("dbServer");
-        dbPort = Integer.parseInt(properties.getProperty("dbPort"));
         dbName = properties.getProperty("dbName");
-        dbUser = properties.getProperty("dbUser");
         dbPass = properties.getProperty("dbPass");
-        dbType = properties.getProperty("dbType");
+        dbPort = Integer.parseInt(properties.getProperty("dbPort"));
+        dbServer = properties.getProperty("dbServer");
+        dbUser = properties.getProperty("dbUser");
         conn = properties.getProperty("connectionString");
-
         dbType = properties.getProperty("dbType");
+
         connectionString = String.format(conn, dbType,
                 dbServer, dbPort, dbName, dbUser, dbPass);
         if (properties.getProperty("dbType").equals("mariadb")) {

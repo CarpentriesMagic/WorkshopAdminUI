@@ -16,6 +16,8 @@ public class SystemProperties {
         hsh_properties.put("dbName","workshopadmin");
         hsh_properties.put("dbUser","workshopadmin");
         hsh_properties.put("dbPass","w0rksh0p");
+        hsh_properties.put("connectionString","jdbc:sqlite:emptydatabase.sqlite");
+        hsh_properties.put("dbType","sqlite");
 
     }
 
