@@ -170,31 +170,4 @@ public class Workshops extends ArrayList<Workshop> {
         return false;
     }
 
-    public ArrayList<String> loadSchedules() {
-        ArrayList<String> ret = new ArrayList<>();
-        List<Object> schedules = DBHandler.getInstance().select(
-               "schedules",
-                new String[]{"schedule_id"},
-               "");
-        for (Object o : schedules) {
-            HashMap<String,Object> schedule = (HashMap<String, Object>) o;
-            String s = (String) schedule.get("schedule_id");
-            ret.add(s);
-        }
-        return ret;
-    }
-
-    public ArrayList<String> loadCurricula() {
-        ArrayList<String> ret = new ArrayList<>();
-        List<Object> curricula = DBHandler.getInstance().select(
-                "curriculum",
-                new String[]{"curriculum_code"},
-                "");
-        for (Object o : curricula) {
-            HashMap<String,Object> curriculum = (HashMap<String, Object>) o;
-            String s = (String) curriculum.get("curriculum_code");
-            ret.add(s);
-        }
-        return ret;
-    }
 }
