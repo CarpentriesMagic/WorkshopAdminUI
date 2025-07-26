@@ -73,7 +73,8 @@ public class DBHandlerSQLite extends DBHandler {
         String values = String.join(",", Arrays.asList(columns));
         values = "'" + values.replaceAll(",","','") + "'";
         String sql = String.format("INSERT INTO %s VALUES (%s)", tableName, values);
-        return executeSQL(sql);
+        boolean ret = executeSQL(sql);
+        return true;
     }
 
     @Override
@@ -97,12 +98,13 @@ public class DBHandlerSQLite extends DBHandler {
     }
 
     private boolean executeSQL(String sql) {
-        logger.info(sql);
+        logger.info("Executing statement: {}",sql);
         Connection connection;
         try {
             connection = DriverManager.getConnection(connectionString);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
+            int resultSet = statement.executeUpdate();
+            System.out.println( "ResultSet: " + resultSet);
             connection.close();
             return true;
         } catch (SQLException e) {
@@ -125,7 +127,7 @@ public class DBHandlerSQLite extends DBHandler {
                     tableName);
             logger.info(sql);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
+            statement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException e) {

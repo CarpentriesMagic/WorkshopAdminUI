@@ -170,4 +170,16 @@ public class Workshops extends ArrayList<Workshop> {
         return false;
     }
 
+    @Override
+    public Workshop remove(int index) {
+        Workshop workshop = get(index);
+        super.remove(index);
+        if (workshop.getStatus() == 's') {
+            logger.debug("Removing workshop for key={}", workshop.getSlug());
+            if (!DBHandler.getInstance().delete("workshops", new String[]{"slug"},
+                    new String[]{workshop.getSlug()}))
+                workshop = null;
+        }
+        return workshop;
+    }
 }

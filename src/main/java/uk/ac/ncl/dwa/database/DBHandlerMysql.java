@@ -101,7 +101,7 @@ public class DBHandlerMysql extends DBHandler {
         try {
             connection = DriverManager.getConnection(connectionString);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
+            statement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException e) {
@@ -122,9 +122,9 @@ public class DBHandlerMysql extends DBHandler {
             String sql = String.format("DELETE FROM %s " +
                             "WHERE " + String.join(" AND ",whereString),
                     tableName);
-            logger.info(sql);
+            logger.info("Delete statement: {}", sql);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
+            statement.executeUpdate();
             connection.close();
             return true;
         } catch (SQLException e) {

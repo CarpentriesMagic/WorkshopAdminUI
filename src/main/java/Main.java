@@ -62,12 +62,12 @@ public class Main {
 
         connectionString = String.format(conn, dbType,
                 dbServer, dbPort, dbName, dbUser, dbPass);
-        if (properties.getProperty("dbType").equals("mariadb")) {
+        if (properties.getProperty("dbType").equals("mariadb") || properties.getProperty("dbType").equals("mysql")) {
             dbHandler = new DBHandlerMysql(connectionString);
         } else if (properties.getProperty("dbType").equals("sqlite")) {
             dbHandler = new DBHandlerSQLite(connectionString);
         } else {
-            logger.error("Database server not specified in properties file");
+            logger.error("Database server type is not specified in properties file");
             System.exit(-1);
         }
 
