@@ -1,6 +1,8 @@
 exclude/
 workshopadmin.properties.bu
 workshopadmin.properties
+workshopadmin.sqlite3
+data.sqlite
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

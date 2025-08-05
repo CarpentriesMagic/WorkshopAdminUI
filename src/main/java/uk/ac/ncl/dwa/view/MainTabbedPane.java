@@ -14,5 +14,6 @@ public class MainTabbedPane extends JTabbedPane {
         addTab("Helpers", new HelperPanel());
         addTab("People", new PersonPanel());
         addTab("Settings", new SettingPanel());
+        addTab("Website creation", new GitHubPanel());
     }
 }

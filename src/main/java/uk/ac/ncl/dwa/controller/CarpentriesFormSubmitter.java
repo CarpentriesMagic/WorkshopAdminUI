@@ -6,10 +6,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
 public class CarpentriesFormSubmitter {
+    public static final Logger logger = LoggerFactory.getLogger("CarpentriesFormSubmitter.java");;
+
     public static void main(String[] args) {
         WebDriver driver = new FirefoxDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -64,7 +68,7 @@ public class CarpentriesFormSubmitter {
             // Wait to confirm submission (e.g., success message or redirect)
             wait.until(ExpectedConditions.urlContains("forms/self-organised/thank-you"));
 
-            System.out.println("✅ Form submitted successfully!");
+            logger.trace("✅ Form submitted successfully!");
 
         } catch (Exception e) {
             System.err.println("❌ An error occurred during form submission:");
