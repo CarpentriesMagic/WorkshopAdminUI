@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DBHandlerMysql extends DBHandler {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -37,17 +38,6 @@ public class DBHandlerMysql extends DBHandler {
             throw new RuntimeException(e);
         }
         return returnList;
-    }
-
-    @Override
-    public String[] selectStringArray(String tableName, String column, String where) {
-        List<Object>  objectList = select(tableName, new String[]{column}, where);
-        String[] ret = new String[objectList.size()];
-        for (Object o: objectList) {
-            HashMap<String, Object> object = (HashMap<String, Object>) o;
-            ret[objectList.indexOf(o)] = object.get(column).toString();
-        }
-        return ret;
     }
 
     @Override
@@ -122,7 +112,6 @@ public class DBHandlerMysql extends DBHandler {
             String sql = String.format("DELETE FROM %s " +
                             "WHERE " + String.join(" AND ",whereString),
                     tableName);
-            logger.info("Delete statement: {}", sql);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.executeUpdate();
             connection.close();
@@ -153,4 +142,36 @@ public class DBHandlerMysql extends DBHandler {
             return false;
         }
     }
+
+    @Override
+    public String selectString(String tableName, String column, String where) {
+        List<Object>  objectList = select(tableName, new String[]{column}, where);
+        String ret;
+        Object o = objectList.get(0);
+        HashMap<String, Object> object = (HashMap<String, Object>) o;
+        ret = object.get(column).toString();
+        return ret;
+    }
+
+    @Override
+    public String[] selectStringArray(String tableName, String column, String where) {
+        List<Object>  objectList = select(tableName, new String[]{column}, where);
+        String[] ret = new String[objectList.size()];
+        for (Object o: objectList) {
+            HashMap<String, Object> object = (HashMap<String, Object>) o;
+            ret[objectList.indexOf(o)] = object.get(column).toString();
+        }
+        return ret;
+    }
+
+
+    @Override
+    public HashMap<String, String> selectStringArray(String tableName, String[] columns, String where) {
+        List<Object>  objectList = select(tableName, columns, where);
+        Object o = objectList.get(0);
+
+        return (HashMap<String, String>) o;
+    }
+
+
 }

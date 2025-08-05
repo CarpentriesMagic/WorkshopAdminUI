@@ -152,8 +152,29 @@ public class DBHandlerSQLite extends DBHandler {
             connection.close();
             return true;
         } catch (SQLException e) {
-            logger.info("Error deleting workshop from database:\n{}", e);
+            logger.info("Error deleting workshop from database: {}", e.getMessage());
             return false;
         }
     }
+
+
+    @Override
+    public String selectString(String tableName, String column, String where) {
+        List<Object>  objectList = select(tableName, new String[]{column}, where);
+        String ret;
+        Object o = objectList.get(0);
+        HashMap<String, Object> object = (HashMap<String, Object>) o;
+        ret = object.get(column).toString();
+        return ret;
+    }
+
+    @Override
+    public HashMap<String, String> selectStringArray(String tableName, String[] columns, String where) {
+        List<Object>  objectList = select(tableName, columns, where);
+        Object o = objectList.get(0);
+        HashMap<String, String> object = (HashMap<String, String>) o;
+
+        return object;
+    }
+
 }
