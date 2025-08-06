@@ -45,6 +45,7 @@ public class SettingPanel extends JPanel implements ActionListener {
         switch (e.getActionCommand()) {
             case "Save Settings" -> {
                 settings.forEach(setting -> {
+                    System.out.println(setting.toString());
                     switch (setting.getStatus()) {
                         case 'n':
                             if (settings.insertSetting(setting)) {
