@@ -1,6 +1,5 @@
 package uk.ac.ncl.dwa.controller.github;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -15,11 +14,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Scanner;
-
 import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getHelpers;
 import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getInstructors;
 
@@ -177,7 +173,7 @@ public class GitHubActions {
         String remoteUrl = "https://github.com/" + owner + "/" + repo + ".git";
         remoteUrl = "git@github.com:" + owner + "/" + repo + ".git";
         String token = getToken();
-        String original = "";
+        String schedule = "";
         String carpentrycode = "";
 
         StringBuilder sb = new StringBuilder();
@@ -262,6 +258,8 @@ public class GitHubActions {
                         if (!line.startsWith("8")) sb.append(line).append("\n");
                     }
                 }
+                schedule = (String)columnValues.get("schedule");
+                logger.info("Set schedule file to {}", schedule);
                 // Write back to file
                 PrintWriter pw = new PrintWriter(repo + "/index.md");
                 pw.write(sb.toString());
@@ -279,10 +277,6 @@ public class GitHubActions {
                         line = "curriculum: " + columnValues.get("curriculum_code") + "\n";
                     if (line.startsWith("flavor")) {
                         line = "flavor: " + columnValues.get("flavour_id") + "\n";
-                        if (!columnValues.get("flavour_id").equals("na")) {
-                            original = (String)columnValues.get("flavour_id") + ".html";
-                            logger.info("Set schedule file to {}", original);
-                        }
                     }
                     if (columnValues.get("carpentry_code").equals("incubator")) incubator = true;
                     if (line.startsWith("title"))
@@ -307,7 +301,7 @@ public class GitHubActions {
                 // Copy schedule into repository
                 try {
                     File copied = new File(repo + "/_includes/" + carpentrycode + "/schedule.html");
-                    File originalfile = new File("schedules/" + original);
+                    File originalfile = new File("schedules/" + schedule);
                     com.google.common.io.Files.copy(originalfile, copied);
                 } catch (IOException e) {
                     logger.error("IOException: {}", e.getMessage());
