@@ -169,10 +169,10 @@ public class DBHandlerSQLite extends DBHandler {
     }
 
     @Override
-    public HashMap<String, String> selectStringArray(String tableName, String[] columns, String where) {
+    public HashMap<String, Object> selectStringArray(String tableName, String[] columns, String where) {
         List<Object>  objectList = select(tableName, columns, where);
         Object o = objectList.get(0);
-        HashMap<String, String> object = (HashMap<String, String>) o;
+        HashMap<String, Object> object = (HashMap<String, Object>) o;
 
         return object;
     }

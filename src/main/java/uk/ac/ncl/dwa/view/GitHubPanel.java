@@ -54,36 +54,36 @@ public class GitHubPanel extends JPanel implements ActionListener {
         if (workshopComboBox.getSelectedItem() != null) {
             switch (e.getActionCommand()) {
                 case "Generate" -> {
-                    int ret = createFromTemplate(organisation, workshopComboBox.getSelectedItem().toString());
+                    String ret = createFromTemplate(organisation, workshopComboBox.getSelectedItem().toString());
                     switch (ret) {
-                        case 0 -> {
+                        case "0" -> {
                             JOptionPane.showMessageDialog(this,
                                     "Repository created successfully.", "SUCCESS",
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
-                        case 1 -> {
+                        case "1" -> {
                             JOptionPane.showMessageDialog(this, "Failed to create repository.",
                                     "FAIL", JOptionPane.ERROR_MESSAGE);
                         }
-                        case 2 -> {
+                        case "2" -> {
                             JOptionPane.showMessageDialog(this, "An unknown error occured.",
                                     "FAIL: ", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
                 case "Delete" -> {
-                    int ret = deleteRepository(organisation, workshopComboBox.getSelectedItem().toString());
+                    String ret = deleteRepository(organisation, workshopComboBox.getSelectedItem().toString());
                     switch (ret) {
-                        case 0 -> {
+                        case "0" -> {
                             JOptionPane.showMessageDialog(this,
                                     "Repository deleted successfully.", "SUCCESS",
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
-                        case 1 -> {
+                        case "1" -> {
                             JOptionPane.showMessageDialog(this, "Failed to delete repository.",
                                     "FAIL", JOptionPane.ERROR_MESSAGE);
                         }
-                        case 2 -> {
+                        case "2" -> {
                             JOptionPane.showMessageDialog(this,
                                     "IOException error. Please check log for more information","FAIL",
                                     JOptionPane.ERROR_MESSAGE);
@@ -95,16 +95,18 @@ public class GitHubPanel extends JPanel implements ActionListener {
                             .toString(), organisation);
                     switch (ret) {
 
-                        case "0" -> {
+                        case "1" -> {
                             JOptionPane.showMessageDialog(this, "A clone of this repository already exist",
                                     "Clone exists", JOptionPane.ERROR_MESSAGE);
-
                         }
-                        case "1" -> {
+                        case "2" -> {
                             JOptionPane.showMessageDialog(this, "File index.md was not found", "Cloning failed: ", JOptionPane.ERROR_MESSAGE);
                         }
-                        default -> {
-                            textArea.setText(ret);
+                        case "3" -> {
+                            JOptionPane.showMessageDialog(this, "Could not copy schedule file.");
+                        }
+                        case "0" -> {
+                            //textArea.setText(ret);
                         }
                     }
                 }

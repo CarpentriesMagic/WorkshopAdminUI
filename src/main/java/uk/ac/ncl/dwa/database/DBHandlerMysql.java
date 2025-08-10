@@ -166,11 +166,11 @@ public class DBHandlerMysql extends DBHandler {
 
 
     @Override
-    public HashMap<String, String> selectStringArray(String tableName, String[] columns, String where) {
+    public HashMap<String, Object> selectStringArray(String tableName, String[] columns, String where) {
         List<Object>  objectList = select(tableName, columns, where);
         Object o = objectList.get(0);
 
-        return (HashMap<String, String>) o;
+        return (HashMap<String, Object>) o;
     }
 
 
