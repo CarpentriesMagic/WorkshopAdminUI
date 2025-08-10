@@ -1,0 +1,11 @@
+#Wed May 21 10:14:01 BST 2025
+dbName=workshopadmin
+dbPass=w0rksh0p
+dbPort=3306
+#dbServer=192.168.0.228
+dbServer=localhost
+dbUser=workshopadmin
+#connectionString=jdbc:%s://%s:%d/%s?user=%s&password=%s
+connectionString=jdbc:sqlite:data.sqlite
+#dbType=mariadb
+dbType=sqlite
