@@ -205,7 +205,7 @@ public class GitHubActions {
                         "settings", "value", "keyValue=\"collabdoc\"").replace("<slug>", repo);
                 String[] workshopColumns = new String[]{"slug", "title", "humandate", "humantime", "startdate",
                         "enddate", "language", "country", "room_id", "eventbrite", "carpentry_code", "curriculum_code",
-                "flavour_id", "inc_lesson_site", "pre_survey", "post_survey"};
+                "flavour_id", "inc_lesson_site", "pre_survey", "post_survey", "schedule"};
                 HashMap<String, Object> columnValues = DBHandler.getInstance().selectStringArray("workshops",
                         workshopColumns,
                         "slug=\"" + repo + "\"");
@@ -258,7 +258,7 @@ public class GitHubActions {
                         if (!line.startsWith("8")) sb.append(line).append("\n");
                     }
                 }
-                schedule = (String)columnValues.get("schedule");
+                schedule = (String)columnValues.get("schedule") + ".html";
                 logger.info("Set schedule file to {}", schedule);
                 // Write back to file
                 PrintWriter pw = new PrintWriter(repo + "/index.md");
