@@ -13,7 +13,7 @@ import java.util.List;
 public class People extends ArrayList<Person> {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(People.class);
 
     public People() {
         super();
@@ -109,7 +109,7 @@ public class People extends ArrayList<Person> {
             String where;
             String sql = switch (certvalue) {
                 //INSTRUCTORS
-                case 1 -> where =  "certified = " + certvalue;
+                case 1 -> where =  "certified = '" + certvalue + "'";
                 // HELPERS
                 case 2 -> where = "certified > " + 0;
                 // EVERYONE
@@ -120,6 +120,7 @@ public class People extends ArrayList<Person> {
                     "people", new String[]{"person_id", "title", "firstname", "lastname"}, where);
             people.forEach(p -> {
                 HashMap<String, Object> personMap = (HashMap<String, Object>) p;
+                logger.info("{} {}", personMap.get("person_id"), personMap.get("lastname"));
                 instructors.add(personMap.get("person_id") + "," +
                         personMap.get("title") + " " +
                         personMap.get("firstname") + " " +

@@ -59,8 +59,11 @@ public class DBHandlerMysql extends DBHandler {
 
     @Override
     public boolean insert(String tableName, String[] columns) {
+        for (int i = 0; i < columns.length; i++) {
+            columns[i] = "\"" + columns[i] + "\"";
+
+        }
         String values = String.join(",", Arrays.asList(columns));
-        values = "'" + values.replaceAll(",","','") + "'";
         String sql = String.format("INSERT INTO %s VALUES (%s)", tableName, values);
         return executeSQL(sql);
     }

@@ -28,6 +28,12 @@ public class HelperTable extends JTable implements Serializable {
         getColumnModel().getColumn(1).setPreferredWidth(100);
         getColumnModel().getColumn(2).setPreferredWidth(200);
 
+        loadWorkshops();
+        loadInstructors();
+        setRowHeight(20);
+    }
+
+    public void loadWorkshops() {
         /*
          * ComboBox for selecting workshop slug
          */
@@ -36,6 +42,10 @@ public class HelperTable extends JTable implements Serializable {
         JComboBox<String> workshopComboBox = new JComboBox<>(workshopList);
         workshop.setCellEditor(new DefaultCellEditor(workshopComboBox));
 
+
+    }
+
+    public void loadInstructors() {
         /*
          * ComboBox for selecting helpers
          * certvalue -1 = no cert
@@ -46,8 +56,6 @@ public class HelperTable extends JTable implements Serializable {
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);
         JComboBox<String> instructorComboBox = new JComboBox<>(instructors);
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
-
-        setRowHeight(20);
     }
 
     @Override

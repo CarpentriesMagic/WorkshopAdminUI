@@ -40,12 +40,15 @@ public class WorkshopPanel extends JPanel implements ActionListener {
         JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
+        JButton btn_reload = new JButton("Refresh");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
+        btn_reload.addActionListener(this);
         buttonPanel.add(btn_save);
         buttonPanel.add(btn_add);
         buttonPanel.add(btn_del);
+        buttonPanel.add(btn_reload);
 
         // Add panel and scroll pane to the frame
         this.add(buttonPanel, "wrap");
@@ -95,6 +98,13 @@ public class WorkshopPanel extends JPanel implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
+            }
+            case "Refresh" -> {
+                workshopTable.loadCarpentries();
+                workshopTable.loadCurricula();
+                workshopTable.loadRooms();
+                workshopTable.loadFlavours();
+                workshopTable.loadSchedules();
             }
             default -> logger.debug("Unknown action command: " + e.getActionCommand());
         }

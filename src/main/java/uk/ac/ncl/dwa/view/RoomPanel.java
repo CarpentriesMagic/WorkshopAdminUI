@@ -44,7 +44,6 @@ public class RoomPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        logger.info(e.getActionCommand());
         Rooms rooms = roomTable.getModel().getRooms();
         switch (e.getActionCommand()) {
             case "Save" -> {
@@ -63,7 +62,8 @@ public class RoomPanel extends JPanel implements ActionListener {
                                 break;
                         }
                         if (room.getStatus() == 'n') {
-                            room.setRoom_id("s");
+                            room.setStatus('s');
+                            room.setRoom_id(room.getRoom_id());
                             room.setKey(room.getRoom_id());
                         }
                     }
@@ -77,6 +77,9 @@ public class RoomPanel extends JPanel implements ActionListener {
                 if (row != -1) {
                     if (rooms.remove(row) == null) {
                         JOptionPane.showMessageDialog(this, "The room could not be removed.");
+                    } else {
+                        logger.info("Deleted row {}",row);
+
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
@@ -84,6 +87,7 @@ public class RoomPanel extends JPanel implements ActionListener {
             }
         }
         roomTable.repaint();
+        roomTable.validate();
     }
 
 }

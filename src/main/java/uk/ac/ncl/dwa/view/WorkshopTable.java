@@ -45,6 +45,14 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         getColumnModel().getColumn(13).setPreferredWidth(180);
 
         setRowHeight(20);
+        loadRooms();
+        loadCarpentries();
+        loadCurricula();
+        loadFlavours();
+        loadSchedules();
+    }
+
+    public void loadRooms() {
         /*
          * ComboBox for selecting room
          */
@@ -52,15 +60,20 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         TableColumn roomColumn = this.getColumnModel().getColumn(6);
         JComboBox<String> roomComboBox = new JComboBox<>(roomsList);
         roomColumn.setCellEditor(new DefaultCellEditor(roomComboBox));
+    }
 
+    public void loadCarpentries() {
         /*
          * ComboBox for selecting carpentries
          */
-        String[] carpentries = {"incubator", "swc", "lc", "dc", "hpd", "cp"};
+//        String[] carpentries = {"incubator", "swc", "lc", "dc", "hpd", "cp"};
+        String[] carpentries = DBHandler.getInstance().selectStringArray("carpentry", "carpentry_code", "");
         TableColumn carpColumn = this.getColumnModel().getColumn(14);
         JComboBox<String> carpComboBox = new JComboBox<>(carpentries);
         carpColumn.setCellEditor(new DefaultCellEditor(carpComboBox));
+    }
 
+    public void loadCurricula() {
         /*
          * ComboBox for selecting curriculum
          */
@@ -68,7 +81,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         TableColumn currColumn = this.getColumnModel().getColumn(15);
         JComboBox<String> currComboBox = new JComboBox<>(curriculaList);
         currColumn.setCellEditor(new DefaultCellEditor(currComboBox));
+    }
 
+    public void loadFlavours() {
         /*
          * ComboBox for selecting curriculum
          */
@@ -76,7 +91,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         TableColumn flavourColumn = this.getColumnModel().getColumn(16);
         JComboBox<String> flavourComboBox = new JComboBox<>(flavour);
         flavourColumn.setCellEditor(new DefaultCellEditor(flavourComboBox));
+    }
 
+    public void loadSchedules() {
         /*
          * ComboBox for selecting schedule to include
          */

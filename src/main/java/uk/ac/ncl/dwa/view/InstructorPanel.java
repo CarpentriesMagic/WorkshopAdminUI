@@ -30,12 +30,15 @@ public class InstructorPanel extends JPanel implements ActionListener {
         JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
+        JButton btn_refresh = new JButton("Refresh");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
+        btn_refresh.addActionListener(this);
         panel.add(btn_save);
         panel.add(btn_add);
         panel.add(btn_del);
+        panel.add(btn_refresh);
 
         // Add panel and scroll pane to the frame
         this.add(panel);
@@ -85,6 +88,10 @@ public class InstructorPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
                 repaint();
+            }
+            case "Refresh" -> {
+                instructorTable.loadInstructors();
+                instructorTable.loadWorkshopSlugs();
             }
         }
     }

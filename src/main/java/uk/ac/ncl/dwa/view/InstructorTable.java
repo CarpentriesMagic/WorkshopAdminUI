@@ -28,6 +28,12 @@ public class InstructorTable extends JTable implements Serializable {
         getColumnModel().getColumn(1).setPreferredWidth(100);
         getColumnModel().getColumn(2).setPreferredWidth(200);
 
+        loadInstructors();
+        loadWorkshopSlugs();
+        setRowHeight(20);
+    }
+
+    public void loadWorkshopSlugs() {
         /*
          * ComboBox for selecting workshop slug
          */
@@ -35,6 +41,10 @@ public class InstructorTable extends JTable implements Serializable {
         TableColumn workshop = this.getColumnModel().getColumn(0);
         JComboBox<String> workshopComboBox = new JComboBox<>(workshopList);
         workshop.setCellEditor(new DefaultCellEditor(workshopComboBox));
+    }
+
+    public void loadInstructors() {
+        logger.info("Loading instructors");
         /*
          * ComboBox for selecting instructor
          */
@@ -42,8 +52,6 @@ public class InstructorTable extends JTable implements Serializable {
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);
         JComboBox<String> instructorComboBox = new JComboBox<>(instructors);
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
-
-        setRowHeight(20);
     }
 
     @Override
