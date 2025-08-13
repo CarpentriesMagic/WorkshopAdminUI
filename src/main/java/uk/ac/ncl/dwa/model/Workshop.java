@@ -63,6 +63,8 @@ public class Workshop {
         this.carpentry_code = "";
         this.curriculum_code = "";
         this.flavour_id = "";
+        this.eventbrite = "";
+        this.schedule = "";
         this.internal_id = "";
     }
 
@@ -307,4 +309,10 @@ public class Workshop {
     public void setStatus(char status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Workshop{" + "slug=" + slug + ", title=" + title + ", humandate=" + humandate + ", humantime=" + humantime + ", startdate=" + startdate + ", enddate=" + enddate + ", room_id=" + room_id + ", language=" + language + ", country=" + country + ", online=" + online + ", pilot=" + pilot + ", inc_lesson_site=" + inc_lesson_site + ", pre_survey=" + pre_survey + ", post_survey=" + post_survey + ", carpentry_code=" + carpentry_code + ", curriculum_code=" + curriculum_code + ", flavour_id=" + flavour_id + ", eventbrite=" + eventbrite + ", schedule=" + schedule + ", internal_id=" + internal_id + ", inserted=" + inserted + ", status=" + status + '}';
+    }
+
 }

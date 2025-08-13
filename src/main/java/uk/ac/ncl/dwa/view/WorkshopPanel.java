@@ -40,14 +40,17 @@ public class WorkshopPanel extends JPanel implements ActionListener {
         JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
+        JButton btn_import = new JButton("Import");
         JButton btn_reload = new JButton("Refresh");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
+        btn_import.addActionListener(this);
         btn_reload.addActionListener(this);
         buttonPanel.add(btn_save);
         buttonPanel.add(btn_add);
         buttonPanel.add(btn_del);
+        buttonPanel.add(btn_import);
         buttonPanel.add(btn_reload);
 
         // Add panel and scroll pane to the frame
@@ -60,7 +63,6 @@ public class WorkshopPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         logger.info(e.getActionCommand());
         Workshops workshops = workshopTable.getModel().getWorkshops();
-        logger.info("{} workshops loaded", workshops.size());
         switch (e.getActionCommand()) {
             case "Save" -> {
                 workshops.forEach(workshop -> {
@@ -98,6 +100,12 @@ public class WorkshopPanel extends JPanel implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
+            }
+            case "Import" -> {
+                workshopTable.getModel().getWorkshops().importWorkshopFromCSV("workshops.tsv");
+                workshopTable.getModel().getWorkshops().clear();
+                workshopTable.getModel().getWorkshops().loadFromDatabase();
+
             }
             case "Refresh" -> {
                 workshopTable.loadCarpentries();

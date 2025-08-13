@@ -1,3 +1,4 @@
+*.tsv
 exclude/
 workshopadmin.properties
 workshopadmin.sqlite3

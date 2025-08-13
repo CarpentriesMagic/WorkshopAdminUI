@@ -2,8 +2,11 @@ package uk.ac.ncl.dwa.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ncl.dwa.model.Workshop;
+
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class SpecificQueriesHelper {
     private static final Logger logger = LoggerFactory.getLogger(SpecificQueriesHelper.class);

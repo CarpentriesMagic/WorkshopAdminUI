@@ -1,5 +1,7 @@
 package uk.ac.ncl.dwa.model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serial;
 import java.util.*;
 import org.slf4j.Logger;
@@ -168,6 +170,34 @@ public class Workshops extends ArrayList<Workshop> {
             return true;
         }
         return false;
+    }
+
+
+    public boolean importWorkshopFromCSV(String tsvFile) {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File(tsvFile));
+        logger.info("Importing workshop from file {}", tsvFile);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] values = line.split("\t");
+            logger.info("values: {}", values.length);
+            if (values.length == 20) {
+                Workshop workshop = new Workshop(values[0], values[1], values[2], values[3], values[4], values[5],
+                        values[6], values[7], values[8], values[9].equals("1"), values[10].equals("1"), values[11],
+                        values[12], values[13], values[14], values[15], values[16], values[17], values[18], values[19]);
+                if (insertWorkshop(workshop)) {
+                    logger.info("Imported workshop: {}", workshop.getSlug());
+                } else {
+                    logger.error("Failed to import workshop: {}", workshop.getSlug());
+                    return false;
+                }
+            }
+        }
+        return true;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
