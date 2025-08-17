@@ -32,7 +32,7 @@ public class SpecificQueriesHelper {
             sb_helper.append('"').append(helper).append('"').append(",");
         }
         String helperlist = sb_helper.toString();
-        helperlist = helperlist.substring(0,helperlist.length()-1) + "]";
+        helperlist = "[" + helperlist.substring(0,helperlist.length()-1) + "]";
         logger.info(helperlist);
         return helperlist;
     }
@@ -58,7 +58,7 @@ public class SpecificQueriesHelper {
             sb_instructor.append('"').append(helper).append('"').append(",");
         }
         String instructorlist = sb_instructor.toString();
-        instructorlist = instructorlist.substring(0,instructorlist.length()-1) + "]";
+        instructorlist = "[" + instructorlist.substring(0,instructorlist.length()-1) + "]";
         logger.info(instructorlist);
         return instructorlist;
     }

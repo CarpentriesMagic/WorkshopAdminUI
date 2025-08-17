@@ -16,11 +16,12 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     WorkshopTableModel workshopTableModel;
     Logger logger = LoggerFactory.getLogger(WorkshopTable.class);
     ArrayList<String> rooms;
-    JTextArea textArea;
+    JTextPane textArea;
     Settings settingsObject;
 
-    public WorkshopTable(JTextArea textArea, Settings settings) {
+    public WorkshopTable(JTextPane textArea, Settings settings) {
         super();
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.settingsObject = settings;
         this.textArea = textArea;
         workshopTableModel = new WorkshopTableModel();
@@ -106,6 +107,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     @Override
     public void valueChanged(ListSelectionEvent e) {
         super.valueChanged(e);
+        textArea.setText("");
         textArea.setText(getRecordAsString(getSelectedRow()));
 
     }
@@ -113,6 +115,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     public String getRecordAsString(int row) {
         HashMap<String, String> settings = this.settingsObject.getHashMap();
         String collabdoc = settings.get("collabdoc");
+        String organisation = settings.get("organisation");
         String internaldoc = (settings.get("internal_id") != null?
                 settings.get("internal_id"):"");
         String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
@@ -128,28 +131,40 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         collabdoc = collabdoc.replace("<slug>", slug);
         internaldoc = internaldoc.replace("<internal_id>", internal_id);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Slug:\t\t").append(slug).append("\n");
-        stringBuilder.append("Internal ID:\t\t").append(internaldoc).append("\n");
-        stringBuilder.append("Title:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("\n");
-        stringBuilder.append("Human date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 2).toString()).append("\n");
-        stringBuilder.append("Human time:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 3).toString()).append("\n");
-        stringBuilder.append("Start date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 4).toString()).append("\n");
-        stringBuilder.append("End date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 5).toString()).append("\n");
-        stringBuilder.append("Room:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 6).toString()).append("\n");
-        stringBuilder.append("Language:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 7).toString()).append("\n");
-        stringBuilder.append("Country:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 8).toString()).append("\n");
-        stringBuilder.append("Online:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 9).toString()).append("\n");
-        stringBuilder.append("Pilot:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 10).toString()).append("\n");
-        stringBuilder.append("Lesson site:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 11).toString()).append("\n");
-        stringBuilder.append("Pre workshop:\t").append(pre).append("\n");
-        stringBuilder.append("Post workshop:\t").append(post).append("\n");
-        stringBuilder.append("Carpentry:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 14).toString()).append("\n");
-        stringBuilder.append("Curriculum:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 15).toString()).append("\n");
-        stringBuilder.append("Flavour:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 16).toString()).append("\n");
-        stringBuilder.append("EventBrite:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 17).toString()).append("\n");
-        stringBuilder.append("Schedule:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 18).toString()).append("\n");
-        stringBuilder.append("Collaborative Doc:\t").append(collabdoc).append("\n");
-
+        stringBuilder.append("Slug:\t\t").append(slug).append("<br/>");
+        stringBuilder.append("Internal ID:\t\t").append(internaldoc).append("<br/>");
+        stringBuilder.append("Title:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("<br/>");
+        stringBuilder.append("Human date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 2).toString()).append("<br/>");
+        stringBuilder.append("Human time:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 3).toString()).append("<br/>");
+        stringBuilder.append("Start date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 4).toString()).append("<br/>");
+        stringBuilder.append("End date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 5).toString()).append("<br/>");
+        stringBuilder.append("Room:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 6).toString()).append("<br/>");
+        stringBuilder.append("Language:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 7).toString()).append("<br/>");
+        stringBuilder.append("Country:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 8).toString()).append("<br/>");
+        stringBuilder.append("Online:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 9).toString()).append("<br/>");
+        stringBuilder.append("Pilot:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 10).toString()).append("<br/>");
+        stringBuilder.append("Lesson site:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 11).toString()).append("<br/>");
+        stringBuilder.append("Pre workshop:\t").append(pre).append("<br/>");
+        stringBuilder.append("Post workshop:\t").append(post).append("<br/>");
+        stringBuilder.append("Carpentry:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 14).toString()).append("<br/>");
+        stringBuilder.append("Curriculum:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 15).toString()).append("<br/>");
+        stringBuilder.append("Flavour:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 16).toString()).append("<br/>");
+        stringBuilder.append("EventBrite:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 17).toString()).append("<br/>");
+        stringBuilder.append("Schedule:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 18).toString()).append("<br/>");
+        stringBuilder.append("Collaborative Doc:\t")
+                .append("<a href=\"").append(collabdoc)
+                .append("\">")
+                .append(collabdoc)
+                .append("</a><br/>");
+        stringBuilder.append("Website link:\t")
+                .append("<a href=\"")
+                .append("https://")
+                .append(organisation)
+                .append(".github.io/")
+                .append(slug)
+                .append("\">")
+                .append("Workshop Website")
+                .append("</a><br/>");
         return stringBuilder.toString();
     }
 

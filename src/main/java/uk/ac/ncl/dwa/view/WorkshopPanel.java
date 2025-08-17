@@ -6,19 +6,28 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.model.Settings;
 import uk.ac.ncl.dwa.model.Workshop;
 import uk.ac.ncl.dwa.model.Workshops;
-
+import java.awt.Desktop;
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-public class WorkshopPanel extends JPanel implements ActionListener {
+public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkListener {
     private final Logger logger = LoggerFactory.getLogger(WorkshopPanel.class);
-    private JTextArea workshopEntryTextArea = new JTextArea("", 640, 480);
+    private JTextPane workshopEntryTextArea = new JTextPane();
     private Settings settings;
     private WorkshopTable workshopTable;
+    private URL url;
 
     public WorkshopPanel(Settings settings) {
         super();
+        workshopEntryTextArea.setContentType("text/html");
+        workshopEntryTextArea.addHyperlinkListener(this);
         this.settings = settings;
         workshopTable = new WorkshopTable(workshopEntryTextArea, settings);
         setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
@@ -117,5 +126,23 @@ public class WorkshopPanel extends JPanel implements ActionListener {
             default -> logger.debug("Unknown action command: " + e.getActionCommand());
         }
         workshopTable.repaint();
+    }
+
+    @Override
+    public void hyperlinkUpdate(HyperlinkEvent event) {
+        if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            if (Desktop.isDesktopSupported()) { // Check if Desktop API is supported on the current platform
+                Desktop desktop = Desktop.getDesktop();
+                logger.info("Open URL {}", event.getURL());
+                try {
+                    desktop.browse(event.getURL().toURI()); // Open the URI in the default browser
+                } catch (IOException | URISyntaxException e) {
+                    System.err.println("Error opening link: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Desktop API is not supported on this platform.");
+            }
+        }
     }
 }
