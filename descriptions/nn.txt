@@ -1,0 +1,1 @@
+This lesson gives an introduction to artificial neural networks. We begin by an outlining an important application of machine learning in healthcare: the development of algorithms for classification of chest X-ray images. During the lesson we explore how to prepare and visualise data for algorithm development, and construct a neural net that is able to classify disease.

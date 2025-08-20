@@ -15,6 +15,7 @@ public class PersonTable extends JTable implements Serializable {
 
     public PersonTable() {
         super();
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(personTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

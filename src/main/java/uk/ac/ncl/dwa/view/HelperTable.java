@@ -21,6 +21,7 @@ public class HelperTable extends JTable implements Serializable {
 
     public HelperTable() {
         super();
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(helperTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

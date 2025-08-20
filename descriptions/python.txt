@@ -1,0 +1,1 @@
+This lesson serves as an introduction to Python 3 for people with little or no previous programming experience.

@@ -15,6 +15,7 @@ public class SettingTable extends JTable {
 
     public SettingTable() {
         super();
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(settingTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

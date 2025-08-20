@@ -202,7 +202,9 @@ public class GitHubActions {
                 String organisation = DBHandler.getInstance().selectString(
                         "settings", "value", "keyValue=\"venue\"");
                 String collabdoc = DBHandler.getInstance().selectString(
-                        "settings", "value", "keyValue=\"collabdoc\"").replace("<slug>", repo);
+                        "settings", "value",
+                        "keyValue=\"collabdoc\"").replace("<slug>", repo);
+                logger.info("Collaborative document: {}", collabdoc);
                 String[] workshopColumns = new String[]{"slug", "title", "humandate", "humantime", "startdate",
                         "enddate", "language", "country", "room_id", "eventbrite", "carpentry_code", "curriculum_code",
                 "flavour_id", "inc_lesson_site", "pre_survey", "post_survey", "schedule"};
@@ -305,7 +307,9 @@ public class GitHubActions {
                     com.google.common.io.Files.copy(originalfile, copied);
                 } catch (IOException e) {
                     logger.error("IOException: {}", e.getMessage());
-                    return "3";
+                    //return "3";
+                    logger.error("Localised message: {}", e.getLocalizedMessage());
+                    logger.error("Problem with schedule file");
                 }
 
                 // Add, commit and push changes to GitHub

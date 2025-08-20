@@ -14,6 +14,7 @@ public class RoomTable extends JTable {
 
     public RoomTable() {
         super();
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(roomTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

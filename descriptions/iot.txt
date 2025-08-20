@@ -1,0 +1,1 @@
+This is a hands-on workshop for novices, aiming to give learners a better understanding of what The Internet of Things is. As a researcher you might be interested to know whether IoT is something that could be of benefit to you in your research and we hope that this workshop might help you answer that question.

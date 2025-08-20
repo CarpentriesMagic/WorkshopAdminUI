@@ -92,6 +92,18 @@ table
 currently are (and most likely are running this program from). It will then update all the template values and push the
 changes back to GitHub. GitHub pages will build the website and it should be availabile after a few minutes.
 
+### Website creation workflow
+
+```mermaid
+flowchart LR
+    CreateFromTemplate["Create From
+    Template on github"] --> 
+    CloneToLocal["Clone to local drive"] --> 
+    UpdateIndex["Update index.md"] --> 
+    UpdateConfig["Update _config.yml"] -->
+    PushToGitHub["Push changes to GitHub"]    
+
+```
 
 # Architecture
 

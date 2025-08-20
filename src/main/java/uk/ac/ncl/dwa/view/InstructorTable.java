@@ -21,6 +21,7 @@ public class InstructorTable extends JTable implements Serializable {
 
     public InstructorTable() {
         super();
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(instructorTableModel);
         setFillsViewportHeight(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

@@ -16,6 +16,7 @@ public class WorkshopTableModel extends AbstractTableModel {
         super();
     }
 
+    @Override
     public int getColumnCount() {
         if (workshops == null)
             return 0;
@@ -23,6 +24,7 @@ public class WorkshopTableModel extends AbstractTableModel {
             return workshops.getColumnCount();
     }
 
+    @Override
     public int getRowCount() {
         if (workshops == null)
             return 0;
