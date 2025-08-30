@@ -22,7 +22,7 @@ public class SpecificQueriesHelper {
         logger.info(sql);
         List<Object> helpers = DBHandler.getInstance().query(sql, columnNames);
         StringBuilder sb_helper = new StringBuilder();
-        sb_helper.append("[");
+//        sb_helper.append("[");
         for (Object object : helpers) {
             HashMap<String, Object> helperMap = (HashMap<String, Object>) object;
             String helper =
@@ -48,7 +48,7 @@ public class SpecificQueriesHelper {
         logger.info(sql);
         List<Object> instructors = DBHandler.getInstance().query(sql, columnNames);
         StringBuilder sb_instructor = new StringBuilder();
-        sb_instructor.append("[");
+//        sb_instructor.append("[");
         for (Object object : instructors) {
             HashMap<String, Object> instructorMap = (HashMap<String, Object>) object;
             String helper =
