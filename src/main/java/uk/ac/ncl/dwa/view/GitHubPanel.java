@@ -43,6 +43,10 @@ public class GitHubPanel extends JPanel implements ActionListener {
         btn_del.addActionListener(this);
         btn_clone.addActionListener(this);
         btn_events.addActionListener(this);
+        btn_gen.setToolTipText("Create a new repository using the Carpentries template");
+        btn_del.setToolTipText("Delete the selected repository in GitHub");
+        btn_clone.setToolTipText("Clone the selected repository in to your local drive, update it and push it back to GitHub");
+        btn_events.setToolTipText("Create a CSV file of the selected workshops for inclusion in the team website");
         buttonPanel.add(btn_gen);
         buttonPanel.add(btn_del);
         buttonPanel.add(btn_clone);

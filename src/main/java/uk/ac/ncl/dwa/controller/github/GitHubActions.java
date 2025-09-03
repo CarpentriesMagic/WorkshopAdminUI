@@ -221,9 +221,9 @@ public class GitHubActions {
                     String line = indexScanner.nextLine();
                     if (line.startsWith("8")) skip = !skip;
                     if (!skip) {
-                        if (line.startsWith("helper")) line = "helper: " + helperlist;
-                        if (line.startsWith("instructor")) line = "instructor: " + instructorlist;
-                        if (line.startsWith("email")) line = "email: " + contact_emails;
+                        if (line.startsWith("helper:")) line = "helper: " + helperlist;
+                        if (line.startsWith("instructor:")) line = "instructor: " + instructorlist;
+                        if (line.startsWith("email:")) line = "email: " + contact_emails;
 
                         if (line.startsWith("venue")) line = line.replaceFirst("FIXME", organisation);
                         if (line.startsWith("humandate"))
