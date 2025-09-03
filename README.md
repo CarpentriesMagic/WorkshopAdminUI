@@ -47,7 +47,7 @@ java -cp dwa-##.jar Main
 
 ## Getting started
 
-1. Add venues to you database using the `Rooms` tab. Do this first because you can't add a workshop without a venue.
+1. Add venues to your database using the `Rooms` tab. Do this first because you can't add a workshop without a venue.
 2. Start by adding people to your database by using the `People` tab. Do this second because you need people to 
 be able to add instructors and helpers. If a person is a certified Carpentries instructor the value in the `Certified` 
 column should be one. If the person can act only as a helper (and is not certified) the value should be 0. If a person
