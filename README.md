@@ -24,8 +24,15 @@ Create a directory on your hard drive into which you can download the program.
 ## Getting Java if you don't have it
 If you don't have Java installed you only need to download a Java Runtime Environment.
 
-You can download an appropriate version for the Windows operating system from here:
+You can download an appropriate version from here:
+For Windows:
 https://www.azul.com/downloads/?version=java-17-lts&os=windows&package=jre#zulu
+
+For Mac:
+https://www.azul.com/downloads/?version=java-17-lts&os=macos&package=jre#zulu
+
+For Linux:
+https://www.azul.com/downloads/?version=java-17-lts&os=linux&package=jre#zulu
 
 Unzip the downloaded file and copy the contents into a subdirectory called `jre` below the
 directory you have created for your program.
