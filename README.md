@@ -16,13 +16,24 @@ OpenJDK Runtime Environment (build 21.0.8+9-Ubuntu-0ubuntu124.04.1)
 OpenJDK 64-Bit Server VM (build 21.0.8+9-Ubuntu-0ubuntu124.04.1, mixed mode, sharing)
 ```
 
+
 ## Preparing for installation
 
-Create a directory on your hard drive into which you
-can download the program. In your web browser, navigate to: 
-`https://github.com/CarpentriesMagic/WorkshopAdminUI/releases`
+Create a directory on your hard drive into which you can download the program. 
+
+## Getting Java if you don't have it
+If you don't have Java installed you only need to download a Java Runtime Environment.
+
+You can download an appropriate version for the Windows operating system from here:
+https://www.azul.com/downloads/?version=java-17-lts&os=windows&package=jre#zulu
+
+Unzip the downloaded file and copy the contents into a subdirectory called `jre` below the
+directory you have created for your program.
 
 ## Download the files
+In your web browser, navigate to:
+`https://github.com/CarpentriesMagic/WorkshopAdminUI/releases`
+
 Click on the little arrow to the left of the Assets heading of the
 latest Automated Build. You need to download the following:
 1. dwa-##.jar (replace ## with the build version)
