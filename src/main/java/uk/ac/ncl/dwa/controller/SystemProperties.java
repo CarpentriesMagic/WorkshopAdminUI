@@ -1,6 +1,9 @@
 package uk.ac.ncl.dwa.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * This is a singleton
@@ -30,5 +33,18 @@ public class SystemProperties {
 
     public HashMap<String, String> getProperties() {
         return hsh_properties;
+    }
+
+    public static String readPropertyFile(String fileName) {
+        try {
+            Scanner sc = new Scanner(new File(fileName));
+            StringBuilder sb = new StringBuilder();
+            while (sc.hasNextLine()) {
+                sb.append(sc.nextLine()).append("\n");
+            }
+            return sb.toString();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

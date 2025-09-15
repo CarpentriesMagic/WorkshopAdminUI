@@ -3,6 +3,8 @@ package uk.ac.ncl.dwa.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,12 +12,18 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class MainFrame extends JFrame implements ActionListener, WindowListener {
-    Logger logger = LoggerFactory.getLogger(MainFrame.class);
+    private final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
     public MainFrame() {
         this.setTitle("Desperado Workshop Admin");
         this.setLayout(new BorderLayout());
-        add(new MainTabbedPane());
+        MainTabbedPane mainTabbedPane = new MainTabbedPane();
+        mainTabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                logger.info("ChangeListener called with {}", e.getSource());
+            }
+        });
+        add(mainTabbedPane);
 
         // Frame settings
         setSize(1024, 768);

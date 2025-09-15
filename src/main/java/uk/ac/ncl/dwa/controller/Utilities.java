@@ -76,4 +76,17 @@ public class Utilities {
         }
         return properties;
     }
+
+    public static void writeStringToFile(String string, File file) {
+            String str = "Hello";
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file));
+            writer.write(string);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

@@ -16,7 +16,7 @@ import static uk.ac.ncl.dwa.controller.github.GitHubActions.*;
 public class GitHubPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(getClass().getName());
     //    JTextArea textArea;
-    GitHubRepoTable workshops = new GitHubRepoTable();
+    GitHubRepoTable workshopTable = new GitHubRepoTable();
     String[] workshopList;
 
     public GitHubPanel() {
@@ -24,7 +24,7 @@ public class GitHubPanel extends JPanel implements ActionListener {
         workshopList = DBHandler.getInstance().selectStringArray("workshops",
                 "slug", "");
         setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
-        JScrollPane scrollPane = new JScrollPane(workshops);
+        JScrollPane scrollPane = new JScrollPane(workshopTable);
         // Create scroll bars
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         //  enable horizontal scrolling
@@ -46,7 +46,7 @@ public class GitHubPanel extends JPanel implements ActionListener {
         btn_gen.setToolTipText("Create a new repository using the Carpentries template");
         btn_del.setToolTipText("Delete the selected repository in GitHub");
         btn_clone.setToolTipText("Clone the selected repository in to your local drive, update it and push it back to GitHub");
-        btn_events.setToolTipText("Create a CSV file of the selected workshops for inclusion in the team website");
+        btn_events.setToolTipText("Create a CSV file of the selected workshopTable for inclusion in the team website");
         buttonPanel.add(btn_gen);
         buttonPanel.add(btn_del);
         buttonPanel.add(btn_clone);
@@ -59,14 +59,14 @@ public class GitHubPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String organisation = DBHandler.getInstance().selectString("settings",
                 "value", "keyValue=\"organisation\"");
-        int[] selectedRows = workshops.getSelectedRows();
+        int[] selectedRows = workshopTable.getSelectedRows();
 
         if (selectedRows != null) {
             switch (e.getActionCommand()) {
                 case "Generate" -> {
                     int rowIndex = selectedRows[0];
                     String ret = createFromTemplate(organisation,
-                            (String)workshops.getValueAt(rowIndex, 0));
+                            (String) workshopTable.getValueAt(rowIndex, 0));
                     switch (ret) {
                         case "0" -> {
                             JOptionPane.showMessageDialog(this,
@@ -85,7 +85,7 @@ public class GitHubPanel extends JPanel implements ActionListener {
                 }
                 case "Delete" -> {
                     int rowIndex = selectedRows[0];
-                    String ret = deleteRepository(organisation, (String) workshops.getValueAt(rowIndex, 0));
+                    String ret = deleteRepository(organisation, (String) workshopTable.getValueAt(rowIndex, 0));
                     switch (ret) {
                         case "0" -> {
                             JOptionPane.showMessageDialog(this,
@@ -106,7 +106,7 @@ public class GitHubPanel extends JPanel implements ActionListener {
                 case "Clone" -> {
                     for (int rowIndex : selectedRows) {
                         String ret = cloneRepository(organisation,
-                                (String) workshops.getValueAt(rowIndex, 0), organisation);
+                                (String) workshopTable.getValueAt(rowIndex, 0), organisation);
                         switch (ret) {
 
                             case "1" -> {
@@ -129,16 +129,16 @@ public class GitHubPanel extends JPanel implements ActionListener {
                     try {
                         PrintWriter writer = new PrintWriter(new FileWriter("events.csv", true));
                         for (int rowIndex : selectedRows) {
-                            String date = (String) workshops.getValueAt(rowIndex, 2);
-                            String title = (String) workshops.getValueAt(rowIndex, 1);
-                            String location = (String) workshops.getValueAt(rowIndex, 6);
-                            String file = (String) workshops.getValueAt(rowIndex, 18);
+                            String date = (String) workshopTable.getValueAt(rowIndex, 2);
+                            String title = (String) workshopTable.getValueAt(rowIndex, 1);
+                            String location = (String) workshopTable.getValueAt(rowIndex, 6);
+                            String file = (String) workshopTable.getValueAt(rowIndex, 18);
                             Scanner sc = new Scanner(new File("descriptions/" + file + ".txt"));
                             String description = "";
                             while (sc.hasNextLine()) {
                                 description += sc.nextLine().trim();
                             }
-                            String slug = (String) workshops.getValueAt(rowIndex, 0);
+                            String slug = (String) workshopTable.getValueAt(rowIndex, 0);
                             writer.println(date + ", Training, " + title + ", " + "\"" + description + "\", " + location
                                     + ", not yet available, " + "https://nclrse-training.github.io/" + slug + "/");
                         }

@@ -1,3 +1,7 @@
+/**
+ * Some notes stuff found and used:
+ * https://stackoverflow.com/questions/71452373/java-sql-sqlexception-access-denied-for-user-rootlocalhost-using-password
+ */
 package uk.ac.ncl.dwa.database;
 
 import org.slf4j.Logger;
@@ -45,9 +49,10 @@ public class DBHandlerMysql extends DBHandler {
         String sql;
         if (where.isBlank()) {
             sql = String.format("SELECT %s FROM %s", String.join(",", Arrays.asList(columns)), tableName);
+            logger.info("> {}", sql);
         } else {
             sql = String.format("SELECT %s FROM %s WHERE %s", String.join(",", Arrays.asList(columns)), tableName, where);
-            logger.info(sql);
+            logger.info(">> {}", sql);
         }
         return query(sql, columns);
     }
