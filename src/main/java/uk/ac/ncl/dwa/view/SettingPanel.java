@@ -35,15 +35,15 @@ public class SettingPanel extends JPanel implements ActionListener {
         JButton btn_save = new JButton("Save Settings");
         JButton btn_add = new JButton("Add Setting");
         JButton btn_del = new JButton("Delete Setting");
-        JButton btn_saveProperies = new JButton("Save Properties");
+        JButton btn_saveProperties = new JButton("Save Properties");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
-        btn_saveProperies.addActionListener(this);
+        btn_saveProperties.addActionListener(this);
         buttonPanel.add(btn_save);
         buttonPanel.add(btn_add);
         buttonPanel.add(btn_del);
-        buttonPanel.add(btn_saveProperies);
+        buttonPanel.add(btn_saveProperties);
         String properties = SystemProperties.readPropertyFile(propertiesFilename);
         propertiesTextArea.setText(properties);
 
