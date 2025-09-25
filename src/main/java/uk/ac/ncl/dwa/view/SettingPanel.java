@@ -96,7 +96,9 @@ public class SettingPanel extends JPanel implements ActionListener {
                 settingTable.repaint();
             }
             case "Save Properties" -> {
+                logger.info("Write properties to file.");
                 Utilities.writeStringToFile(propertiesTextArea.getText(), new File(propertiesFilename));
+                JOptionPane.showMessageDialog(this, "You have to restart the program for the properties changes to take effect");
             }
         }
     }
