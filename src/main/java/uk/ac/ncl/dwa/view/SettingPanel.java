@@ -31,6 +31,10 @@ public class SettingPanel extends JPanel implements ActionListener {
         JSplitPane settingsSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, settingsScrollPane, propertiesTextArea);
 
         JPanel buttonPanel = new JPanel(new MigLayout("", "[50%][50%]", "[fill][fill]"));
+        JPanel leftButtonPanel = new JPanel();
+        JPanel rightButtonPanel = new JPanel();
+        buttonPanel.add(leftButtonPanel, "cell 0 0,grow");
+        buttonPanel.add(rightButtonPanel, "cell 1 0,grow");
         settingTable.setFillsViewportHeight(true);
         JButton btn_save = new JButton("Save Settings");
         JButton btn_add = new JButton("Add Setting");
@@ -40,10 +44,10 @@ public class SettingPanel extends JPanel implements ActionListener {
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
         btn_saveProperties.addActionListener(this);
-        buttonPanel.add(btn_save);
-        buttonPanel.add(btn_add);
-        buttonPanel.add(btn_del);
-        buttonPanel.add(btn_saveProperties);
+        leftButtonPanel.add(btn_save);
+        leftButtonPanel.add(btn_add);
+        leftButtonPanel.add(btn_del);
+        rightButtonPanel.add(btn_saveProperties);
         String properties = SystemProperties.readPropertyFile(propertiesFilename);
         propertiesTextArea.setText(properties);
 
