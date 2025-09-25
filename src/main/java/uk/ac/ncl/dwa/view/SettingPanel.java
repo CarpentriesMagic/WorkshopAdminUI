@@ -21,15 +21,16 @@ public class SettingPanel extends JPanel implements ActionListener {
 
     public SettingPanel() {
         super();
-        setLayout(new MigLayout("", "[100%]", "[fill]"));
+        setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
+
         JScrollPane settingsScrollPane = new JScrollPane(settingTable);
         settingsScrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         settingsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         settingsScrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
         settingsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         JSplitPane settingsSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, settingsScrollPane, propertiesTextArea);
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+        JPanel buttonPanel = new JPanel(new MigLayout("", "[50%][50%]", "[fill][fill]"));
         settingTable.setFillsViewportHeight(true);
         JButton btn_save = new JButton("Save Settings");
         JButton btn_add = new JButton("Add Setting");

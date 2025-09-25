@@ -42,7 +42,7 @@ public class DBHandlerSQLite extends DBHandler {
 
     @Override
     public String[] selectStringArray(String tableName, String column, String where) {
-        List<Object>  objectList = select(tableName, new String[]{column}, where);
+        List<Object>  objectList = select(tableName, new String[]{column}, where, "");
         String[] ret = new String[objectList.size()];
         for (Object o: objectList) {
             HashMap<String, Object> object = (HashMap<String, Object>) o;
@@ -52,14 +52,20 @@ public class DBHandlerSQLite extends DBHandler {
     }
 
     @Override
-    public List<Object> select(String tableName, String[] columns, String where) {
+    public List<Object> select(String tableName, String[] columns, String where, String orderby) {
         String sql;
+        String orderstring = "";
+        if (!orderby.isBlank()) {
+            orderstring = " ORDER BY " + orderby;
+        }
         if (where.isBlank()) {
             sql = String.format("SELECT %s FROM %s", String.join(",", Arrays.asList(columns)), tableName);
+            logger.info("> {}", sql);
         } else {
             sql = String.format("SELECT %s FROM %s WHERE %s", String.join(",", Arrays.asList(columns)), tableName, where);
-            logger.info(sql);
+            logger.info(">> {}", sql);
         }
+        sql += orderstring;
         return query(sql, columns);
     }
 
@@ -160,7 +166,7 @@ public class DBHandlerSQLite extends DBHandler {
 
     @Override
     public String selectString(String tableName, String column, String where) {
-        List<Object>  objectList = select(tableName, new String[]{column}, where);
+        List<Object>  objectList = select(tableName, new String[]{column}, where, "");
         String ret;
         Object o = objectList.get(0);
         HashMap<String, Object> object = (HashMap<String, Object>) o;
@@ -170,7 +176,7 @@ public class DBHandlerSQLite extends DBHandler {
 
     @Override
     public HashMap<String, Object> selectStringArray(String tableName, String[] columns, String where) {
-        List<Object>  objectList = select(tableName, columns, where);
+        List<Object>  objectList = select(tableName, columns, where, "");
         Object o = objectList.get(0);
         HashMap<String, Object> object = (HashMap<String, Object>) o;
 

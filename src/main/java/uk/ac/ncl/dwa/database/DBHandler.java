@@ -9,7 +9,7 @@ public abstract class DBHandler {
         return instance;
     }
 
-    public abstract List<Object> select(String tableName, String[] columns, String where);
+    public abstract List<Object> select(String tableName, String[] columns, String where, String orderby);
     public abstract String[] selectStringArray(String tableName, String column, String where);
     public abstract HashMap<String, Object> selectStringArray(String tableName, String[] columns, String where);
     public abstract List<Object> query(String sql, String[] columns);

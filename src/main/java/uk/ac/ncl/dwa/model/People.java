@@ -22,7 +22,7 @@ public class People extends ArrayList<Person> {
 
     public void loadFromDatabase() {
         String[] columnNames = Person.dbColumnNames;
-        List<Object> people = DBHandler.getInstance().select("people", columnNames, "");
+        List<Object> people = DBHandler.getInstance().select("people", columnNames, "", "");
         for (Object object : people) {
             HashMap<String, Object> peopleMap = (HashMap<String, Object>) object;
             Person person = new Person(
@@ -117,10 +117,10 @@ public class People extends ArrayList<Person> {
             };
 
             List<Object> people = DBHandler.getInstance().select(
-                    "people", new String[]{"person_id", "title", "firstname", "lastname"}, where);
+                    "people", new String[]{"person_id", "title", "firstname", "lastname"}, where, "");
             people.forEach(p -> {
                 HashMap<String, Object> personMap = (HashMap<String, Object>) p;
-                logger.info("{} {}", personMap.get("person_id"), personMap.get("lastname"));
+                logger.info("***** {} {} {}", where, personMap.get("person_id"), personMap.get("lastname"));
                 instructors.add(personMap.get("person_id") + "," +
                         personMap.get("title") + " " +
                         personMap.get("firstname") + " " +
