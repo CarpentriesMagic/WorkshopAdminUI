@@ -88,7 +88,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting curriculum
          */
-        String[] flavour = {"python", "r", "na"};
+        String[] flavour = {"matlab", "python", "r", "na"};
         TableColumn flavourColumn = this.getColumnModel().getColumn(16);
         JComboBox<String> flavourComboBox = new JComboBox<>(flavour);
         flavourColumn.setCellEditor(new DefaultCellEditor(flavourComboBox));

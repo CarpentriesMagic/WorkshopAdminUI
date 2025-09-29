@@ -43,10 +43,11 @@ public class GitHubActions {
                     "\"description\": \"Workshop site using Carpentries website template\"," +
                     "\"private\": false}", owner, repo);
 //                    "\"homepage\":\"https://%sgithub.io/%s\"}", owner, repo, owner, repo);
-            URL url = new URL("https://api.github.com/repos/carpentries/workshop-template/generate");
+            URL url = new URL("https://github.com/carpentries/workshop-template.git");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setRequestProperty("Authorization", "token " + token);
+            logger.info("Github token: {}", token);
             conn.setRequestProperty("Accept", "application/vnd.github+json");
             conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
             conn.setDoOutput(true);
@@ -64,10 +65,12 @@ public class GitHubActions {
                 logger.info("Failed to create repository. HTTP status: {}", status);
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
                     String line;
-                    if ((line = br.readLine()) != null) {
+                    while ((line = br.readLine()) != null) {
+
                         logger.info(line);
-                        return "1"; // ERROR
+                         // ERROR
                     }
+                    return "1";
                 }
             }
             logger.info("Disconnecting from the server.");
@@ -143,6 +146,7 @@ public class GitHubActions {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Authorization", "Bearer " + token);
+            logger.info("Github token: {}", token);
             conn.setRequestProperty("Accept", "application/vnd.github+json");
             conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
             conn.setDoOutput(true);
@@ -155,10 +159,11 @@ public class GitHubActions {
                 logger.info("Failed to delete repository. HTTP status: {}", responseCode);
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
                     String line;
-                    if ((line = br.readLine()) != null) {
+                    while ((line = br.readLine()) != null) {
                         logger.info(line);
-                        return "1";
+
                     }
+                    return "1";
                 }
             }
             conn.disconnect();
