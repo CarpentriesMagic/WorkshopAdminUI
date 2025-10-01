@@ -7,6 +7,7 @@ import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.SshTransport;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.transport.sshd.SshdSessionFactory;
 import org.slf4j.Logger;
 import uk.ac.ncl.dwa.database.DBHandler;
@@ -190,11 +191,7 @@ public class GitHubActions {
             CloneCommand clone = Git.cloneRepository()
                     .setURI(remoteUrl)
                     .setDirectory(new File(repo))
-                    .setTransportConfigCallback(transport -> {
-                        if (transport instanceof SshTransport sshTransport) {
-                            sshTransport.setSshSessionFactory(sshSessionFactory);
-                        }
-                    } );
+                    .setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, "")) ;// token as username, blank password
             try (Git git = clone.call()) {
                 logger.info("Repository cloned successfully.");
                 // READ index.md into text area
