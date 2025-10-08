@@ -3,6 +3,7 @@ package uk.ac.ncl.dwa.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.database.DBHandler;
+import uk.ac.ncl.dwa.database.SpecificQueriesHelper;
 import uk.ac.ncl.dwa.model.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -165,6 +166,12 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
                 .append("\">")
                 .append("Workshop Website")
                 .append("</a><br/>");
+        stringBuilder.append("<b>Instructors:</b><br>")
+                .append(SpecificQueriesHelper.getInstructors(slug))
+                .append("<br/>");
+        stringBuilder.append("<b>Helpers:</b><br>")
+                .append(SpecificQueriesHelper.getHelpers(slug))
+                .append("<br/>");
         return stringBuilder.toString();
     }
 
