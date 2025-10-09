@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.view;
 
+import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.model.People;
@@ -11,35 +12,37 @@ import java.awt.event.ActionListener;
 public class PersonPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(PersonPanel.class);
     PersonTable personTable = new PersonTable();
+    JTextArea textArea = new JTextArea();
 
     public PersonPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        JScrollPane scrollPane = new JScrollPane(personTable);
-        // Create scroll bars
-        scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
-        //  enable horizontal scrolling
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
-        //  enable vertical scrolling
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        setLayout(new MigLayout("", "[30%][70%]", "[fill][fill]"));
 
         // Add components to the frame
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        JPanel personTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
+        JPanel personTextFieldPanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
+        textArea.setEditable(false);
+        JScrollPane personTableScollPane = new JScrollPane(personTable);
+        JScrollPane personTextFieldScrollPane = new JScrollPane(textArea);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, personTablePanel, personTextFieldPanel);
+        splitPane.setResizeWeight(0.3); // Initial divider position at 50%
+        splitPane.setContinuousLayout(true); // Smooth dragging
+        splitPane.setLeftComponent(personTableScollPane);
+        splitPane.setRightComponent(personTextFieldScrollPane);
+        personTable.setFillsViewportHeight(true);
+        JPanel buttonPanel = new JPanel(new MigLayout("", "[50%][50%]", "[fill][fill]"));
         JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
-        panel.add(btn_save);
-        panel.add(btn_add);
-        panel.add(btn_del);
+        buttonPanel.add(btn_save);
+        buttonPanel.add(btn_add);
+        buttonPanel.add(btn_del);
 
         // Add panel and scroll pane to the frame
-        this.add(panel);
-        this.add(scrollPane);
+        this.add(buttonPanel, "wrap");
+        this.add(splitPane, "span, grow, push, wrap");
     }
 
     @Override
