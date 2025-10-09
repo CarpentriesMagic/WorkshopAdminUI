@@ -100,6 +100,10 @@ selection as helper.
 
 ## Creating a workshop website
 
+To create a workshop website you need to have a GitHub account. You also need to be able to
+connect to GitHub with a rsa **ssh** key pair and a token that gives you permission to delete
+a repository.
+
 The last tab `Website creation` has three buttons and one dropdown box:
 1. The dropdown box is for selecting a workshop for which you want to create a website.
 2. The `Generate` button will create a repository using the Carpentries workshop-template. The repository will be created
