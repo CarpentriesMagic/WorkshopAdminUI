@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 
 public class PersonPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(PersonPanel.class);
-    PersonTable personTable = new PersonTable();
     JTextArea textArea = new JTextArea();
+    PersonTable personTable = new PersonTable(textArea);
 
     public PersonPanel() {
         setLayout(new MigLayout("", "[30%][70%]", "[fill][fill]"));

@@ -63,4 +63,24 @@ public class SpecificQueriesHelper {
         return instructorlist;
     }
 
+    public static String getPersonInstructorStatus(String person_id, String start_date, String end_date) {
+        String[] columnNames = new String[]{"count"};
+        String sql = "SELECT count(*) as count from instructors as i where"
+                + " i.slug > \"2025-08\" and i.person_id = \"" + person_id + "\"";
+        logger.info(sql);
+        List<Object> count = DBHandler.getInstance().query(sql, columnNames);
+        HashMap<String, Object> c = (HashMap<String, Object>) count.get(0);
+        return (String) c.get("count");
+    }
+
+    public static String getPersonHelperStatus(String person_id, String start_date, String end_date) {
+        String[] columnNames = new String[]{"count"};
+        String sql = "SELECT count(*) as count from helpers as h where"
+                + " h.slug > \"2025-08\" and h.person_id = \"" + person_id + "\"";
+        logger.info(sql);
+        List<Object> count = DBHandler.getInstance().query(sql, columnNames);
+        HashMap<String, Object> c = (HashMap<String, Object>) count.get(0);
+        return (String) c.get("count");
+    }
+
 }
