@@ -4,17 +4,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.model.PersonTableModel;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
-public class PersonTable extends JTable implements Serializable {
+import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getPersonHelperStatus;
+import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getPersonInstructorStatus;
+
+public class PersonTable extends JTable implements Serializable, ListSelectionListener {
     @Serial
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final PersonTableModel personTableModel = new PersonTableModel();
+    private JTextArea textArea;
 
-    public PersonTable() {
+    public PersonTable(JTextArea textArea) {
         super();
+        this.textArea = textArea;
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(personTableModel);
         setFillsViewportHeight(true);
@@ -31,5 +39,18 @@ public class PersonTable extends JTable implements Serializable {
     @Override
     public PersonTableModel getModel() {
         return personTableModel;
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        super.valueChanged(e);
+        textArea.setText("");
+        String person_id = personTableModel.getValueAt(getSelectedRow(), 0).toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Acting as instructor: ").append(getPersonInstructorStatus(person_id, "", ""));
+        sb.append("\n");
+        sb.append("Acting as helper: ").append(getPersonHelperStatus(person_id, "", ""));
+        sb.append("\n");
+        textArea.setText(sb.toString());
     }
 }

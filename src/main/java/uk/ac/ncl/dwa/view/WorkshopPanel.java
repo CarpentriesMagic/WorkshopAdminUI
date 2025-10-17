@@ -58,8 +58,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
-        btn_import.addActionListener(this);
-        btn_reload.addActionListener(this);
+        btn_import.addActionListener(this);        btn_reload.addActionListener(this);
         btn_save.setToolTipText("Save modifications made to workshops");
         btn_add.setToolTipText("Add a new workshop");
         btn_del.setToolTipText("Delete a selected workshop");
