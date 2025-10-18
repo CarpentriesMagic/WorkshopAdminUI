@@ -66,7 +66,7 @@ public class SpecificQueriesHelper {
     public static String getPersonInstructorStatus(String person_id, String start_date, String end_date) {
         String[] columnNames = new String[]{"count"};
         String sql = "SELECT count(*) as count from instructors as i where"
-                + " i.slug > \"2025-08\" and i.person_id = \"" + person_id + "\"";
+                + " i.slug > \"" + start_date + "\" and i.person_id = \"" + person_id + "\"";
         logger.info(sql);
         List<Object> count = DBHandler.getInstance().query(sql, columnNames);
         HashMap<String, Object> c = (HashMap<String, Object>) count.get(0);
@@ -76,11 +76,27 @@ public class SpecificQueriesHelper {
     public static String getPersonHelperStatus(String person_id, String start_date, String end_date) {
         String[] columnNames = new String[]{"count"};
         String sql = "SELECT count(*) as count from helpers as h where"
-                + " h.slug > \"2025-08\" and h.person_id = \"" + person_id + "\"";
+                + " h.slug > \"" + start_date + "\" and h.person_id = \"" + person_id + "\"";
         logger.info(sql);
         List<Object> count = DBHandler.getInstance().query(sql, columnNames);
         HashMap<String, Object> c = (HashMap<String, Object>) count.get(0);
         return (String) c.get("count");
+    }
+
+    public static String getAllStatus(String table, String start_date, String end_date) {
+        String[] columnNames = new String[]{"count", "firstname", "lastname"};
+        String sql = "select count(*) as count, p.firstname as firstname, p.lastname as lastname from "
+                + table + " as i " + "join people as p on i.person_id = p.person_id where i.slug > \"" +
+                start_date +  "\" group by i.person_id order by p.firstname";
+        logger.info(sql);
+        List<Object> counts = DBHandler.getInstance().query(sql, columnNames);
+        StringBuilder sb = new StringBuilder();
+        counts.forEach(record -> {
+            HashMap<String, Object> r = (HashMap<String, Object>) record;
+            sb.append(r.get("count") + "\t" + r.get("firstname") + "\t" + r.get("lastname") + "\n");
+        });
+        return sb.toString();
+
     }
 
 }

@@ -8,7 +8,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
+import java.time.LocalDate;
 
 import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getPersonHelperStatus;
 import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getPersonInstructorStatus;
@@ -44,13 +44,23 @@ public class PersonTable extends JTable implements Serializable, ListSelectionLi
     @Override
     public void valueChanged(ListSelectionEvent e) {
         super.valueChanged(e);
+        LocalDate today = LocalDate.now();
+
+        calcIndivTotals(today.toString().substring(0, 4) + "-09-01");
+    }
+
+    public void calcIndivTotals(String startslug) {
         textArea.setText("");
-        String person_id = personTableModel.getValueAt(getSelectedRow(), 0).toString();
-        StringBuilder sb = new StringBuilder();
-        sb.append("Acting as instructor: ").append(getPersonInstructorStatus(person_id, "", ""));
-        sb.append("\n");
-        sb.append("Acting as helper: ").append(getPersonHelperStatus(person_id, "", ""));
-        sb.append("\n");
-        textArea.setText(sb.toString());
+        if (getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Please select a row");
+        } else {
+            String person_id = personTableModel.getValueAt(getSelectedRow(), 0).toString();
+            StringBuilder sb = new StringBuilder();
+            sb.append("Acting as instructor: ").append(getPersonInstructorStatus(person_id, startslug, ""));
+            sb.append("\n");
+            sb.append("Acting as helper: ").append(getPersonHelperStatus(person_id, startslug, ""));
+            sb.append("\n");
+            textArea.setText(sb.toString());
+        }
     }
 }
