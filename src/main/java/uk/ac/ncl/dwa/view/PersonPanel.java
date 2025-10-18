@@ -3,6 +3,7 @@ package uk.ac.ncl.dwa.view;
 import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ncl.dwa.database.SpecificQueriesHelper;
 import uk.ac.ncl.dwa.model.People;
 import uk.ac.ncl.dwa.model.Person;
 import javax.swing.*;
@@ -13,6 +14,8 @@ public class PersonPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(PersonPanel.class);
     JTextArea textArea = new JTextArea();
     PersonTable personTable = new PersonTable(textArea);
+    JTextField tf_startdate = new JTextField(30);
+
 
     public PersonPanel() {
         setLayout(new MigLayout("", "[30%][70%]", "[fill][fill]"));
@@ -29,19 +32,26 @@ public class PersonPanel extends JPanel implements ActionListener {
         splitPane.setLeftComponent(personTableScollPane);
         splitPane.setRightComponent(personTextFieldScrollPane);
         personTable.setFillsViewportHeight(true);
-        JPanel buttonPanel = new JPanel(new MigLayout("", "[50%][50%]", "[fill][fill]"));
+        JPanel buttonPanel = new JPanel();
         JButton btn_save = new JButton("Save");
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
+        JLabel lbl_startdate = new JLabel("Start Date");
+        JButton btn_calcTotals = new JButton("Calculate Totals");
+        btn_calcTotals.addActionListener(this);
+        btn_calcTotals.setToolTipText("Calculate the number of times this person acted as a \nhelper and an instructor, start from the slug (date) specified.");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
         buttonPanel.add(btn_save);
         buttonPanel.add(btn_add);
         buttonPanel.add(btn_del);
+        buttonPanel.add(lbl_startdate);
+        buttonPanel.add(tf_startdate);
+        buttonPanel.add(btn_calcTotals);
 
         // Add panel and scroll pane to the frame
-        this.add(buttonPanel, "wrap");
+        this.add(buttonPanel, "span, grow, wrap");
         this.add(splitPane, "span, grow, push, wrap");
     }
 
@@ -78,6 +88,17 @@ public class PersonPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Please select a row");
                 }
                 personTable.repaint();
+            }
+            case "Calculate Totals" -> {
+                if (tf_startdate.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter start date");
+                } else {
+                    String results = "Instructors:\n";
+                    results += SpecificQueriesHelper.getAllStatus("instructors", tf_startdate.getText(), "");
+                    results += "Helpers:\n";
+                    results += SpecificQueriesHelper.getAllStatus("helpers", tf_startdate.getText(), "");
+                    textArea.setText(results);
+                }
             }
         }
     }
