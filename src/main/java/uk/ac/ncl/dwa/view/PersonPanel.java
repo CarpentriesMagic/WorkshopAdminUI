@@ -16,6 +16,7 @@ public class PersonPanel extends JPanel implements ActionListener {
     PersonTable personTable = new PersonTable(textArea);
     JTextField tf_startdate = new JTextField(30);
 
+
     public PersonPanel() {
         setLayout(new MigLayout("", "[30%][70%]", "[fill][fill]"));
 

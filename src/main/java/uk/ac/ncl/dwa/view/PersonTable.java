@@ -8,8 +8,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
-
+import java.time.LocalDate;import java.util.List;
 import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getPersonHelperStatus;
 import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getPersonInstructorStatus;
 
@@ -45,7 +44,6 @@ public class PersonTable extends JTable implements Serializable, ListSelectionLi
     public void valueChanged(ListSelectionEvent e) {
         super.valueChanged(e);
         LocalDate today = LocalDate.now();
-
         calcIndivTotals(today.toString().substring(0, 4) + "-09-01");
     }
 
