@@ -146,7 +146,8 @@ public class Workshops extends ArrayList<Workshop> {
                     (String)workshopObject.get(columnNames[16]),
                     (String)workshopObject.get(columnNames[17]),
                     (String)workshopObject.get(columnNames[18]),
-                    (String)workshopObject.get(columnNames[19])
+                    (String)workshopObject.get(columnNames[19]),
+                    (((String)workshopObject.get(columnNames[20])).equals("1"))
                     );
             workshop.setStatus('s');
             add(workshop);
@@ -182,10 +183,11 @@ public class Workshops extends ArrayList<Workshop> {
             String line = scanner.nextLine();
             String[] values = line.split("\t");
             logger.info("values: {}", values.length);
-            if (values.length == 20) {
+            if (values.length == 21) {
                 Workshop workshop = new Workshop(values[0], values[1], values[2], values[3], values[4], values[5],
                         values[6], values[7], values[8], values[9].equals("1"), values[10].equals("1"), values[11],
-                        values[12], values[13], values[14], values[15], values[16], values[17], values[18], values[19]);
+                        values[12], values[13], values[14], values[15], values[16], values[17], values[18], values[19],
+                        values[20].equals("1"));
                 if (insertWorkshop(workshop)) {
                     logger.info("Imported workshop: {}", workshop.getSlug());
                 } else {
