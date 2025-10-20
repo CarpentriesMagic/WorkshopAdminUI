@@ -11,7 +11,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class WorkshopTable extends JTable implements ListSelectionListener {
     WorkshopTableModel workshopTableModel;
@@ -52,6 +51,9 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         loadCurricula();
         loadFlavours();
         loadSchedules();
+        selectPilot();
+        selectOnline();
+        selectRegistered();
     }
 
     public void loadRooms() {
@@ -89,11 +91,33 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting curriculum
          */
-        String[] flavour = {"matlab", "python", "r", "na"};
+        String[] flavour = DBHandler.getInstance().selectStringArray("flavour", "flavour_id", "");
         TableColumn flavourColumn = this.getColumnModel().getColumn(16);
         JComboBox<String> flavourComboBox = new JComboBox<>(flavour);
         flavourColumn.setCellEditor(new DefaultCellEditor(flavourComboBox));
     }
+
+    public void selectPilot() {
+        String[] pilot = new String[]{"false", "true"};
+        TableColumn pilotColumn = this.getColumnModel().getColumn(10);
+        JComboBox<String> pilotComboBox = new JComboBox<>(pilot);
+        pilotColumn.setCellEditor(new DefaultCellEditor(pilotComboBox));
+    }
+
+    public void selectOnline() {
+        String[] online = new String[]{"false", "true"};
+        TableColumn onlineColumn = this.getColumnModel().getColumn(9);
+        JComboBox<String> onlineComboBox = new JComboBox<>(online);
+        onlineColumn.setCellEditor(new DefaultCellEditor(onlineComboBox));
+    }
+
+    public void selectRegistered() {
+        String[] registered = new String[]{"false", "true"};
+        TableColumn registeredColumn = this.getColumnModel().getColumn(20);
+        JComboBox<String> registeredComboBox = new JComboBox<>(registered);
+        registeredColumn.setCellEditor(new DefaultCellEditor(registeredComboBox));
+    }
+
 
     public void loadSchedules() {
         /*
@@ -152,6 +176,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Flavour:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 16).toString()).append("<br/>");
         stringBuilder.append("EventBrite:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 17).toString()).append("<br/>");
         stringBuilder.append("Schedule:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 18).toString()).append("<br/>");
+        stringBuilder.append("Internal ID:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 19).toString()).append("<br/>");
+        stringBuilder.append("Registered:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 20).toString()).append("<br/>");
         stringBuilder.append("Collaborative Doc:\t")
                 .append("<a href=\"").append(collabdoc)
                 .append("\">")

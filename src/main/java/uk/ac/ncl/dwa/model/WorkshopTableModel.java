@@ -37,7 +37,7 @@ public class WorkshopTableModel extends AbstractTableModel {
         if (workshops == null) {
             return;
         }
-
+        logger.info("setValueAt(" + row + ", " + col + "): " + value);
         Workshop workshop = workshops.get(row);
         if (workshop.getStatus() != 'n') workshop.setStatus('u');
         switch (col) {
@@ -69,10 +69,10 @@ public class WorkshopTableModel extends AbstractTableModel {
                 workshop.setCountry((String) value);
                 break;
             case 9:
-                workshop.setOnline((Boolean) value);
+                workshop.setOnline(value.equals("true"));
                 break;
             case 10:
-                workshop.setPilot((Boolean) value);
+                workshop.setPilot(value.equals("true"));
                 break;
             case 11:
                 workshop.setInc_lesson_site((String) value);
@@ -100,6 +100,9 @@ public class WorkshopTableModel extends AbstractTableModel {
                 break;
             case 19:
                 workshop.setInternal_id((String) value);
+                break;
+            case 20:
+                workshop.setRegistered(value.equals("true"));
                 break;
         }
 
@@ -130,6 +133,7 @@ public class WorkshopTableModel extends AbstractTableModel {
             case 17 -> workshop.getEventbrite();
             case 18 -> workshop.getSchedule();
             case 19 -> workshop.getInternal_id();
+            case 20 -> workshop.isRegistered();
             default -> null;
         };
 

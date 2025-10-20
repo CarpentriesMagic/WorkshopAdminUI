@@ -7,10 +7,10 @@ public class Workshop {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     public static final String[] columnNames = {"slug", "title", "human date", "human time", "start date", "end date",
             "room_id", "lang", "cntry", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
-            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id"};
+            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id", "registered"};
     public static final String[] dbColumnNames = {"slug", "title", "humandate", "humantime", "startdate", "enddate",
             "room_id", "language", "country", "online", "pilot", "inc_lesson_site", "pre_survey", "post_survey",
-            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id"};
+            "carpentry_code", "curriculum_code", "flavour_id", "eventbrite", "schedule", "internal_id", "registered"};
     private String key; // slug before any changes made to record - needed for updating
     private String slug;
     private String title;
@@ -32,6 +32,7 @@ public class Workshop {
     private String eventbrite = "";
     private String schedule = "";
     private String internal_id = "";
+    private boolean registered = false;
     private Boolean inserted = false;
     private char status = 'n';
 
@@ -43,7 +44,7 @@ public class Workshop {
                 inc_lesson_site, pre_survey,
                 post_survey, carpentry_code,
                 curriculum_code, flavour_id,
-                eventbrite, schedule, internal_id};
+                eventbrite, schedule, internal_id, (registered?"1":"0")};
     }
     public Workshop() {
         this.slug = "";
@@ -66,6 +67,7 @@ public class Workshop {
         this.eventbrite = "";
         this.schedule = "";
         this.internal_id = "";
+        this.registered = false;
     }
 
     /**
@@ -89,12 +91,14 @@ public class Workshop {
      * @param flavour_id The programming language that will be used. python or r
      * @param eventbrite If using Eventbrite, the eventbrite generated jcode
      * @param schedule The include filename (without an extension) to be used for the schedule
+     * @param internal_id An ID internal to the institution
+     * @param registered Whether or not the workshop has been registered with The Carpentries
      */
     public Workshop(String slug, String title, String humandate, String humantime,
                     String startdate, String enddate, String room_id, String language, String country,
                     boolean online, boolean pilot, String inc_lesson_site, String pre_survey,
                     String post_survey, String carpentry_code, String curriculum_code, String flavour_id,
-                    String eventbrite, String schedule, String internal_id) {
+                    String eventbrite, String schedule, String internal_id, boolean registered) {
         this.key = slug;
         this.slug = slug;
         this.title = title;
@@ -116,6 +120,7 @@ public class Workshop {
         this.eventbrite = eventbrite;
         this.schedule = schedule;
         this.internal_id = internal_id;
+        this.registered = registered;
     }
 
     public String getSlug() {
@@ -210,6 +215,13 @@ public class Workshop {
         this.pilot = pilot;
     }
 
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
     public String getInc_lesson_site() {
         return inc_lesson_site;
     }
@@ -312,7 +324,16 @@ public class Workshop {
 
     @Override
     public String toString() {
-        return "Workshop{" + "slug=" + slug + ", title=" + title + ", humandate=" + humandate + ", humantime=" + humantime + ", startdate=" + startdate + ", enddate=" + enddate + ", room_id=" + room_id + ", language=" + language + ", country=" + country + ", online=" + online + ", pilot=" + pilot + ", inc_lesson_site=" + inc_lesson_site + ", pre_survey=" + pre_survey + ", post_survey=" + post_survey + ", carpentry_code=" + carpentry_code + ", curriculum_code=" + curriculum_code + ", flavour_id=" + flavour_id + ", eventbrite=" + eventbrite + ", schedule=" + schedule + ", internal_id=" + internal_id + ", inserted=" + inserted + ", status=" + status + '}';
+        return "Workshop{" + "slug=" + slug + ", title=" + title + ", humandate=" +
+                humandate + ", humantime=" + humantime + ", startdate=" + startdate +
+                ", enddate=" + enddate + ", room_id=" + room_id + ", language=" + language +
+                ", country=" + country + ", online=" + online + ", pilot=" + pilot +
+                ", inc_lesson_site=" + inc_lesson_site + ", pre_survey=" + pre_survey +
+                ", post_survey=" + post_survey + ", carpentry_code=" + carpentry_code +
+                ", curriculum_code=" + curriculum_code + ", flavour_id=" + flavour_id +
+                ", eventbrite=" + eventbrite + ", schedule=" + schedule + ", internal_id=" +
+                internal_id + ", registered=" + registered + ", inserted=" + inserted +
+                ", status=" + status + '}';
     }
 
 }
