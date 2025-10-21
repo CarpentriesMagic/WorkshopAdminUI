@@ -84,8 +84,8 @@ public class SpecificQueriesHelper {
     }
 
     public static String getAllStatus(String table, String start_date, String end_date) {
-        String[] columnNames = new String[]{"count", "firstname", "lastname"};
-        String sql = "select count(*) as count, p.firstname as firstname, p.lastname as lastname from "
+        String[] columnNames = new String[]{"count", "firstname", "lastname", "email"};
+        String sql = "select count(*) as count, p.firstname as firstname, p.lastname as lastname, p.email from "
                 + table + " as i " + "join people as p on i.person_id = p.person_id where i.slug > \"" +
                 start_date +  "\" group by i.person_id order by p.firstname";
         logger.info(sql);
@@ -93,7 +93,8 @@ public class SpecificQueriesHelper {
         StringBuilder sb = new StringBuilder();
         counts.forEach(record -> {
             HashMap<String, Object> r = (HashMap<String, Object>) record;
-            sb.append(r.get("count") + "\t" + r.get("firstname") + "\t" + r.get("lastname") + "\n");
+            sb.append(r.get("count") + "\t" + r.get("firstname") + "\t" + r.get("lastname") + "\t" + r.get("email") +
+                    "\n");
         });
         return sb.toString();
 
