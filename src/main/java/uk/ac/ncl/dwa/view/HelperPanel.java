@@ -11,11 +11,11 @@ import java.awt.event.ActionListener;
 public class HelperPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(HelperPanel.class);
     HelperTable helperTable = new HelperTable();
+    JScrollPane scrollPane = new JScrollPane(helperTable);
 
     public HelperPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JScrollPane scrollPane = new JScrollPane(helperTable);
         // Create scroll bars
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         //  enable horizontal scrolling
@@ -67,28 +67,43 @@ public class HelperPanel extends JPanel implements ActionListener {
 //                            helper.updateHelper(helper);
                             break;
                     }
-                    helperTable.repaint();
+
                 });
             }
             case "Add" -> {
                 logger.info("Adding new Person");
                 helpers.add(helpers.size(), new Helper());
-                helperTable.repaint();
+
             }
             case "Delete" -> {
-                int row = helperTable.getSelectedRow();
+                  int row = helperTable.getSelectedRow();
                 if (row != -1) {
                     helpers.remove(row);
                 } else {
                     JOptionPane.showMessageDialog(null, "Please select a row");
                 }
-                helperTable.repaint();
+
             }
             case "Refresh" -> {
                 helperTable.loadWorkshops();
                 helperTable.loadInstructors();
             }
         }
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = helperTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                helperTable.setRowSelectionInterval(lastRow, lastRow);
+                helperTable.scrollRectToVisible(helperTable.getCellRect(lastRow, 0, true));
+                helperTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = scrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        helperTable.revalidate();
+        helperTable.repaint();
     }
 
 }

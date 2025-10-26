@@ -11,11 +11,11 @@ import java.awt.event.ActionListener;
 public class InstructorPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(InstructorPanel.class);
     InstructorTable instructorTable = new InstructorTable();
+    JScrollPane scrollPane = new JScrollPane(instructorTable);
 
     public InstructorPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JScrollPane scrollPane = new JScrollPane(instructorTable);
         // Create scroll bars
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         //  enable horizontal scrolling
@@ -77,7 +77,7 @@ public class InstructorPanel extends JPanel implements ActionListener {
             case "Add" -> {
                 // Add action
                 instructors.add(instructors.size(), new Instructor());
-                repaint();
+
             }
             case "Delete" -> {
                 // Delete action
@@ -87,13 +87,41 @@ public class InstructorPanel extends JPanel implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
-                repaint();
+
             }
             case "Refresh" -> {
                 instructorTable.loadInstructors();
                 instructorTable.loadWorkshopSlugs();
             }
         }
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = instructorTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                instructorTable.setRowSelectionInterval(lastRow, lastRow);
+                instructorTable.scrollRectToVisible(instructorTable.getCellRect(lastRow, 0, true));
+                instructorTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = scrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = instructorTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                instructorTable.setRowSelectionInterval(lastRow, lastRow);
+                instructorTable.scrollRectToVisible(instructorTable.getCellRect(lastRow, 0, true));
+                instructorTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = scrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        instructorTable.revalidate();
+        instructorTable.repaint();
     }
 
 }
