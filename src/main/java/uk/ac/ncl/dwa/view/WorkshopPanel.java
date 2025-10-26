@@ -25,7 +25,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
     private Settings settings;
     private WorkshopTable workshopTable;
     private URL url;
-
+    JScrollPane workshopTableScrollPane;
+    JScrollPane workshopEntryScrollPane;
     public WorkshopPanel(Settings settings) {
         super();
         workshopEntryTextArea.setContentType("text/html");
@@ -40,8 +41,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         JPanel workshopEntryPanel = new JPanel(new MigLayout("fill", "[]", "[]"));
         workshopEntryTextArea.setEditable(false);
-        JScrollPane workshopTableScrollPane = new JScrollPane(workshopTable);
-        JScrollPane workshopEntryScrollPane = new JScrollPane(workshopEntryTextArea);
+        workshopTableScrollPane = new JScrollPane(workshopTable);
+        workshopEntryScrollPane = new JScrollPane(workshopEntryTextArea);
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, workshopTablePanel, workshopEntryPanel);
         splitPane.setResizeWeight(0.5); // Initial divider position at 50%
         splitPane.setContinuousLayout(true); // Smooth dragging
@@ -265,7 +266,6 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                 case "Add" -> {
                     logger.info("Adding new workshop number {}",workshops.size());
                     workshops.add(workshops.size(), new Workshop());
-                    workshopTable.repaint();
                 }
                 case "Import" -> {
                     workshopTable.getModel().getWorkshops().importWorkshopFromCSV("workshops.tsv");
@@ -285,7 +285,21 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     //logger.debug("Unknown action command: " + e.getActionCommand());
                 }
             }
-            workshopTable.repaint();
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = workshopTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                workshopTable.setRowSelectionInterval(lastRow, lastRow);
+                workshopTable.scrollRectToVisible(workshopTable.getCellRect(lastRow, 0, true));
+                workshopTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = workshopTableScrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        workshopTable.revalidate();
+        workshopTable.repaint();
         //}
     }
 }

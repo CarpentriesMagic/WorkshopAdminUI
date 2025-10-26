@@ -15,7 +15,8 @@ public class PersonPanel extends JPanel implements ActionListener {
     JTextArea textArea = new JTextArea();
     PersonTable personTable = new PersonTable(textArea);
     JTextField tf_startdate = new JTextField(30);
-
+    JScrollPane personTableScrollPane = new JScrollPane(personTable);
+    JScrollPane personTextFieldScrollPane = new JScrollPane(textArea);
 
     public PersonPanel() {
         setLayout(new MigLayout("", "[30%][70%]", "[fill][fill]"));
@@ -24,12 +25,11 @@ public class PersonPanel extends JPanel implements ActionListener {
         JPanel personTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         JPanel personTextFieldPanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         textArea.setEditable(false);
-        JScrollPane personTableScollPane = new JScrollPane(personTable);
-        JScrollPane personTextFieldScrollPane = new JScrollPane(textArea);
+
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, personTablePanel, personTextFieldPanel);
         splitPane.setResizeWeight(0.3); // Initial divider position at 50%
         splitPane.setContinuousLayout(true); // Smooth dragging
-        splitPane.setLeftComponent(personTableScollPane);
+        splitPane.setLeftComponent(personTableScrollPane);
         splitPane.setRightComponent(personTextFieldScrollPane);
         personTable.setFillsViewportHeight(true);
         JPanel buttonPanel = new JPanel();
@@ -71,14 +71,13 @@ public class PersonPanel extends JPanel implements ActionListener {
                             break;
                         case 'u': people.updatePerson(person);
                             break;
-                    }
-                    personTable.repaint();
+                   }
                 });
             }
             case "Add" -> {
                 logger.info("Adding new Person");
                 people.add(people.size(), new Person());
-                personTable.repaint();
+
             }
             case "Delete" -> {
                 int row =  personTable.getSelectedRow();
@@ -87,7 +86,7 @@ public class PersonPanel extends JPanel implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(this, "Please select a row");
                 }
-                personTable.repaint();
+
             }
             case "Calculate Totals" -> {
                 if (tf_startdate.getText().isEmpty()) {
@@ -101,6 +100,21 @@ public class PersonPanel extends JPanel implements ActionListener {
                 }
             }
         }
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = personTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                personTable.setRowSelectionInterval(lastRow, lastRow);
+                personTable.scrollRectToVisible(personTable.getCellRect(lastRow, 0, true));
+                personTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = personTableScrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        personTable.revalidate();
+        personTable.repaint();
     }
 
 }

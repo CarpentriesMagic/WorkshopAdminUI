@@ -12,13 +12,13 @@ import java.awt.event.ActionListener;
 public class RoomPanel extends JPanel implements ActionListener {
     Logger logger = LoggerFactory.getLogger(RoomPanel.class);
     RoomTable roomTable = new RoomTable();
+    JScrollPane scrollPane = new JScrollPane(roomTable);
 
     public RoomPanel() {
         super();
 //        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setLayout(new MigLayout("","[50%][50%]","[fill][fill]"));
 
-        JScrollPane scrollPane = new JScrollPane(roomTable);
         scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
@@ -71,6 +71,8 @@ public class RoomPanel extends JPanel implements ActionListener {
             }
             case "Add" -> {
                 rooms.add(rooms.size(), new Room());
+                roomTable.revalidate();
+                roomTable.repaint();
             }
             case "Delete" -> {
                 int row = roomTable.getSelectedRow();
@@ -86,8 +88,21 @@ public class RoomPanel extends JPanel implements ActionListener {
                 }
             }
         }
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = roomTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                roomTable.setRowSelectionInterval(lastRow, lastRow);
+                roomTable.scrollRectToVisible(roomTable.getCellRect(lastRow, 0, true));
+                roomTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = scrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        roomTable.revalidate();
         roomTable.repaint();
-        roomTable.validate();
     }
 
 }

@@ -18,12 +18,12 @@ public class SettingPanel extends JPanel implements ActionListener {
     SettingTable settingTable = new SettingTable();
     JTextArea propertiesTextArea = new JTextArea();
     String propertiesFilename = "workshopadmin.properties";
+    JScrollPane settingsScrollPane = new JScrollPane(settingTable);
 
     public SettingPanel() {
         super();
         setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
 
-        JScrollPane settingsScrollPane = new JScrollPane(settingTable);
         settingsScrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
         settingsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         settingsScrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
@@ -78,13 +78,10 @@ public class SettingPanel extends JPanel implements ActionListener {
                             break;
                     }
                 });
-                settingTable.repaint();
             }
             case "Add Setting" -> {
                 logger.info("Adding new Setting");
                 settings.add(settings.size(), new Setting());
-                settingTable.repaint();
-
             }
             case "Delete Setting" -> {
                 int row = settingTable.getSelectedRow();
@@ -93,7 +90,6 @@ public class SettingPanel extends JPanel implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(this, "No row selected");
                 }
-                settingTable.repaint();
             }
             case "Save Properties" -> {
                 logger.info("Write properties to file.");
@@ -101,5 +97,20 @@ public class SettingPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "You have to restart the program for the properties changes to take effect");
             }
         }
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = settingTable.getRowCount() - 1;
+            if (lastRow >= 0) {
+                settingTable.setRowSelectionInterval(lastRow, lastRow);
+                settingTable.scrollRectToVisible(settingTable.getCellRect(lastRow, 0, true));
+                settingTable.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = settingsScrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        settingTable.revalidate();
+        settingTable.repaint();
     }
 }
