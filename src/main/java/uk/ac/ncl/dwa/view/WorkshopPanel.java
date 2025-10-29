@@ -266,6 +266,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                 case "Add" -> {
                     logger.info("Adding new workshop number {}",workshops.size());
                     workshops.add(workshops.size(), new Workshop());
+                    lastRow(workshopTable, workshopTableScrollPane);
                 }
                 case "Import" -> {
                     workshopTable.getModel().getWorkshops().importWorkshopFromCSV("workshops.tsv");
@@ -285,22 +286,26 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     //logger.debug("Unknown action command: " + e.getActionCommand());
                 }
             }
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = workshopTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                workshopTable.setRowSelectionInterval(lastRow, lastRow);
-                workshopTable.scrollRectToVisible(workshopTable.getCellRect(lastRow, 0, true));
-                workshopTable.requestFocusInWindow();
-            }
 
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = workshopTableScrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
         workshopTable.revalidate();
         workshopTable.repaint();
         //}
+    }
+
+    private void lastRow(JTable table, JScrollPane scrollPane) {
+        // Ensure the table scrolls to and focuses on the last row
+        SwingUtilities.invokeLater(() -> {
+            int lastRow = table.getRowCount() - 1;
+            if (lastRow >= 0) {
+                table.setRowSelectionInterval(lastRow, lastRow);
+                table.scrollRectToVisible(table.getCellRect(lastRow, 0, true));
+                table.requestFocusInWindow();
+            }
+
+            // Make sure the scrollbars are scrolled all the way to the bottom
+            JScrollBar vertical = scrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
     }
 }
 
