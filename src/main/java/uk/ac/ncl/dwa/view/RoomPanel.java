@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.model.Room;
 import uk.ac.ncl.dwa.model.Rooms;
 import javax.swing.*;
+import static uk.ac.ncl.dwa.view.FocusUtils.lastRow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -73,6 +74,7 @@ public class RoomPanel extends JPanel implements ActionListener {
                 rooms.add(rooms.size(), new Room());
                 roomTable.revalidate();
                 roomTable.repaint();
+                lastRow(roomTable, scrollPane);
             }
             case "Delete" -> {
                 int row = roomTable.getSelectedRow();
@@ -88,19 +90,7 @@ public class RoomPanel extends JPanel implements ActionListener {
                 }
             }
         }
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = roomTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                roomTable.setRowSelectionInterval(lastRow, lastRow);
-                roomTable.scrollRectToVisible(roomTable.getCellRect(lastRow, 0, true));
-                roomTable.requestFocusInWindow();
-            }
-
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = scrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
+        
         roomTable.revalidate();
         roomTable.repaint();
     }

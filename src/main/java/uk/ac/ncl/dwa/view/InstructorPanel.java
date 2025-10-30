@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.model.Instructor;
 import uk.ac.ncl.dwa.model.Instructors;
 import javax.swing.*;
+import static uk.ac.ncl.dwa.view.FocusUtils.lastRow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -77,7 +78,7 @@ public class InstructorPanel extends JPanel implements ActionListener {
             case "Add" -> {
                 // Add action
                 instructors.add(instructors.size(), new Instructor());
-
+                lastRow(instructorTable, scrollPane);
             }
             case "Delete" -> {
                 // Delete action
@@ -94,32 +95,7 @@ public class InstructorPanel extends JPanel implements ActionListener {
                 instructorTable.loadWorkshopSlugs();
             }
         }
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = instructorTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                instructorTable.setRowSelectionInterval(lastRow, lastRow);
-                instructorTable.scrollRectToVisible(instructorTable.getCellRect(lastRow, 0, true));
-                instructorTable.requestFocusInWindow();
-            }
-
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = scrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = instructorTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                instructorTable.setRowSelectionInterval(lastRow, lastRow);
-                instructorTable.scrollRectToVisible(instructorTable.getCellRect(lastRow, 0, true));
-                instructorTable.requestFocusInWindow();
-            }
-
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = scrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
+        
         instructorTable.revalidate();
         instructorTable.repaint();
     }

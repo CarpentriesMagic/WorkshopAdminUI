@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.model.Helper;
 import uk.ac.ncl.dwa.model.Helpers;
 import javax.swing.*;
+import static uk.ac.ncl.dwa.view.FocusUtils.lastRow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -73,7 +74,7 @@ public class HelperPanel extends JPanel implements ActionListener {
             case "Add" -> {
                 logger.info("Adding new Person");
                 helpers.add(helpers.size(), new Helper());
-
+                lastRow(helperTable, scrollPane);
             }
             case "Delete" -> {
                   int row = helperTable.getSelectedRow();
@@ -89,19 +90,7 @@ public class HelperPanel extends JPanel implements ActionListener {
                 helperTable.loadInstructors();
             }
         }
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = helperTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                helperTable.setRowSelectionInterval(lastRow, lastRow);
-                helperTable.scrollRectToVisible(helperTable.getCellRect(lastRow, 0, true));
-                helperTable.requestFocusInWindow();
-            }
-
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = scrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
+        
         helperTable.revalidate();
         helperTable.repaint();
     }
