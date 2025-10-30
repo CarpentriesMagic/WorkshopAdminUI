@@ -7,6 +7,7 @@ import uk.ac.ncl.dwa.database.SpecificQueriesHelper;
 import uk.ac.ncl.dwa.model.People;
 import uk.ac.ncl.dwa.model.Person;
 import javax.swing.*;
+import static uk.ac.ncl.dwa.view.FocusUtils.lastRow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -77,7 +78,7 @@ public class PersonPanel extends JPanel implements ActionListener {
             case "Add" -> {
                 logger.info("Adding new Person");
                 people.add(people.size(), new Person());
-
+                lastRow(personTable, personTableScrollPane);
             }
             case "Delete" -> {
                 int row =  personTable.getSelectedRow();
@@ -100,19 +101,7 @@ public class PersonPanel extends JPanel implements ActionListener {
                 }
             }
         }
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = personTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                personTable.setRowSelectionInterval(lastRow, lastRow);
-                personTable.scrollRectToVisible(personTable.getCellRect(lastRow, 0, true));
-                personTable.requestFocusInWindow();
-            }
-
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = personTableScrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
+        
         personTable.revalidate();
         personTable.repaint();
     }

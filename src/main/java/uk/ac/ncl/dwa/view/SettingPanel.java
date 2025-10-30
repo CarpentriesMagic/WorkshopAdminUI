@@ -9,6 +9,7 @@ import uk.ac.ncl.dwa.model.Setting;
 import uk.ac.ncl.dwa.model.Settings;
 
 import javax.swing.*;
+import static uk.ac.ncl.dwa.view.FocusUtils.lastRow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -82,6 +83,7 @@ public class SettingPanel extends JPanel implements ActionListener {
             case "Add Setting" -> {
                 logger.info("Adding new Setting");
                 settings.add(settings.size(), new Setting());
+                lastRow(settingTable, settingsScrollPane);
             }
             case "Delete Setting" -> {
                 int row = settingTable.getSelectedRow();
@@ -97,19 +99,7 @@ public class SettingPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "You have to restart the program for the properties changes to take effect");
             }
         }
-        // Ensure the table scrolls to and focuses on the last row
-        SwingUtilities.invokeLater(() -> {
-            int lastRow = settingTable.getRowCount() - 1;
-            if (lastRow >= 0) {
-                settingTable.setRowSelectionInterval(lastRow, lastRow);
-                settingTable.scrollRectToVisible(settingTable.getCellRect(lastRow, 0, true));
-                settingTable.requestFocusInWindow();
-            }
-
-            // Make sure the scrollbars are scrolled all the way to the bottom
-            JScrollBar vertical = settingsScrollPane.getVerticalScrollBar();
-            vertical.setValue(vertical.getMaximum());
-        });
+        
         settingTable.revalidate();
         settingTable.repaint();
     }
