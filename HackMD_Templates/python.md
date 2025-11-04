@@ -1,7 +1,7 @@
-# YYYY-MM-DD-NCL Programming with Python
+# [slug] Programming with Python
 
 ## This document:
-### https://hackmd.io/@rseteam/YYYY-MM-DD-NCL/edit
+### https://hackmd.io/@rseteam/[slug]/edit
 
 ## JupyterHub online environment:
 ### http://nclrse.uksouth.cloudapp.azure.com
@@ -27,12 +27,11 @@ You will be asked to show the QR code we sent to you via email
 The Jupyter environment we provide will be taken down after the course.  You can download any files you'd like to keep.
 
 ### General Python Setup instructions:
-https://nclrse-training.github.io/YYYY-MM-DD-NCL/#python-1 or
 https://carpentries.github.io/workshop-template/install_instructions/#python
 
 ### Python IDEs you may like to use
-PyCharm: https://www.jetbrains.com/pycharm/ - free if you register with a Uni email address     
-Visual Studio Code: https://code.visualstudio.com/download - free
+- PyCharm: https://www.jetbrains.com/pycharm/ - free if you register with a Uni email address     
+- Visual Studio Code: https://code.visualstudio.com/download - free
 
 ### Matplotlib documentation
 https://matplotlib.org/

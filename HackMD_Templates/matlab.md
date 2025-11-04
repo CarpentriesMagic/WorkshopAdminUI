@@ -1,4 +1,4 @@
-# [slug] HPC Carpentry
+# [slug] Programming with MATLAB
 
 ## This document:
 ### https://hackmd.io/@rseteam/[slug]/edit
@@ -9,7 +9,7 @@
 - [RSE Team](https://rse.ncldata.dev)
 - [Code of Conduct](https://docs.carpentries.org/policies/coc/)
 - [Workshop website](https://nclrse-training.github.io/[slug]/)
-- [Link to lesson website](https://nclrse-training.github.io/hpc-intro-rocket/)
+- [Link to lesson website](https://swcarpentry.github.io/matlab-novice-inflammation)
 - [Link to data](http://training.researchcomputing.ncl.ac.uk/training-materials/hpc-intro-data.tar.gz)
 - [Pre-workshop survey](https://carpentries.typeform.com/to/wi32rS?slug=[slug])
 - [Post-workshop survey](https://carpentries.typeform.com/to/UgVdRQ?slug=[slug])
