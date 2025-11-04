@@ -122,9 +122,22 @@ public class Workshops extends ArrayList<Workshop> {
     }
 
     public void loadFromDatabase() {
+
+        loadFromDatabase("2020", "3000");
+    }
+
+    public void loadFromDatabase(String startdate, String enddate) {
         String[] columnNames = Workshop.dbColumnNames;
+        String where = "";
+        if (!startdate.trim().isEmpty()) {
+            where = "slug >= '" + startdate + "'";
+        }
+        if (!enddate.trim().isEmpty()) {
+            where += "and slug <= '" + enddate + "'";
+        }
+        clear();
         List<Object> workshops = DBHandler.getInstance().select(
-                "workshops", columnNames, "", "slug");
+                "workshops", columnNames, where, "slug");
         for (Object o : workshops) {
             HashMap<String,Object> workshopObject = (HashMap<String, Object>) o;
             Workshop workshop = new Workshop((String)workshopObject.get(columnNames[0]),
@@ -136,8 +149,8 @@ public class Workshops extends ArrayList<Workshop> {
                     (String)workshopObject.get(columnNames[6]),
                     (String)workshopObject.get(columnNames[7]),
                     (String)workshopObject.get(columnNames[8]),
-                    (((String) workshopObject.get(columnNames[9])).equals("1")),
-                    (((String) workshopObject.get(columnNames[10])).equals("1")),
+                    ((workshopObject.get(columnNames[9])).equals("1")),
+                    ((workshopObject.get(columnNames[10])).equals("1")),
                     (String)workshopObject.get(columnNames[11]),
                     (String)workshopObject.get(columnNames[12]),
                     (String)workshopObject.get(columnNames[13]),
@@ -147,7 +160,7 @@ public class Workshops extends ArrayList<Workshop> {
                     (String)workshopObject.get(columnNames[17]),
                     (String)workshopObject.get(columnNames[18]),
                     (String)workshopObject.get(columnNames[19]),
-                    (((String)workshopObject.get(columnNames[20])).equals("1"))
+                    ((workshopObject.get(columnNames[20])).equals("1"))
                     );
             workshop.setStatus('s');
             add(workshop);
