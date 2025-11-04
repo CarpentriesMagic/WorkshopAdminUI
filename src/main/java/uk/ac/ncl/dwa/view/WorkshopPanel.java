@@ -21,23 +21,22 @@ import static uk.ac.ncl.dwa.controller.github.GitHubActions.*;
 
 public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkListener {
     private final Logger logger = LoggerFactory.getLogger(WorkshopPanel.class);
-    private JTextPane workshopEntryTextArea = new JTextPane();
-    private Settings settings;
-    private WorkshopTable workshopTable;
     private URL url;
-    JScrollPane workshopTableScrollPane;
-    JScrollPane workshopEntryScrollPane;
+    private JTextPane workshopEntryTextArea = new JTextPane();
+    private WorkshopTable workshopTable;
+    private JScrollPane workshopTableScrollPane;
+    private JScrollPane workshopEntryScrollPane;
+    private JTextField tf_filterFrom = new JTextField("", 10);
+    private JTextField tf_filterTo = new JTextField("", 10);
+
     public WorkshopPanel(Settings settings) {
         super();
         workshopEntryTextArea.setContentType("text/html");
         workshopEntryTextArea.addHyperlinkListener(this);
-        this.settings = settings;
         workshopTable = new WorkshopTable(workshopEntryTextArea, settings);
         setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
 
-        JPanel buttonPanel = new JPanel(new MigLayout("", "[50%][50%]", "[fill][fill]"));
         JPanel leftButtonPanel = new JPanel();
-        JPanel rightButtonPanel = new JPanel();
         JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         JPanel workshopEntryPanel = new JPanel(new MigLayout("fill", "[]", "[]"));
         workshopEntryTextArea.setEditable(false);
@@ -55,28 +54,24 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         JButton btn_add = new JButton("Add");
         JButton btn_del = new JButton("Delete");
         JButton btn_import = new JButton("Import");
-        JButton btn_reload = new JButton("Refresh");
+        JButton btn_refresh = new JButton("Refresh");
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
-        btn_import.addActionListener(this);        btn_reload.addActionListener(this);
+        btn_import.addActionListener(this);
+        btn_refresh.addActionListener(this);
         btn_save.setToolTipText("Save modifications made to workshops");
         btn_add.setToolTipText("Add a new workshop");
         btn_del.setToolTipText("Delete a selected workshop");
         btn_import.setToolTipText("Import workshop");
-        btn_reload.setToolTipText("Reload any changes made to helpers, instructors or rooms");
-        buttonPanel.add(leftButtonPanel, "cell 0 0,grow");
-        buttonPanel.add(rightButtonPanel, "cell 1 0,grow");
-        leftButtonPanel.add(btn_save);
-        leftButtonPanel.add(btn_add);
-        leftButtonPanel.add(btn_del);
-        leftButtonPanel.add(btn_import);
-        leftButtonPanel.add(btn_reload);
+        btn_refresh.setToolTipText("Reload any changes made to helpers, instructors or rooms");
 
+        JButton btn_filter = new JButton("Filter");
         JButton btn_gen = new JButton("Generate");
         JButton btn_del2 = new JButton("Delete GitHub Repository");
         JButton btn_clone = new JButton("Clone");
         JButton btn_events = new JButton("Events");
+        btn_filter.addActionListener(this);
         btn_gen.addActionListener(this);
         btn_del2.addActionListener(this);
         btn_clone.addActionListener(this);
@@ -85,14 +80,23 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_del.setToolTipText("Delete the selected repository in GitHub");
         btn_clone.setToolTipText("Clone the selected repository in to your local drive, update it and push it back to GitHub");
         btn_events.setToolTipText("Create a CSV file of the selected workshopTable for inclusion in the team website");
-        rightButtonPanel.add(btn_gen);
-        rightButtonPanel.add(btn_del2);
-        rightButtonPanel.add(btn_clone);
-        rightButtonPanel.add(btn_events);
+        leftButtonPanel.add(btn_save);
+        leftButtonPanel.add(btn_add);
+        leftButtonPanel.add(btn_del);
+        leftButtonPanel.add(btn_import);
+        leftButtonPanel.add(btn_refresh);
+        leftButtonPanel.add(tf_filterFrom);
+        leftButtonPanel.add(tf_filterTo);
+        leftButtonPanel.add(btn_filter);
+        leftButtonPanel.add(btn_gen);
+        leftButtonPanel.add(btn_del2);
+        leftButtonPanel.add(btn_clone);
+        leftButtonPanel.add(btn_events);
+
 
 
         // Add panel and scroll pane to the frame
-        this.add(buttonPanel, "wrap");
+        this.add(leftButtonPanel, "span, grow, wrap");
         this.add(splitPane, "span, grow, push, wrap");
     }
 
@@ -280,6 +284,12 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     workshopTable.loadRooms();
                     workshopTable.loadFlavours();
                     workshopTable.loadSchedules();
+                }
+                case "Filter" -> {
+                    String startdate = tf_filterFrom.getText();
+                    String enddate = tf_filterTo.getText();
+                    workshopTable.getModel().getWorkshops().loadFromDatabase(startdate, enddate);
+                    workshopTable.getModel().fireTableDataChanged();
                 }
                 default -> {
                     JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
