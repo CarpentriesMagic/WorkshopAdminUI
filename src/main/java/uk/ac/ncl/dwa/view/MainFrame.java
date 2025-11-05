@@ -27,6 +27,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 
         // Frame settings
         setSize(1024, 768);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(this);
         setVisible(true);
