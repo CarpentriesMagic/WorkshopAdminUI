@@ -3,6 +3,7 @@ package uk.ac.ncl.dwa.view;
 import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ncl.dwa.controller.HackmdCreateNote;
 import uk.ac.ncl.dwa.database.DBHandler;
 import uk.ac.ncl.dwa.model.Settings;
 import uk.ac.ncl.dwa.model.Workshop;
@@ -37,6 +38,9 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         setLayout(new MigLayout("", "[50%][50%]", "[fill][fill]"));
 
         JPanel leftButtonPanel = new JPanel();
+        JPanel rightButtonPanel = new JPanel();
+        JPanel filterPanel = new JPanel();
+        JPanel collabPanel = new JPanel();
         JPanel workshopTablePanel = new JPanel(new MigLayout("fill", "[]", "[fill]"));
         JPanel workshopEntryPanel = new JPanel(new MigLayout("fill", "[]", "[]"));
         workshopEntryTextArea.setEditable(false);
@@ -55,48 +59,59 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         JButton btn_del = new JButton("Delete");
         JButton btn_import = new JButton("Import");
         JButton btn_refresh = new JButton("Refresh");
+        JButton btn_gen = new JButton("Generate");
+        JButton btn_del2 = new JButton("Delete GitHub Repository");
+        JButton btn_clone = new JButton("Clone");
+        JButton btn_events = new JButton("Events");
+        JButton btn_filter = new JButton("Filter");
+        JButton btn_collab = new JButton("Collab Doc");
+
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
         btn_del.addActionListener(this);
         btn_import.addActionListener(this);
         btn_refresh.addActionListener(this);
+        btn_gen.addActionListener(this);
+        btn_del2.addActionListener(this);
+        btn_clone.addActionListener(this);
+        btn_events.addActionListener(this);
+        btn_filter.addActionListener(this);
+        btn_collab.addActionListener(this);
+
         btn_save.setToolTipText("Save modifications made to workshops");
         btn_add.setToolTipText("Add a new workshop");
         btn_del.setToolTipText("Delete a selected workshop");
         btn_import.setToolTipText("Import workshop");
         btn_refresh.setToolTipText("Reload any changes made to helpers, instructors or rooms");
-
-        JButton btn_filter = new JButton("Filter");
-        JButton btn_gen = new JButton("Generate");
-        JButton btn_del2 = new JButton("Delete GitHub Repository");
-        JButton btn_clone = new JButton("Clone");
-        JButton btn_events = new JButton("Events");
-        btn_filter.addActionListener(this);
-        btn_gen.addActionListener(this);
-        btn_del2.addActionListener(this);
-        btn_clone.addActionListener(this);
-        btn_events.addActionListener(this);
         btn_gen.setToolTipText("Create a new repository using the Carpentries template");
         btn_del.setToolTipText("Delete the selected repository in GitHub");
         btn_clone.setToolTipText("Clone the selected repository in to your local drive, update it and push it back to GitHub");
         btn_events.setToolTipText("Create a CSV file of the selected workshopTable for inclusion in the team website");
+        btn_filter.setToolTipText("Filter the workshops to only display those between specified dates.");
+        btn_collab.setToolTipText("Create collaborative HackMD document");
+
         leftButtonPanel.add(btn_save);
         leftButtonPanel.add(btn_add);
         leftButtonPanel.add(btn_del);
         leftButtonPanel.add(btn_import);
         leftButtonPanel.add(btn_refresh);
-        leftButtonPanel.add(tf_filterFrom);
-        leftButtonPanel.add(tf_filterTo);
-        leftButtonPanel.add(btn_filter);
-        leftButtonPanel.add(btn_gen);
-        leftButtonPanel.add(btn_del2);
-        leftButtonPanel.add(btn_clone);
-        leftButtonPanel.add(btn_events);
+        rightButtonPanel.add(btn_gen);
+        rightButtonPanel.add(btn_del2);
+        rightButtonPanel.add(btn_clone);
+        rightButtonPanel.add(btn_events);
 
-
+        filterPanel.add(new JLabel("From:"));
+        filterPanel.add(tf_filterFrom);
+        filterPanel.add(new JLabel("To:"));
+        filterPanel.add(tf_filterTo);
+        filterPanel.add(btn_filter);
+        collabPanel.add(btn_collab);
 
         // Add panel and scroll pane to the frame
-        this.add(leftButtonPanel, "span, grow, wrap");
+        this.add(leftButtonPanel, "");
+        this.add(rightButtonPanel, "wrap");
+        this.add(filterPanel);
+        this.add(collabPanel, "wrap");
         this.add(splitPane, "span, grow, push, wrap");
     }
 
@@ -290,6 +305,27 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     String enddate = tf_filterTo.getText();
                     workshopTable.getModel().getWorkshops().loadFromDatabase(startdate, enddate);
                     workshopTable.getModel().fireTableDataChanged();
+                }
+                case "Collab Doc" -> {
+                    if (selectedRows != null) {
+                        int row = workshopTable.getSelectedRow();
+                        if (row != -1) {
+                            logger.info("Create HackMD for {} workshop with slug: {}", workshops.get(row).getSchedule(), workshops.get(row).getSlug());
+                            int ret = HackmdCreateNote.createDoc(workshops.get(row).getSchedule(),
+                                    workshops.get(row).getSlug());
+                            switch (ret) {
+                                case 0 -> {JOptionPane.showMessageDialog(this,
+                                        "Document created successfully");}
+                                case 1 -> {JOptionPane.showMessageDialog(this,
+                                        "Missing HackMD API Token", "Error", JOptionPane.ERROR_MESSAGE);}
+                                case 2 -> {JOptionPane.showMessageDialog(this,
+                                        "❌ Failed to create note. See error log for more information",
+                                        "Error", JOptionPane.ERROR_MESSAGE);}
+                                case 3 -> {JOptionPane.showMessageDialog(this,
+                                        "Something went wrong", "Error", JOptionPane.ERROR_MESSAGE);}
+                            }
+                        }
+                    }
                 }
                 default -> {
                     JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
