@@ -159,8 +159,12 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                                         "FAIL", JOptionPane.ERROR_MESSAGE);
                             }
                             case "2" -> {
-                                JOptionPane.showMessageDialog(this, "An unknown error occured.",
+                                JOptionPane.showMessageDialog(this, "An unknown error occurred.",
                                         "FAIL: ", JOptionPane.ERROR_MESSAGE);
+                            }
+                            case "3" -> {
+                                JOptionPane.showMessageDialog(this, "The repository was created but we couldn't<br/> update the homepage link", "FAIL",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     } else {
