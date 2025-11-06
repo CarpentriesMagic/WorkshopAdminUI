@@ -32,8 +32,8 @@ public class GitHubActions {
             sc = new Scanner(new File(System.getProperty("user.home") + "/.ssh/gh_token"));
             token = sc.nextLine();
             sc.close();
-        } catch ( FileNotFoundException e) {
-          logger.info("FileNotFoundException: {}", e.getMessage());
+        } catch (FileNotFoundException e) {
+            logger.info("FileNotFoundException: {}", e.getMessage());
         }
 
         try {
@@ -42,8 +42,9 @@ public class GitHubActions {
             String jsonBody = String.format("{\"owner\": \"%s\"," +
                     "\"name\": \"%s\"," +
                     "\"description\": \"Workshop site using Carpentries website template\"," +
-                    "\"private\": false}", owner, repo);
-//                    "\"homepage\":\"https://%sgithub.io/%s\"}", owner, repo, owner, repo);
+//                    "\"homepage\": \"https://%sgithub.io/%s\"," +
+                    "\"private\": false}", owner, repo, owner, repo);
+
             URL url = new URL("https://api.github.com/repos/carpentries/workshop-template/generate");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -69,62 +70,58 @@ public class GitHubActions {
                     while ((line = br.readLine()) != null) {
 
                         logger.info(line);
-                         // ERROR
+                        // ERROR
                     }
                     return "1";
                 }
             }
             logger.info("Disconnecting from the server.");
             conn.disconnect();
+            updateHomepage(owner, repo, token);
             return "0"; // SUCCESS
         } catch (IOException e) {
             logger.error("IOException: {}", e.getMessage());
             logger.error("Localised message: {}", e.getLocalizedMessage());
             return "1"; // ERROR
         }
+    }
 
-// TODO: This update needs to be replaced by OpenFeign as the HttpURLConnection does not support PATCH
-//        try {
-//            logger.info("Update homepage URL for the new repository");
-//            // Create JSON body for the request
-//            String jsonBody2 = String.format("{\"homepage\":\"https://%s.github.io/%s\"}", owner, repo);
-//            logger.info("JSON body: {}", jsonBody2);
-//            String urlstring = String.format("https://api.github.com/repos/%s/%s", owner, repo);
-//            logger.info("URL string: {}", urlstring);
-//            URL url2 = new URL(urlstring);
-//            HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
-//            conn2.setRequestMethod("PATCH");
-//            conn2.setRequestProperty("Authorization", "Bearer " + token);
-//            conn2.setRequestProperty("Accept", "application/vnd.github+json");
-//            conn2.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
-//            conn2.setDoOutput(true);
-//
-//            try (OutputStream os = conn2.getOutputStream()) {
-//                byte[] input = jsonBody2.getBytes(StandardCharsets.UTF_8);
-//                os.write(input, 0, input.length);
-//                logger.info("Something to do with outputstream");
-//            }
-//            int status2 = conn2.getResponseCode();
-//            logger.info("Response code: {}", status2);
-//            if (status2 == 201 || status2 == 202) {
-//                logger.info("Repository updated successfully.");
-//                return 0;
-//            } else {
-//                logger.info("Failed to update repository. HTTP status: {}", status2);
-//                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn2.getErrorStream()))) {
-//                    String line;
-//                    if ((line = br.readLine()) != null) {
-//                        logger.info(line);
-//                        return 1;
-//                    }
-//                }
-//            }
-//            conn2.disconnect();
-//        } catch (IOException e) {
-//            logger.error("IOException: {}", e.getMessage());
-//            logger.error("Localised message: {}", e.getLocalizedMessage());
-//            return 1;
-//        }
+    public static void updateHomepage(String owner, String repo, String token) {
+        try {
+            // API endpoint for updating a repository
+            URL url = new URL("https://api.github.com/repos/" + owner + "/" + repo);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setRequestProperty("Accept", "application/vnd.github+json");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // Set the homepage value
+            String homepageUrl = String.format("https://%s.github.io/%s", owner, repo);
+            String jsonBody = String.format("{\"homepage\": \"%s\"}", homepageUrl);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonBody.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("Response code: " + responseCode);
+
+            if (responseCode == 200) {
+                System.out.println("Homepage updated successfully!");
+            } else {
+                System.out.println("Failed to update homepage. Check response for details.");
+            }
+
+            conn.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static String getToken() {
