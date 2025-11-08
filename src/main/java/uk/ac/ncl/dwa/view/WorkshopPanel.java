@@ -203,22 +203,41 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             switch (ret) {
 
                                 case "1" -> {
-                                    JOptionPane.showMessageDialog(this, "A clone of this repository already exist",
+                                    JOptionPane.showMessageDialog(this,
+                                            "A clone of this repository already exist",
                                             "Clone exists", JOptionPane.ERROR_MESSAGE);
                                 }
                                 case "2" -> {
-                                    JOptionPane.showMessageDialog(this, "File index.md was not found", "Cloning failed: ", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(this,
+                                            "File index.md was not found",
+                                            "Cloning failed: ", JOptionPane.ERROR_MESSAGE);
                                 }
                                 case "3" -> {
-                                    JOptionPane.showMessageDialog(this, "Could not copy schedule file.");
+                                    JOptionPane.showMessageDialog(this,
+                                            "Could not copy schedule file.",
+                                            "Error",  JOptionPane.ERROR_MESSAGE);
                                 }
                                 case "0" -> {
                                     //textArea.setText(ret);
+
+                                    Object[] options = { "OK" };
+                                    JOptionPane.showOptionDialog(
+                                            null,
+                                            "Workshops website appears to have been cloned successfully.",
+                                            "Success",
+                                            JOptionPane.DEFAULT_OPTION,
+                                            JOptionPane.INFORMATION_MESSAGE,
+                                            null,
+                                            options,
+                                            options[0]
+                                    );
                                 }
                             }
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                        JOptionPane.showConfirmDialog(this,
+                                "Please select a workshop first\n",
+                                "Error",  JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 case "Events" -> {
