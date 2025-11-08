@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import uk.ac.ncl.dwa.controller.github.GitHubActions;
+import uk.ac.ncl.dwa.database.DBHandler;
 
 import static java.lang.System.exit;
 
@@ -54,7 +55,9 @@ public class HackmdCreateNote {
 
     public static int createDoc(String templateName, String slug) {
         final String API_TOKEN = getToken();
-        final String API_URL = "https://api.hackmd.io/v1/notes";
+        String organisation = DBHandler.getInstance().selectString("settings",
+                "value", "keyValue=\"HackMD_team\"");
+        final String API_URL = "https://api.hackmd.io/v1/teams/" + organisation + "/notes";
         if (API_TOKEN == null || API_TOKEN.isBlank()) {
             System.err.println("❌ Please create a file containing your HackMD API token in ~/.ssh/hmd_token.");
             return 1;
