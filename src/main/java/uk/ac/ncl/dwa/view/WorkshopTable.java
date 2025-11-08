@@ -149,6 +149,23 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         return builder.toString();
     }
 
+    private String makeGitHubLink(String organisation, String slug) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Website Repository link:\t")
+                .append("<a href=\"")
+                .append("https://")
+                .append("github.com/")
+                .append(organisation)
+                .append("/")
+                .append(slug)
+                .append("\">")
+                .append("Repository Link")
+                .append("</a><br/>");
+
+        return builder.toString();
+
+    }
+
     private String makeWebsiteLink(String organisation, String slug) {
         StringBuilder builder = new StringBuilder();
         builder.append("Website link:\t")
@@ -207,6 +224,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Registered:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 20).toString()).append("<br/>");
         stringBuilder.append(makeLink("Collaborative Doc", collabdoc));
         stringBuilder.append(makeWebsiteLink(organisation, slug));
+        stringBuilder.append(makeGitHubLink(organisation, slug));
         stringBuilder.append("<b>Instructors:</b><br>")
                 .append(SpecificQueriesHelper.getInstructors(slug))
                 .append("<br/>");
