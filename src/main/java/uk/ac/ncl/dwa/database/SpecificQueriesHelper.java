@@ -11,16 +11,22 @@ import java.util.Scanner;
 public class SpecificQueriesHelper {
     private static final Logger logger = LoggerFactory.getLogger(SpecificQueriesHelper.class);
 
-    public static String getHelpers(String repo) {
-        String[] columnNames = new String[]{"title", "firstname", "lastname"};
+    public static List getPeople(String repo, String who) {
+        String[] columnNames = new String[]{"title", "firstname", "lastname", "email"};
         String sql = "SELECT " +
                 "p.title as title, p.firstname as firstname, " +
-                "p.lastname as lastname " +
-                "FROM helpers as h " +
+                "p.lastname as lastname, " +
+                "p.email as email " +
+                "FROM " + who + " as h " +
                 "JOIN people as p on p.person_id=h.person_id " +
                 "WHERE h.slug=\"" + repo + "\" ";
         logger.info(sql);
-        List<Object> helpers = DBHandler.getInstance().query(sql, columnNames);
+        return DBHandler.getInstance().query(sql, columnNames);
+    }
+
+    public static String getHelpers(String repo) {
+        String[] columnNames = new String[]{"title", "firstname", "lastname", "email"};
+        List helpers = getPeople(repo, "helpers");
         StringBuilder sb_helper = new StringBuilder();
 //        sb_helper.append("[");
         for (Object object : helpers) {
@@ -39,15 +45,8 @@ public class SpecificQueriesHelper {
     }
 
     public static String getInstructors(String repo) {
-        String[] columnNames = new String[]{"title", "firstname", "lastname"};
-        String sql = "SELECT " +
-                "p.title as title, p.firstname as firstname, " +
-                "p.lastname as lastname " +
-                "FROM instructors as h " +
-                "JOIN people as p on p.person_id=h.person_id " +
-                "WHERE h.slug=\"" + repo + "\" ";
-        logger.info(sql);
-        List<Object> instructors = DBHandler.getInstance().query(sql, columnNames);
+        String[] columnNames = new String[]{"title", "firstname", "lastname", "email"};
+        List<Object> instructors = getPeople(repo, "instructors");
         StringBuilder sb_instructor = new StringBuilder();
 //        sb_instructor.append("[");
         for (Object object : instructors) {
