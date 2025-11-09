@@ -24,6 +24,43 @@ public class SpecificQueriesHelper {
         return DBHandler.getInstance().query(sql, columnNames);
     }
 
+    /**
+     * Query the database for all helpers and instructors
+     * @param slug The identifier of the GitHub repository which is also the workshop slug
+     * @return A string formatted as an HTML list
+     */
+    public static String getStaff(String slug) {
+        String[] columnNames = new String[]{"title", "firstname", "lastname", "email"};
+        List helpers = getPeople(slug, "helpers");
+        StringBuilder sb_helper = new StringBuilder();
+        for (Object object : helpers) {
+            HashMap<String, Object> helperMap = (HashMap<String, Object>) object;
+            String helper =
+                    ((String) helperMap.get(columnNames[0]) + " " +
+                            (String) helperMap.get(columnNames[1]) + " " +
+                            (String) helperMap.get(columnNames[2])).trim() + ", " +
+                            (String) helperMap.get(columnNames[3]);
+            sb_helper.append("<li>").append(helper).append("</li>");
+        }
+        String helperlist = sb_helper.toString();
+        helperlist = (!helperlist.isEmpty() ?helperlist.substring(0,helperlist.length()-1):"");
+        List<Object> instructors = getPeople(slug, "instructors");
+        StringBuilder sb_instructor = new StringBuilder();
+        for (Object object : instructors) {
+            HashMap<String, Object> instructorMap = (HashMap<String, Object>) object;
+            String instructor =
+                    ((String) instructorMap.get(columnNames[0]) + " " +
+                            (String) instructorMap.get(columnNames[1]) + " " +
+                            (String) instructorMap.get(columnNames[2])).trim() + ", " +
+                            (String) instructorMap.get(columnNames[3]);
+            sb_instructor.append("<li>").append(instructor).append("</li>");
+        }
+        String instructorlist = sb_instructor.toString();
+        instructorlist = (!instructorlist.isEmpty()?instructorlist.substring(0,instructorlist.length()-1):"");
+        return "<b>Helpers</b><br/><ol>" + helperlist + "</ol><br/><b>Instructors:</b><br/><ol>" + instructorlist +
+                "</ol>";
+    }
+
     public static String getHelpers(String repo) {
         String[] columnNames = new String[]{"title", "firstname", "lastname", "email"};
         List helpers = getPeople(repo, "helpers");

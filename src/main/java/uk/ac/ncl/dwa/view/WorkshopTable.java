@@ -225,12 +225,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append(makeLink("Collaborative Doc", collabdoc));
         stringBuilder.append(makeWebsiteLink(organisation, slug));
         stringBuilder.append(makeGitHubLink(organisation, slug));
-        stringBuilder.append("<b>Instructors:</b><br>")
-                .append(SpecificQueriesHelper.getInstructors(slug))
-                .append("<br/>");
-        stringBuilder.append("<b>Helpers:</b><br>")
-                .append(SpecificQueriesHelper.getHelpers(slug))
-                .append("<br/>");
+        stringBuilder.append("<b>Staff:</b><br>")
+                .append(SpecificQueriesHelper.getStaff(slug));
         return stringBuilder.toString();
     }
 
