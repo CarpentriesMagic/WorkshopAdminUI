@@ -36,6 +36,13 @@ public class HackmdCreateNote {
         return token;
     }
 
+    /**
+     * Use the templateName specified as a filename and read the contents of the file
+     * to be used as a template for creating a HackMD document
+     * @param templateName
+     * @param slug
+     * @return
+     */
     public static String getTemplate(String templateName, String slug) {
         templateName = "HackMD_Templates/" + templateName + ".md";
         StringBuilder sb = new StringBuilder();
@@ -45,76 +52,87 @@ public class HackmdCreateNote {
                 sb.append(sc.nextLine()).append("\n");
             }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         return sb.toString().replace("[slug]", slug);
     }
 
-    public static void main(String[] args) throws Exception {
-    }
-
+    /**
+     * Create a HackMD document using the file specified as a templage
+     * @param templateName
+     * @param slug
+     * @return
+     */
     public static int createDoc(String templateName, String slug) {
-        final String API_TOKEN = getToken();
-        String organisation = DBHandler.getInstance().selectString("settings",
-                "value", "keyValue=\"HackMD_team\"");
-        final String API_URL = "https://api.hackmd.io/v1/teams/" + organisation + "/notes";
-        if (API_TOKEN == null || API_TOKEN.isBlank()) {
-            System.err.println("❌ Please create a file containing your HackMD API token in ~/.ssh/hmd_token.");
-            return 1;
-        }
-        // Prepare note data as a Map
-        Map<String, Object> noteData = Map.of(
-
-                "title", slug,
-                "content", getTemplate(templateName, slug),
-                "readPermission", "guest",     // options: owner, signed_in, guest
-                "writePermission", "guest",    // same or stricter than readPermission
-                "commentPermission", "everyone", // options: everyone, signed_in, owner
-                "permalink", slug
-        );
-
-        Gson gson = new Gson();
-        String requestBody = gson.toJson(noteData);
-        System.out.println(requestBody);
-        // Build HTTP client and request
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
-                .build();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
-                .timeout(Duration.ofSeconds(20))
-                .header("Authorization", "Bearer " + API_TOKEN)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-
-        // Send the request
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            int status = response.statusCode();
-            String responseBody = response.body();
-
-            if (status == 201 || status == 200) {
-                logger.info("✅ Note created successfully!");
-
-                JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
-
-                String id = jsonResponse.has("id") ? jsonResponse.get("id").getAsString() : "(none)";
-                String shortId = jsonResponse.has("shortId") ? jsonResponse.get("shortId").getAsString() : "(none)";
-                String title = jsonResponse.has("title") ? jsonResponse.get("title").getAsString() : "(none)";
-                String publishLink = jsonResponse.has("publishLink") ? jsonResponse.get("publishLink").getAsString() : "(none)";
-
-                System.out.printf("ID: %s%nShort ID: %s%nTitle: %s%nPublish link: %s%n", id, shortId, title, publishLink);
-            } else {
-                logger.error("❌ Failed to create note. HTTP status: " + status);
-                logger.error("Response body: " + responseBody);
-                return 2;
+        String template = getTemplate(templateName, slug);
+        if (template == null) {
+            return 4;
+        } else {
+            final String API_TOKEN = getToken();
+            String organisation = DBHandler.getInstance().selectString("settings",
+                    "value", "keyValue=\"HackMD_team\"");
+            String folder_id = DBHandler.getInstance().selectString("settings",
+                    "value", "keyValue=\"HackMD_folder_id\"");
+            final String API_URL = "https://api.hackmd.io/v1/teams/" + organisation + "/notes";
+            if (API_TOKEN == null || API_TOKEN.isBlank()) {
+                System.err.println("❌ Please create a file containing your HackMD API token in ~/.ssh/hmd_token.");
+                return 1;
             }
-        } catch (IOException | InterruptedException e) {
-            logger.error(e.getMessage());
-            return 3;
+            // Prepare note data as a Map
+            Map<String, Object> noteData = Map.of(
+
+                    "title", slug,
+                    "content", template,
+                    "readPermission", "guest",     // options: owner, signed_in, guest
+                    "writePermission", "guest",    // same or stricter than readPermission
+                    "commentPermission", "everyone", // options: everyone, signed_in, owner
+                    "permalink", slug, //
+                    "parentFolderId", folder_id
+            );
+
+            Gson gson = new Gson();
+            String requestBody = gson.toJson(noteData);
+            System.out.println(requestBody);
+            // Build HTTP client and request
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .timeout(Duration.ofSeconds(20))
+                    .header("Authorization", "Bearer " + API_TOKEN)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            // Send the request
+            try {
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                int status = response.statusCode();
+                String responseBody = response.body();
+
+                if (status == 201 || status == 200) {
+                    logger.info("✅ Note created successfully!");
+
+                    JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
+
+                    String id = jsonResponse.has("id") ? jsonResponse.get("id").getAsString() : "(none)";
+                    String shortId = jsonResponse.has("shortId") ? jsonResponse.get("shortId").getAsString() : "(none)";
+                    String title = jsonResponse.has("title") ? jsonResponse.get("title").getAsString() : "(none)";
+                    String publishLink = jsonResponse.has("publishLink") ? jsonResponse.get("publishLink").getAsString() : "(none)";
+
+                    System.out.printf("ID: %s%nShort ID: %s%nTitle: %s%nPublish link: %s%n", id, shortId, title, publishLink);
+                } else {
+                    logger.error("❌ Failed to create note. HTTP status: " + status);
+                    logger.error("Response body: " + responseBody);
+                    return 2;
+                }
+            } catch (IOException | InterruptedException e) {
+                logger.error(e.getMessage());
+                return 3;
+            }
         }
         return 0;
     }

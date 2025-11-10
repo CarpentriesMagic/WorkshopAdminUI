@@ -346,6 +346,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                                         "Error", JOptionPane.ERROR_MESSAGE);}
                                 case 3 -> {JOptionPane.showMessageDialog(this,
                                         "Something went wrong", "Error", JOptionPane.ERROR_MESSAGE);}
+                                case 4 -> {JOptionPane.showMessageDialog(this,
+                                        "The template file does not exist", "Error", JOptionPane.ERROR_MESSAGE);}
                             }
                         }
                     }
