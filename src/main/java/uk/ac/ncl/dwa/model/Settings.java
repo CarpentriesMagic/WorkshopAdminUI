@@ -44,6 +44,7 @@ public class Settings extends ArrayList<Setting> {
     }
 
     public HashMap<String, String> getHashMap() {
+        loadFromDatabase();
         HashMap<String, String> settings = new HashMap<>();
         for (Setting setting : this) {
             settings.put(setting.getKey(), setting.getValue());

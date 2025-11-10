@@ -1,6 +1,7 @@
 package uk.ac.ncl.dwa.view;
 
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.HackmdCreateNote;
@@ -17,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Scanner;
 import static uk.ac.ncl.dwa.controller.github.GitHubActions.*;
 
@@ -61,6 +63,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         JButton btn_refresh = new JButton("Refresh");
         JButton btn_gen = new JButton("Generate");
         JButton btn_del2 = new JButton("Delete GitHub Repository");
+        JButton btn_del3 = new JButton("Delete Local Clone");
         JButton btn_clone = new JButton("Clone");
         JButton btn_events = new JButton("Events");
         JButton btn_filter = new JButton("Filter");
@@ -73,6 +76,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_refresh.addActionListener(this);
         btn_gen.addActionListener(this);
         btn_del2.addActionListener(this);
+        btn_del3.addActionListener(this);
         btn_clone.addActionListener(this);
         btn_events.addActionListener(this);
         btn_filter.addActionListener(this);
@@ -84,7 +88,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_import.setToolTipText("Import workshop");
         btn_refresh.setToolTipText("Reload any changes made to helpers, instructors or rooms");
         btn_gen.setToolTipText("Create a new repository using the Carpentries template");
-        btn_del.setToolTipText("Delete the selected repository in GitHub");
+        btn_del2.setToolTipText("Delete the selected repository in GitHub");
+        btn_del3.setToolTipText("Delete the local clone of the selected repository");
         btn_clone.setToolTipText("Clone the selected repository in to your local drive, update it and push it back to GitHub");
         btn_events.setToolTipText("Create a CSV file of the selected workshopTable for inclusion in the team website");
         btn_filter.setToolTipText("Filter the workshops to only display those between specified dates.");
@@ -95,10 +100,10 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         leftButtonPanel.add(btn_del);
         leftButtonPanel.add(btn_import);
         leftButtonPanel.add(btn_refresh);
-        rightButtonPanel.add(btn_gen);
         rightButtonPanel.add(btn_del2);
+        rightButtonPanel.add(btn_gen);
+        rightButtonPanel.add(btn_del3);
         rightButtonPanel.add(btn_clone);
-        rightButtonPanel.add(btn_events);
 
         filterPanel.add(new JLabel("From:"));
         filterPanel.add(tf_filterFrom);
@@ -106,6 +111,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         filterPanel.add(tf_filterTo);
         filterPanel.add(btn_filter);
         collabPanel.add(btn_collab);
+        collabPanel.add(btn_events);
 
         // Add panel and scroll pane to the frame
         this.add(leftButtonPanel, "");
@@ -166,6 +172,26 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                                 JOptionPane.showMessageDialog(this, "The repository was created but we couldn't<br/> update the homepage link", "FAIL",
                                         JOptionPane.ERROR_MESSAGE);
                             }
+                        }
+                    } else {
+                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                    }
+                }
+                case "Delete Local Clone" -> {
+                    if (selectedRows != null) {
+                        int rowIndex = selectedRows[0];
+                        String slug = (String) workshopTable.getValueAt(rowIndex, 0);
+                        File file = FileUtils.getFile(slug);
+
+                        try {
+                            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to " +
+                                    "delete the local clone of " + slug + "?\n", "Delete",
+                                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                FileUtils.deleteDirectory(file);
+                                JOptionPane.showMessageDialog(this, "Local clone of " + slug + " deleted or it didn't exist\n", "Delete", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(this, "Failed to delete local clone of " + slug + "\n", "Delete", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");

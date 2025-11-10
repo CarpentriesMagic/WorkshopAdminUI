@@ -181,6 +181,12 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         return builder.toString();
     }
 
+    /**
+     * Retrieve the workshop record as text for display
+     * THIS SHOULD PROBABLY NOT BE IN THIS CLASS (TO BE THOUGHT ABOUT)
+     * @param row
+     * @return
+     */
     public String getRecordAsString(int row) {
         HashMap<String, String> settings = this.settingsObject.getHashMap();
         String collabdoc = settings.get("collabdoc");
@@ -196,6 +202,10 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         if (post == null || post.isEmpty()) {
             post = settings.get("post_survey") + slug;
         }
+        String pretix_admin = (settings.get("pretix_admin") != null?
+                "<a href=\"" + settings.get("pretix_admin").replace("<slug>", slug) + "\">" + settings.get("pretix_admin").replace("<slug>", slug) + "</a>":"");
+        String pretix_shop = (settings.get("pretix_shop".toLowerCase()) != null?
+                "<a href=\"" + settings.get("pretix_shop").replace("<slug>", slug) + "\">" + settings.get("pretix_shop").replace("<slug>", slug) + "</a>":"");
         String internal_id = (workshopTableModel.getValueAt(getSelectedRow(), 19) != null)?workshopTableModel.getValueAt(getSelectedRow(), 19).toString():"";
         collabdoc = collabdoc.replace("<slug>", slug);
         internaldoc = internaldoc.replace("<internal_id>", internal_id);
@@ -222,9 +232,12 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Schedule:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 18).toString()).append("<br/>");
         stringBuilder.append("Internal ID:\t").append(workshopTableModel.getValueAt(getSelectedRow(), 19).toString()).append("<br/>");
         stringBuilder.append("Registered:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 20).toString()).append("<br/>");
+        stringBuilder.append("Pretix admin:\t\t").append(pretix_admin).append("<br/>");
+        stringBuilder.append("Pretix shop:\t\t").append(pretix_shop).append("<br/>");
         stringBuilder.append(makeLink("Collaborative Doc", collabdoc));
         stringBuilder.append(makeWebsiteLink(organisation, slug));
         stringBuilder.append(makeGitHubLink(organisation, slug));
+
         stringBuilder.append("<b>Staff:</b><br>")
                 .append(SpecificQueriesHelper.getStaff(slug));
         return stringBuilder.toString();
