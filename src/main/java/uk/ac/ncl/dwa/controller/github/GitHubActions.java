@@ -1,5 +1,6 @@
 package uk.ac.ncl.dwa.controller.github;
 
+import com.google.common.io.Files;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -10,6 +11,7 @@ import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.transport.sshd.SshdSessionFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.database.DBHandler;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -22,7 +24,7 @@ import static uk.ac.ncl.dwa.database.SpecificQueriesHelper.getInstructors;
 
 public class GitHubActions {
 
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(GitHubActions.class);
+    private static final Logger logger = LoggerFactory.getLogger(GitHubActions.class);
 
     public static String createFromTemplate(String owner, String repo) {
         Scanner sc;
@@ -223,7 +225,6 @@ public class GitHubActions {
                         if (line.startsWith("helper:")) line = "helper: " + helperlist;
                         if (line.startsWith("instructor:")) line = "instructor: " + instructorlist;
                         if (line.startsWith("email:")) line = "email: " + contact_emails;
-
                         if (line.startsWith("venue")) line = line.replaceFirst("FIXME", organisation);
                         if (line.startsWith("humandate"))
                             line = line.replaceFirst("FIXME", (String)columnValues.get("humandate"));
@@ -257,6 +258,18 @@ public class GitHubActions {
                             line = line.replaceFirst("collaborative_notes: ",
                                     "collaborative_notes: " + collabdoc);
                         if (!line.startsWith("8")) sb.append(line).append("\n");
+                        if (line.startsWith("This workshop is teaching a lesson in ")) {
+                            logger.info("Include incubator schedule: " + columnValues.get("schedule"));
+                            Scanner sc = new Scanner(new File("schedules/" + columnValues.get("schedule") + ".html"));
+                            String scheduleLines = "";
+                            while (sc.hasNext()) {
+                                scheduleLines = scheduleLines + sc.nextLine() + "\n";
+                            }
+                            sc.close();
+                            line = scheduleLines;
+                            sb.append(line).append("\n");
+                        }
+
                     }
                 }
                 schedule = (String)columnValues.get("schedule") + ".html";
@@ -301,9 +314,13 @@ public class GitHubActions {
 
                 // Copy schedule into repository
                 try {
-                    File copied = new File(repo + "/_includes/" + carpentrycode + "/schedule.html");
-                    File originalfile = new File("schedules/" + schedule);
-                    com.google.common.io.Files.copy(originalfile, copied);
+                    if (carpentrycode.equals("incubator")) {
+
+                    } else {
+                        File copied = new File(repo + "/_includes/" + carpentrycode + "/schedule.html");
+                        File originalfile = new File("schedules/" + schedule);
+                        Files.copy(originalfile, copied);
+                    }
                 } catch (IOException e) {
                     logger.error("IOException: {}", e.getMessage());
                     //return "3";
