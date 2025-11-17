@@ -137,6 +137,12 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
 
     }
 
+    /**
+     * Using the provided title and URL, create an HTML link
+     * @param title The text to be displayed for the link
+     * @param url The URL to which the link should lead
+     * @return The HTML formatted link in the format: <a href="url">Title</a>
+     */
     private String makeLink(String title, String url) {
         StringBuilder builder = new StringBuilder();
 
@@ -149,6 +155,12 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         return builder.toString();
     }
 
+    /**
+     * Using the organisation and slug create a link to the GitHub repository for the workshop website
+     * @param organisation
+     * @param slug
+     * @return The HTML formatted link to the GitHub repository
+     */
     private String makeGitHubLink(String organisation, String slug) {
         StringBuilder builder = new StringBuilder();
         builder.append("Website Repository link:\t")
@@ -166,7 +178,14 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
 
     }
 
-    private String makeWebsiteLink(String organisation, String slug) {
+    /**
+     * Using the organisation and slug this method creates a link to the rendered GitHub pages
+     * @param organisation The organisation in which the repository has been created
+     * @param slug The Carpentries workshop slug to be used for the URL. Usually in the format
+     *             YYYY-MM-DD-organisation
+     * @return The HTML formatted link to the GitHub pages
+     */
+    private String makeGitHubPagesLink(String organisation, String slug) {
         StringBuilder builder = new StringBuilder();
         builder.append("Website link:\t")
                 .append("<a href=\"")
@@ -184,8 +203,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
     /**
      * Retrieve the workshop record as text for display
      * THIS SHOULD PROBABLY NOT BE IN THIS CLASS (TO BE THOUGHT ABOUT)
-     * @param row
-     * @return
+     * @param row The row in the workshops table to be formatted into a String formatted as HTML
+     * @return The HTML formatted string of the workshop row
      */
     public String getRecordAsString(int row) {
         HashMap<String, String> settings = this.settingsObject.getHashMap();
@@ -195,6 +214,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
                 settings.get("internal_id"):"");
         String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
         String pre = workshopTableModel.getValueAt(getSelectedRow(), 12).toString();
+        String lesson = workshopTableModel.getValueAt(getSelectedRow(), 11).toString();
         if (pre == null || pre.isEmpty()) {
             pre = settings.get("pre_survey") + slug;
         }
@@ -222,7 +242,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Country:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 8).toString()).append("<br/>");
         stringBuilder.append("Online:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 9).toString()).append("<br/>");
         stringBuilder.append("Pilot:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 10).toString()).append("<br/>");
-        stringBuilder.append("Lesson site:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 11).toString()).append("<br/>");
+        stringBuilder.append(makeLink("Lesson site:\t\t",lesson));
         stringBuilder.append(makeLink("Pre workshop", pre));
         stringBuilder.append(makeLink("Post workshop", post));
         stringBuilder.append("Carpentry:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 14).toString()).append("<br/>");
@@ -235,7 +255,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Pretix admin:\t\t").append(pretix_admin).append("<br/>");
         stringBuilder.append("Pretix shop:\t\t").append(pretix_shop).append("<br/>");
         stringBuilder.append(makeLink("Collaborative Doc", collabdoc));
-        stringBuilder.append(makeWebsiteLink(organisation, slug));
+        stringBuilder.append(makeGitHubPagesLink(organisation, slug));
         stringBuilder.append(makeGitHubLink(organisation, slug));
 
         stringBuilder.append("<b>Staff:</b><br>")

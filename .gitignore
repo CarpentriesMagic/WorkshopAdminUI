@@ -1,4 +1,5 @@
-assets/*
+assets/*.jar
+*.zip
 20*/
 jre/
 zulu*
