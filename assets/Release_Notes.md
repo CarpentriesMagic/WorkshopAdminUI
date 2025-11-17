@@ -1,9 +1,9 @@
+# 67
+- 
+
 ## 66
 - Add hpc.html schedule
 - Include schedule when an incubator workshop
-- Comment some methods in source code
-- remove switch in Makefile
-- 
 
 ## 65
 - Add Pretix links
