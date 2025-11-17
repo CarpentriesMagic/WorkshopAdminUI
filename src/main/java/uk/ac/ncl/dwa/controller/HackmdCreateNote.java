@@ -57,6 +57,50 @@ public class HackmdCreateNote {
         return sb.toString().replace("[slug]", slug);
     }
 
+    public static int deleteDoc(String slug) {
+        final String API_TOKEN = getToken();
+        String organisation = DBHandler.getInstance().selectString("settings",
+                "value", "keyValue=\"HackMD_team\"");
+        String folder_id = DBHandler.getInstance().selectString("settings",
+                "value", "keyValue=\"HackMD_folder_id\"");
+        final String API_URL = "https://api.hackmd.io/v1/teams/" + organisation + "/notes/" + slug;
+        if (API_TOKEN == null || API_TOKEN.isBlank()) {
+            System.err.println("❌ Please create a file containing your HackMD API token in ~/.ssh/hmd_token.");
+            return 1;
+        }
+
+        Gson gson = new Gson();
+        String requestBody = "";
+        System.out.println(requestBody);        // Build HTTP client and request
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL))
+                .timeout(Duration.ofSeconds(20))
+                .header("Authorization", "Bearer " + API_TOKEN)
+                .DELETE()
+                .build();
+
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int status = response.statusCode();
+
+            if (status == 201 || status == 200) {
+                logger.info("✅ Note deleted {} successfully!", slug);
+            } else {
+                logger.error("❌ Failed to delete note. HTTP status: " + status);
+                logger.error("Response body: " + response.body());
+                return 2;
+            }
+        } catch (IOException | InterruptedException e) {
+
+        }
+        return 1;
+    }
+
     /**
      * Create a HackMD document using the file specified as a templage
      * @param templateName

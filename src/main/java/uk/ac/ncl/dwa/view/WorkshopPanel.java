@@ -68,6 +68,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         JButton btn_events = new JButton("Events");
         JButton btn_filter = new JButton("Filter");
         JButton btn_collab = new JButton("Collab Doc");
+        JButton btn_delDoc = new JButton("Delete Doc");
 
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
@@ -81,6 +82,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_events.addActionListener(this);
         btn_filter.addActionListener(this);
         btn_collab.addActionListener(this);
+        btn_delDoc.addActionListener(this);
+        btn_del.addActionListener(this);
 
         btn_save.setToolTipText("Save modifications made to workshops");
         btn_add.setToolTipText("Add a new workshop");
@@ -94,6 +97,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_events.setToolTipText("Create a CSV file of the selected workshopTable for inclusion in the team website");
         btn_filter.setToolTipText("Filter the workshops to only display those between specified dates.");
         btn_collab.setToolTipText("Create collaborative HackMD document");
+        btn_delDoc.setToolTipText("Delete collaborative HackMD document");
 
         leftButtonPanel.add(btn_save);
         leftButtonPanel.add(btn_add);
@@ -111,6 +115,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         filterPanel.add(tf_filterTo);
         filterPanel.add(btn_filter);
         collabPanel.add(btn_collab);
+        collabPanel.add(btn_delDoc);
         collabPanel.add(btn_events);
 
         // Add panel and scroll pane to the frame
@@ -375,6 +380,15 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                                 case 4 -> {JOptionPane.showMessageDialog(this,
                                         "The template file does not exist", "Error", JOptionPane.ERROR_MESSAGE);}
                             }
+                        }
+                    }
+                }
+                case "Delete Doc" -> {
+                    if (selectedRows != null) {
+                        int row = workshopTable.getSelectedRow();
+                        if (row != -1) {
+                            logger.info("Delete HackMD for {} workshop with slug: {}", workshops.get(row).getSchedule(), workshops.get(row).getSlug());
+                            int ret = HackmdCreateNote.deleteDoc(workshops.get(row).getSlug());
                         }
                     }
                 }
