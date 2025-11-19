@@ -64,6 +64,7 @@ public class HackmdCreateNote {
         String folder_id = DBHandler.getInstance().selectString("settings",
                 "value", "keyValue=\"HackMD_folder_id\"");
         final String API_URL = "https://api.hackmd.io/v1/teams/" + organisation + "/notes/" + slug;
+        logger.info("API_url: {}", API_URL);
         if (API_TOKEN == null || API_TOKEN.isBlank()) {
             System.err.println("❌ Please create a file containing your HackMD API token in ~/.ssh/hmd_token.");
             return 1;
@@ -118,6 +119,7 @@ public class HackmdCreateNote {
             String folder_id = DBHandler.getInstance().selectString("settings",
                     "value", "keyValue=\"HackMD_folder_id\"");
             final String API_URL = "https://api.hackmd.io/v1/teams/" + organisation + "/notes";
+            logger.info("API_url: {}", API_URL);
             if (API_TOKEN == null || API_TOKEN.isBlank()) {
                 System.err.println("❌ Please create a file containing your HackMD API token in ~/.ssh/hmd_token.");
                 return 1;
