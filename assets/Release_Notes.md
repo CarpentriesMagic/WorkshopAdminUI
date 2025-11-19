@@ -1,5 +1,5 @@
 # 67
-- 
+- Additional log entries on hackMD creation
 
 ## 66
 - Add hpc.html schedule
