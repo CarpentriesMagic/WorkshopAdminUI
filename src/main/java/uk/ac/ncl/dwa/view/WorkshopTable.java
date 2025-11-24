@@ -60,7 +60,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting room
          */
-        String[] roomsList = DBHandler.getInstance().selectStringArray("room", "room_id", "");
+        String[] roomsList = DBHandler.getInstance().selectStringArray("room", "room_id", "", "");
         TableColumn roomColumn = this.getColumnModel().getColumn(6);
         JComboBox<String> roomComboBox = new JComboBox<>(roomsList);
         roomColumn.setCellEditor(new DefaultCellEditor(roomComboBox));
@@ -71,7 +71,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
          * ComboBox for selecting carpentries
          */
 //        String[] carpentries = {"incubator", "swc", "lc", "dc", "hpd", "cp"};
-        String[] carpentries = DBHandler.getInstance().selectStringArray("carpentry", "carpentry_code", "");
+        String[] carpentries = DBHandler.getInstance().selectStringArray("carpentry", "carpentry_code", "", "");
         TableColumn carpColumn = this.getColumnModel().getColumn(14);
         JComboBox<String> carpComboBox = new JComboBox<>(carpentries);
         carpColumn.setCellEditor(new DefaultCellEditor(carpComboBox));
@@ -81,7 +81,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting curriculum
          */
-        String[] curriculaList = DBHandler.getInstance().selectStringArray("curriculum", "curriculum_code", "");
+        String[] curriculaList = DBHandler.getInstance().selectStringArray("curriculum", "curriculum_code", "", "");
         TableColumn currColumn = this.getColumnModel().getColumn(15);
         JComboBox<String> currComboBox = new JComboBox<>(curriculaList);
         currColumn.setCellEditor(new DefaultCellEditor(currComboBox));
@@ -91,7 +91,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting curriculum
          */
-        String[] flavour = DBHandler.getInstance().selectStringArray("flavour", "flavour_id", "");
+        String[] flavour = DBHandler.getInstance().selectStringArray("flavour", "flavour_id", "", "");
         TableColumn flavourColumn = this.getColumnModel().getColumn(16);
         JComboBox<String> flavourComboBox = new JComboBox<>(flavour);
         flavourColumn.setCellEditor(new DefaultCellEditor(flavourComboBox));
@@ -123,7 +123,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         /*
          * ComboBox for selecting schedule to include
          */
-        String[] schedules = DBHandler.getInstance().selectStringArray("schedules", "schedule_id", "");
+        String[] schedules = DBHandler.getInstance().selectStringArray("schedules", "schedule_id", "", "");
         TableColumn scheduleColumn = this.getColumnModel().getColumn(18);
         JComboBox<String> scheduleComboBox = new JComboBox<String>(schedules);
         scheduleColumn.setCellEditor(new DefaultCellEditor(scheduleComboBox));

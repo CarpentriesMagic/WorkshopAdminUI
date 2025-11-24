@@ -167,8 +167,8 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
-    public String[] selectStringArray(String tableName, String column, String where) {
-        List<Object>  objectList = select(tableName, new String[]{column}, where, "");
+    public String[] selectStringArray(String tableName, String column, String where, String orderby) {
+        List<Object>  objectList = select(tableName, new String[]{column}, where, orderby);
         String[] ret = new String[objectList.size()];
         for (Object o: objectList) {
             HashMap<String, Object> object = (HashMap<String, Object>) o;

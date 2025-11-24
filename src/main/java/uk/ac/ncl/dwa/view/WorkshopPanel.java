@@ -348,6 +348,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
 
                 }
                 case "Refresh" -> {
+                    workshopTable.getModel().getWorkshops().loadFromDatabase();
                     workshopTable.loadCarpentries();
                     workshopTable.loadCurricula();
                     workshopTable.loadRooms();

@@ -38,7 +38,7 @@ public class HelperTable extends JTable implements Serializable {
         /*
          * ComboBox for selecting workshop slug
          */
-        String[] workshopList = DBHandler.getInstance().selectStringArray("workshops", "slug", "");
+        String[] workshopList = DBHandler.getInstance().selectStringArray("workshops", "slug", "", "slug");
         TableColumn workshop = this.getColumnModel().getColumn(0);
         JComboBox<String> workshopComboBox = new JComboBox<>(workshopList);
         workshop.setCellEditor(new DefaultCellEditor(workshopComboBox));

@@ -41,7 +41,7 @@ public class DBHandlerSQLite extends DBHandler {
     }
 
     @Override
-    public String[] selectStringArray(String tableName, String column, String where) {
+    public String[] selectStringArray(String tableName, String column, String where, String orderby) {
         List<Object>  objectList = select(tableName, new String[]{column}, where, "");
         String[] ret = new String[objectList.size()];
         for (Object o: objectList) {

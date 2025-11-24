@@ -127,6 +127,7 @@ public class Workshops extends ArrayList<Workshop> {
     }
 
     public void loadFromDatabase(String startdate, String enddate) {
+        this.clear();
         String[] columnNames = Workshop.dbColumnNames;
         String where = "";
         if (!startdate.trim().isEmpty()) {
