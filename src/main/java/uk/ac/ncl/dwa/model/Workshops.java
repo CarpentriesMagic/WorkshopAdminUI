@@ -123,22 +123,22 @@ public class Workshops extends ArrayList<Workshop> {
 
     public void loadFromDatabase() {
 
-        loadFromDatabase("2020", "3000");
+        loadFromDatabase("2020", "3000", true);
     }
 
-    public void loadFromDatabase(String startdate, String enddate) {
+    public void loadFromDatabase(String startDate, String endDate, boolean ascending) {
         this.clear();
         String[] columnNames = Workshop.dbColumnNames;
         String where = "";
-        if (!startdate.trim().isEmpty()) {
-            where = "slug >= '" + startdate + "'";
+        if (!startDate.trim().isEmpty()) {
+            where = "slug >= '" + startDate + "'";
         }
-        if (!enddate.trim().isEmpty()) {
-            where += "and slug <= '" + enddate + "'";
+        if (!endDate.trim().isEmpty()) {
+            where += "and slug <= '" + endDate + "'";
         }
         clear();
         List<Object> workshops = DBHandler.getInstance().select(
-                "workshops", columnNames, where, "slug");
+                "workshops", columnNames, where, "slug", true);
         for (Object o : workshops) {
             HashMap<String,Object> workshopObject = (HashMap<String, Object>) o;
             Workshop workshop = new Workshop((String)workshopObject.get(columnNames[0]),

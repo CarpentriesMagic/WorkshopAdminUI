@@ -24,7 +24,7 @@ public class Settings extends ArrayList<Setting> {
 
     public void loadFromDatabase() {
         String[] columnNames = Setting.columnNames;
-        List<Object> settings = DBHandler.getInstance().select("settings", columnNames, "", "");
+        List<Object> settings = DBHandler.getInstance().select("settings", columnNames, "", "", true);
         for (Object o : settings) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Setting setting = new Setting((String)settingObject.get(columnNames[0]),
@@ -99,7 +99,7 @@ public class Settings extends ArrayList<Setting> {
     }
 
     public List<Object> selectSetting(String key) {
-        return DBHandler.getInstance().select("settings",new String[]{"keyValue"}, key, "");
+        return DBHandler.getInstance().select("settings",new String[]{"keyValue"}, key, "", true);
     }
 
     public boolean isDirty() {

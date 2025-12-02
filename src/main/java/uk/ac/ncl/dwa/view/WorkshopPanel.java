@@ -13,6 +13,7 @@ import java.awt.Desktop;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.table.JTableHeader;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -31,6 +32,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
     private JScrollPane workshopEntryScrollPane;
     private JTextField tf_filterFrom = new JTextField("", 10);
     private JTextField tf_filterTo = new JTextField("", 10);
+    private boolean workshopOrder = true;
 
     public WorkshopPanel(Settings settings) {
         super();
@@ -84,6 +86,9 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_collab.addActionListener(this);
         btn_delDoc.addActionListener(this);
         btn_del.addActionListener(this);
+        //workshopTable.getTableHeader().setReorderingAllowed(true);
+        JTableHeader header = workshopTable.getTableHeader();
+        header.addMouseListener(new TableHeaderMouseListener(this));
 
         btn_save.setToolTipText("Save modifications made to workshops");
         btn_add.setToolTipText("Add a new workshop");
@@ -358,7 +363,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                 case "Filter" -> {
                     String startdate = tf_filterFrom.getText();
                     String enddate = tf_filterTo.getText();
-                    workshopTable.getModel().getWorkshops().loadFromDatabase(startdate, enddate);
+                    workshopTable.getModel().getWorkshops().loadFromDatabase(startdate, enddate, workshopOrder);
                     workshopTable.getModel().fireTableDataChanged();
                 }
                 case "Collab Doc" -> {
@@ -404,6 +409,14 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         //}
     }
 
+    public void setWorkshopOrder(boolean ascending) {
+        String start = tf_filterFrom.getText();
+        String end = tf_filterTo.getText();
+        workshopTable.getModel().getWorkshops().loadFromDatabase(start, end, ascending);
+        logger.info("Workshop order set to {}", ascending);
+        workshopTable.getModel().fireTableDataChanged();
+    }
+
     private void lastRow(JTable table, JScrollPane scrollPane) {
         // Ensure the table scrolls to and focuses on the last row
         SwingUtilities.invokeLater(() -> {
@@ -418,6 +431,14 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
             JScrollBar vertical = scrollPane.getVerticalScrollBar();
             vertical.setValue(vertical.getMaximum());
         });
+    }
+
+    public WorkshopTable getWorkshopTable() {
+        return workshopTable;
+    }
+
+    public void setWorkshopTable(WorkshopTable workshopTable) {
+        this.workshopTable = workshopTable;
     }
 }
 

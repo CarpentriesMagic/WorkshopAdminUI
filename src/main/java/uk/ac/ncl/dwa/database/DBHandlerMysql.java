@@ -45,11 +45,12 @@ public class DBHandlerMysql extends DBHandler {
     }
 
     @Override
-    public List<Object> select(String tableName, String[] columns, String where, String orderby) {
+    public List<Object> select(String tableName, String[] columns, String where, String orderBy, boolean ascending) {
         String sql;
         String orderstring = "";
-        if (!orderby.isBlank()) {
-            orderstring = " ORDER BY " + orderby;
+        String order = ascending ? "ASC" : "DESC";
+        if (!orderBy.isBlank()) {
+            orderstring = " ORDER BY " + orderBy + " " + order;
         }
         if (where.isBlank()) {
             sql = String.format("SELECT %s FROM %s", String.join(",", Arrays.asList(columns)), tableName);
@@ -158,7 +159,7 @@ public class DBHandlerMysql extends DBHandler {
 
     @Override
     public String selectString(String tableName, String column, String where) {
-        List<Object>  objectList = select(tableName, new String[]{column}, where, "");
+        List<Object>  objectList = select(tableName, new String[]{column}, where, "", true);
         String ret;
         Object o = objectList.get(0);
         HashMap<String, Object> object = (HashMap<String, Object>) o;
@@ -168,7 +169,7 @@ public class DBHandlerMysql extends DBHandler {
 
     @Override
     public String[] selectStringArray(String tableName, String column, String where, String orderby) {
-        List<Object>  objectList = select(tableName, new String[]{column}, where, orderby);
+        List<Object>  objectList = select(tableName, new String[]{column}, where, orderby, true);
         String[] ret = new String[objectList.size()];
         for (Object o: objectList) {
             HashMap<String, Object> object = (HashMap<String, Object>) o;
@@ -180,7 +181,7 @@ public class DBHandlerMysql extends DBHandler {
 
     @Override
     public HashMap<String, Object> selectStringArray(String tableName, String[] columns, String where) {
-        List<Object>  objectList = select(tableName, columns, where, "");
+        List<Object>  objectList = select(tableName, columns, where, "", true);
         Object o = objectList.get(0);
 
         return (HashMap<String, Object>) o;
