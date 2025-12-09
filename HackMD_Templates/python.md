@@ -10,12 +10,12 @@ Use your University login like **b1234567**, (don't include @newcastle.ac.uk)
 The online environment will be removed after the course
 ### Links:
 - [Code of Conduct](https://docs.carpentries.org/policies/coc/)
-- [Workshop website](https://nclrse-training.github.io/YYYY-MM-DD-NCL/)
+- [Workshop website](https://nclrse-training.github.io/[slug]/)
 
 - [Link to lesson website](https://swcarpentry.github.io/python-novice-gapminder/instructor/index.html)
 - [Link to data](https://swcarpentry.github.io/python-novice-gapminder/files/python-novice-gapminder-data.zip)
-- [Pre-workshop survey](https://carpentries.typeform.com/to/wi32rS?slug=YYYY-MM-DD-NCL)
-- [Post-workshop survey](https://carpentries.typeform.com/to/UgVdRQ?slug=YYYY-MM-DD-NCL)
+- [Pre-workshop survey](https://carpentries.typeform.com/to/wi32rS?slug=[slug])
+- [Post-workshop survey](https://carpentries.typeform.com/to/UgVdRQ?slug=[slug])
 - [Code Community](https://teams.microsoft.com/l/team/19%3aG79Rz7Mhk6rC0mhia04YCD-nj7WabLMxhnyb1YLp04A1%40thread.tacv2/conversations?groupId=7059214c-2200-4ad6-a739-9d350c74c7a9&tenantId=9c5012c9-b616-44c2-a917-66814fbe3e87)
 - [How to use JupyterHub/JupyterNotebook](https://jupyter.ncldata.dev)
 
