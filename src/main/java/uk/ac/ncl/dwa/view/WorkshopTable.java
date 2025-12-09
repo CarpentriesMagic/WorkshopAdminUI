@@ -171,7 +171,10 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
                 .append("/")
                 .append(slug)
                 .append("\">")
-                .append("Repository Link")
+                .append("https://github.com/")
+                .append(organisation)
+                .append("/")
+                .append(slug)
                 .append("</a><br/>");
 
         return builder.toString();
@@ -194,7 +197,10 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
                 .append(".github.io/")
                 .append(slug)
                 .append("\">")
-                .append("Workshop Website")
+                .append("https://")
+                .append(organisation)
+                .append(".github.io/")
+                .append(slug)
                 .append("</a><br/>");
 
         return builder.toString();
