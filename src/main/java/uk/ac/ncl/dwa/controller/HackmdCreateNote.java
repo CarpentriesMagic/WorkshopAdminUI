@@ -154,6 +154,7 @@ public class HackmdCreateNote {
 
             // Send the request
             try {
+                logger.info("Request: {}", request.toString());
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 int status = response.statusCode();
