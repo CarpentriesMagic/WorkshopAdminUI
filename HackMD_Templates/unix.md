@@ -30,7 +30,7 @@ You will be asked to show the QR code we sent to you via email
 _Everyone is welcome to add tips, tricks and comments to this document_ by editing text in the left pane of this document in edit mode (CTRL+ALT+B)
 
 ### Terminals
-Git for Windows (Git Bash) is packaged for installation on University computers and should be available in Software Center
+Git for Windows (Git Bash) is packaged for installation on **University Windows computers** and should be available in Software Center
 If Git for Windows is not installed, you can [download **MobaXterm Portable Edition**](https://download.mobatek.net/2522025040602403/MobaXterm_Portable_v25.2.zip) from [MobaXterm Website](https://mobaxterm.mobatek.net/) and follow our [MobaXterm Setup guide](https://hackmd.io/@RSETeam/MobaXterm) for today's workshop.
 
 #### Setting up MobaXterm on your Windows machine:
