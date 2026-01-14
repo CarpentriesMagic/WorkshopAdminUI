@@ -49,7 +49,7 @@ ssh-keygen
 ```
 
 ### Terminals
-Git for Windows (Git Bash) is packaged for installation on University computers and should be available in Software Center.
+Git for Windows (Git Bash) is packaged for installation on University Windows computers and should be available in Software Center.
 Git for Windows can be installed on a personal computer with admin rights, using the [instructions from The Carpentries](https://carpentries.github.io/workshop-template/install_instructions/#the-bash-shell).
 
 ### GitBash not installed?
