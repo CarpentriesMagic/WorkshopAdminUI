@@ -2,6 +2,7 @@
 
 ## This document:
 ### https://hackmd.io/@rseteam/[slug]/edit
+(_no need to log in_ to Hackmd.io)
 
 ### Links:
 - [Carpentries](https://carpentries.org)
@@ -33,7 +34,7 @@ https://github.com/login
 https://github.com/settings/keys
 https://github.com/NclRSE-Training/countries
 
-### Useful information:
+## Useful information:
 _Everyone is welcome to add tips, tricks and comments to this document._
 
 ### Did you get an error about ".ssh" when you tried to create ssh keys?
