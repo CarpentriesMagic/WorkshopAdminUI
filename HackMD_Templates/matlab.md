@@ -25,5 +25,12 @@
 ## Useful information:
 _Everyone is welcome to add tips, tricks and comments to this document._
 
+Getting MATLAB for a personal computer:
+https://services.ncl.ac.uk/itservice/core-services/software/licences/specialist/matlab.html
+
+HPC services at Newcastle:
+https://hpc.researchcomputing.ncl.ac.uk/ 
+Users who have an HPC project can access HPC Matlab sessions with or without GPU at https://ood01.comet.hpc.ncl.ac.uk/
+
 ## Other Training
 **[From the Newcastle RSE Team](https://rse.ncldata.dev/events)**
