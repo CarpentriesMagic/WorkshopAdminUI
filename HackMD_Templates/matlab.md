@@ -29,8 +29,8 @@ You will be asked to show the QR code we sent to you via email
 _Everyone is welcome to add tips, tricks and comments to this document._
 
 ### Getting MATLAB 
-Matlab is packaged for installation on University Windows computers and should be available in Software Center.
-Install with the University license on a personal computer: https://services.ncl.ac.uk/itservice/core-services/software/licences/specialist/matlab.html
+Matlab is packaged for installation on **University Windows computers** and should be available in Software Center.
+Install with the University license on a **personal computer**: https://services.ncl.ac.uk/itservice/core-services/software/licences/specialist/matlab.html
 
 HPC services at Newcastle:
 https://hpc.researchcomputing.ncl.ac.uk/ 
