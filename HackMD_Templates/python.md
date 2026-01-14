@@ -39,8 +39,8 @@ e.g. `!wget https://swcarpentry.github.io/python-novice-gapminder/files/python-n
 
 
 ### General Python Setup instructions:
-Python, PyCharm, Anaconda and Visual Studio Code are packaged for installation on University Windows computers and should be available in Software Center.
-Python can be installed on a personal computer with admin rights.  Use using the [instructions from The Carpentries](https://carpentries.github.io/workshop-template/install_instructions/#python)
+Python, PyCharm, Anaconda and Visual Studio Code are packaged for installation on **University Windows computers** and should be available in Software Center.
+Python can be installed on a **personal computer** with admin rights.  Use using the [instructions from The Carpentries](https://carpentries.github.io/workshop-template/install_instructions/#python)
 
 ### Python IDEs you may like to use
 - PyCharm: https://www.jetbrains.com/pycharm/ - free if you register with a Uni email address, best to use with our Comet HPC     
