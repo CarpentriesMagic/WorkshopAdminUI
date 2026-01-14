@@ -4,6 +4,9 @@
 ### https://hackmd.io/@rseteam/[slug]/edit
 (_no need to log in_ to Hackmd.io)
 
+### Attendance:
+You will be asked to show the QR code we sent to you via email
+
 ### Links:
 - [Carpentries](https://carpentries.org)
 - [RSE Team](https://rse.ncldata.dev)
@@ -35,7 +38,7 @@ https://github.com/settings/keys
 https://github.com/NclRSE-Training/countries
 
 ## Useful information:
-_Everyone is welcome to add tips, tricks and comments to this document._
+_Everyone is welcome to add tips, tricks and comments to this document_ by editing text in the left pane of this document in edit mode (CTRL+ALT+B)
 
 ### Did you get an error about ".ssh" when you tried to create ssh keys?
 
@@ -44,6 +47,10 @@ mkdir ~/.ssh
 chmod 600 ~/.ssh
 ssh-keygen
 ```
+
+### Terminals
+Git for Windows (Git Bash) is packaged for installation on University computers and should be available in Software Center.
+Git for Windows can be installed on a personal computer with admin rights, using the [instructions from The Carpentries](https://carpentries.github.io/workshop-template/install_instructions/#the-bash-shell).
 
 ### GitBash not installed?
 You can [download **MobaXterm Portable Edition**](https://download.mobatek.net/2522025040602403/MobaXterm_Portable_v25.2.zip) from [MobaXterm Website](https://mobaxterm.mobatek.net/) and follow our [MobaXterm Setup guide](https://hackmd.io/@RSETeam/MobaXterm) for today's workshop.
@@ -61,3 +68,4 @@ You can [download **MobaXterm Portable Edition**](https://download.mobatek.net/2
 
 ## Other Training
 **[From the Newcastle RSE Team](https://rse.ncldata.dev/events)**
+Community lessons under development at https://carpentries.org/lesson-development/community-lessons
