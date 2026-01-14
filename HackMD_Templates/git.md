@@ -49,8 +49,8 @@ ssh-keygen
 ```
 
 ### Terminals
-Git for Windows (Git Bash) is packaged for installation on University Windows computers and should be available in Software Center.
-Git for Windows can be installed on a personal computer with admin rights, using the [instructions from The Carpentries](https://carpentries.github.io/workshop-template/install_instructions/#the-bash-shell).
+Git for Windows (Git Bash) is packaged for installation on **University Windows computers** and should be available in Software Center.
+Git for Windows can be installed on a **personal computer** with admin rights, using the [instructions from The Carpentries](https://carpentries.github.io/workshop-template/install_instructions/#the-bash-shell).
 
 ### GitBash not installed?
 You can [download **MobaXterm Portable Edition**](https://download.mobatek.net/2522025040602403/MobaXterm_Portable_v25.2.zip) from [MobaXterm Website](https://mobaxterm.mobatek.net/) and follow our [MobaXterm Setup guide](https://hackmd.io/@RSETeam/MobaXterm) for today's workshop.
