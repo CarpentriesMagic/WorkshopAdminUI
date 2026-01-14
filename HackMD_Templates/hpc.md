@@ -2,7 +2,10 @@
 
 ## This document:
 ### https://hackmd.io/@rseteam/[slug]/edit
+(_no need to log in_ to Hackmd.io)
 
+### Attendance:
+You will be asked to show the QR code we sent to you via email
 
 ### Links to keep:
 - [Carpentries](https://carpentries.org)
@@ -17,9 +20,15 @@
 - [MobaXterm](https://mobaxterm.mobatek.net/) - home [portable version](https://download.mobatek.net/2532025092512146/MobaXterm_Portable_v25.3.zip)
 
 
-### Your instructors
+## Your instructors
+[Email us your questions](mailto://training.researchcomputing@newcastle.ac.uk) to training.researchcomputing@newcastle.ac.uk
 [instructors]
 [helpers]
+
+## Useful information:
+_Everyone is welcome to add tips, tricks and comments to this document_ by editing text in the left pane of this document in edit mode (CTRL+ALT+B)
+
+
 
 ### Our HPC
 - [register for unix.ncl.ac.uk](https://services.ncl.ac.uk/itservice/technical-services/unix-time-sharing/)
@@ -34,8 +43,7 @@ The HPC Support Team:
 * [HPC Portal – self service](https://hpc.researchcomputing.ncl.ac.uk/)
 * [Comet Documentation Wiki](https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/)
 * [NUService ticket](https://nuservice.ncl.ac.uk/) for tracking issues
-- ARCHER2 training site: https://www.archer2.ac.uk/training/
-- Induction to Comet for users of Rocket - [PowerPoint Slides](https://newcastle.sharepoint.com/:p:/r/sites/CodeCommunity/Shared%20Documents/High%20Performance%20Computing/2026-01-07-NCL_Comet-induction.pptx?d=w6d294f7392e948578e84284891158771&csf=1&web=1&e=lprgF7)
+* Induction to Comet for users of Rocket - [PowerPoint Slides](https://newcastle.sharepoint.com/:p:/r/sites/CodeCommunity/Shared%20Documents/High%20Performance%20Computing/2026-01-07-NCL_Comet-induction.pptx?d=w6d294f7392e948578e84284891158771&csf=1&web=1&e=lprgF7)
 
 ### Other Training
 **[From the Newcastle RSE Team](https://rse.ncldata.dev/events)**
