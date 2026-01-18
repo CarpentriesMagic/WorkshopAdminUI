@@ -35,6 +35,7 @@ _Everyone is welcome to add tips, tricks and comments to this document_ by editi
 - [just-in-time Authorisation](https://ama.ncl.ac.uk/Role/AccessRequest)
 - [Our HPC Portal](https://hpc.researchcomputing.ncl.ac.uk/)
 - [HPC driving test](https://hpc.researchcomputing.ncl.ac.uk/quiz/)
+- [Comet Node Types](https://hpc.researchcomputing.ncl.ac.uk/calc/resources/)
 - [Comet Partitions (Documentation Wiki)](https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=started:comet_resources)
 
 ### Further links
