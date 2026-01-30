@@ -15,7 +15,7 @@ You will be asked to show the QR code we sent to you via email
 - [Link to lesson website](https://nclrse-training.github.io/hpc-intro-comet/)
 - The [training Project](https://hpc.researchcomputing.ncl.ac.uk/projects/manage/name/comet_training) on Comet is cleared after 1 week.  Home directories are not cleared.
 - [Pre-workshop survey]([pre-survey])
-- [Post-workshop survey]([post-survey)
+- [Post-workshop survey]([post-survey])
 - [Code Community](https://teams.microsoft.com/l/team/19%3aG79Rz7Mhk6rC0mhia04YCD-nj7WabLMxhnyb1YLp04A1%40thread.tacv2/conversations?groupId=7059214c-2200-4ad6-a739-9d350c74c7a9&tenantId=9c5012c9-b616-44c2-a917-66814fbe3e87)
 - Mac and Linux have a built in terminal for connecting to Comet. Windows users may use [MobaXterm](https://mobaxterm.mobatek.net/) - home [portable version](https://download.mobatek.net/2532025092512146/MobaXterm_Portable_v25.3.zip)
 - [Link to data]()
