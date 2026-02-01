@@ -77,6 +77,11 @@ public class Utilities {
         return properties;
     }
 
+    /**
+     * Write a string to the given file
+     * @param string String to be written
+     * @param file File to write to
+     */
     public static void writeStringToFile(String string, File file) {
             String str = "Hello";
         BufferedWriter writer = null;

@@ -136,4 +136,14 @@ public class SpecificQueriesHelper {
 
     }
 
+    public static String getRoomInfo(String room_id) {
+        String[] columnNames = new String[]{"room_id", "description", "longitude", "latitude", "latitude", "what_three_words"};
+        String sql = "SELECT room_id, description, longitude, latitude, latitude, what_three_words FROM room WHERE room_id=\"" + room_id + "\"";
+        logger.info(sql);
+        List<Object> roomInfo = DBHandler.getInstance().query(sql, columnNames);
+        HashMap<String, Object> r = (HashMap<String, Object>) roomInfo.get(0);
+        return "<ul><li>" + r.get("room_id") + "</li><li>" + r.get("description") + "</li><li>"
+                + r.get("longitude") + "</li><li>" + r.get("latitude") + "</li><li>" + r.get("what_three_words") + "</li></ul>";
+    }
+
 }

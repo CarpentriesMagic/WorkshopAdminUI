@@ -163,7 +163,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
      */
     private String makeGitHubLink(String organisation, String slug) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Website Repository link:\t")
+        builder.append("<b>Website Repository link:</b>\t")
                 .append("<a href=\"")
                 .append("https://")
                 .append("github.com/")
@@ -190,7 +190,7 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
      */
     private String makeGitHubPagesLink(String organisation, String slug) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Website link:\t")
+        builder.append("<b>Website link:</b>\t")
                 .append("<a href=\"")
                 .append("https://")
                 .append(organisation)
@@ -220,6 +220,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
                 settings.get("internal_id"):"");
         String slug = workshopTableModel.getValueAt(getSelectedRow(), 0).toString();
         String pre = workshopTableModel.getValueAt(getSelectedRow(), 12).toString();
+        String room_id = workshopTableModel.getValueAt(getSelectedRow(), 6).toString();
+        String room_info = SpecificQueriesHelper.getRoomInfo(room_id);
         String lesson = workshopTableModel.getValueAt(getSelectedRow(), 11).toString();
         if (pre == null || pre.isEmpty()) {
             pre = settings.get("pre_survey") + slug;
@@ -236,19 +238,23 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         collabdoc = collabdoc.replace("<slug>", slug);
         internaldoc = internaldoc.replace("<internal_id>", internal_id);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Slug:\t\t").append(slug).append("<br/>");
-        stringBuilder.append(makeLink("Internal ID", internaldoc));
-        stringBuilder.append("Title:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("<br/>");
+        stringBuilder.append("<b>Slug:</b>\t\t").append(slug).append("<br/>");
+        stringBuilder.append(makeLink("<b>Internal ID</b>", internaldoc));
+        stringBuilder.append("<b>Title:</b>\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("<br/>");
+        stringBuilder.append(makeLink("<b>Lesson site:</b>\t\t",lesson));
+        stringBuilder.append(makeLink("<b>Collaborative Doc:</b>", collabdoc));
+        stringBuilder.append(makeGitHubPagesLink(organisation, slug));
+        stringBuilder.append("<b>Room</b>:<br/>").append(room_info);
+        stringBuilder.append("<b>Staff:</b><br>")
+                .append(SpecificQueriesHelper.getStaff(slug)).append("<br/>");
         stringBuilder.append("Human date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 2).toString()).append("<br/>");
         stringBuilder.append("Human time:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 3).toString()).append("<br/>");
         stringBuilder.append("Start date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 4).toString()).append("<br/>");
         stringBuilder.append("End date:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 5).toString()).append("<br/>");
-        stringBuilder.append("Room:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 6).toString()).append("<br/>");
         stringBuilder.append("Language:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 7).toString()).append("<br/>");
         stringBuilder.append("Country:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 8).toString()).append("<br/>");
         stringBuilder.append("Online:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 9).toString()).append("<br/>");
         stringBuilder.append("Pilot:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 10).toString()).append("<br/>");
-        stringBuilder.append(makeLink("Lesson site:\t\t",lesson));
         stringBuilder.append(makeLink("Pre workshop", pre));
         stringBuilder.append(makeLink("Post workshop", post));
         stringBuilder.append("Carpentry:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 14).toString()).append("<br/>");
@@ -260,12 +266,8 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("Registered:\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 20).toString()).append("<br/>");
         stringBuilder.append("Pretix admin:\t\t").append(pretix_admin).append("<br/>");
         stringBuilder.append("Pretix shop:\t\t").append(pretix_shop).append("<br/>");
-        stringBuilder.append(makeLink("Collaborative Doc", collabdoc));
-        stringBuilder.append(makeGitHubPagesLink(organisation, slug));
         stringBuilder.append(makeGitHubLink(organisation, slug));
 
-        stringBuilder.append("<b>Staff:</b><br>")
-                .append(SpecificQueriesHelper.getStaff(slug));
         return stringBuilder.toString();
     }
 
