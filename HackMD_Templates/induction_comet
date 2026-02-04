@@ -1,0 +1,84 @@
+# Induction to Comet HPC
+
+### This document: https://bit.ly/[slug]
+
+|      |         |         |
+|:----:| ------- | ------- |
+| **Today's slides: [Induction to Comet PPT](https://newcastle.sharepoint.com/:p:/r/sites/CodeCommunity/Shared%20Documents/High%20Performance%20Computing/[slug]_Comet-induction.pptx?d=w6d294f7392e948578e84284891158771&csf=1&web=1&e=lprgF7)** | *No need to sign in* | *Not in edit mode?* Click the book shaped icon near top left or scroll to top of page and click the 'edit' icon. |
+
+**Contents**
+ [TOC] 
+
+# Your Feedback for the Team 
+***Please fill in our [short 2 page survey]([post-survey])*** about 
+- your ideas for training and community
+- your feedback on our session today
+
+# Your Questions
+Please type your questions [here in edit mode](https://hackmd.io/@RSETeam/[slug]/edit#Your-Questions).  You can use Markdown, click the `?` near top left of the screen for help.
+
+***Example question***
+- Carol asks: How do I log in to Comet?
+
+# Links 
+* [Led by Academics](https://hpc.researchcomputing.ncl.ac.uk/staff/)
+
+### Support
+* [Documentation Wiki](https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/) and [cheat sheet for Rocket Users](https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:rocket_comet_cheats)
+* [Email us your questions](mailto://hpc.researchcomputing@newcastle.ac.uk) at hpc.researchcomputing@newcastle.ac.uk
+* [HPC Portal – self service](https://hpc.researchcomputing.ncl.ac.uk/)
+* [NUService ticket](https://nuservice.ncl.ac.uk/) for tracking issues
+* [RSE Team](https://rse.ncldata.dev)
+* [Code Community](https://teams.microsoft.com/l/team/19%3aG79Rz7Mhk6rC0mhia04YCD-nj7WabLMxhnyb1YLp04A1%40thread.tacv2/conversations?groupId=7059214c-2200-4ad6-a739-9d350c74c7a9&tenantId=9c5012c9-b616-44c2-a917-66814fbe3e87) on MS Teams
+### Training
+**[From the Newcastle RSE Team](https://rse.ncldata.dev/events)**
+   * [Unix Shell](https://swcarpentry.github.io/shell-novice/instructor/aio.html), [Git](https://swcarpentry.github.io/git-novice/aio.html) and more
+   * [Introduction to HPC](https://newcastlerse-training.github.io/hpc-intro-comet/)
+#### Online training from other institutions
+* [HPC Carpentry](https://www.hpc-carpentry.org/index.html) and [The Carpentries](https://carpentries.org/lessons/)
+* [ARCHER2](https://www.archer2.ac.uk/training/) in Edinburgh
+* [ASC Vienna](https://events.asc.ac.at/category/4/) in Austria
+
+### Hardware
+* Hardware: https://hpc.researchcomputing.ncl.ac.uk/calc/resources/
+* [Partitions - free versus funded](https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=started:comet_resources)
+* Calculator tool: https://hpc.researchcomputing.ncl.ac.uk/calc/
+
+### Getting Started
+**Cost Calculator**: https://hpc.researchcomputing.ncl.ac.uk/calc/
+**Driving Test**: https://hpc.researchcomputing.ncl.ac.uk/quiz/
+**Project** Registration, Management and Usage Reporting
+* https://hpc.researchcomputing.ncl.ac.uk/projects/ 
+* https://hpc.researchcomputing.ncl.ac.uk/projects/published/ 
+
+### Logging in
+**MobaXterm** https://mobaxterm.mobatek.net/download-home-edition.html
+[Register to use unix.ncl.ac.uk](https://services.ncl.ac.uk/itservice/technical-services/unix-time-sharing/#registering) for off-campus connections
+**Just-in-time Authentication** https://ama.ncl.ac.uk/
+
+### Software
+
+**Software list:** https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:software_list
+**Request for centrally installed software (module):** https://nuservice.ncl.ac.uk/
+**Self install:** https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:software
+**Condaforge, not Anaconda:** https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:anaconda
+
+### Partitions and Accounts
+**What is my account code?** https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=faq:033
+**Partitions:** https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=started:comet_resources
+#### Open OnDemand for interactive and graphical jobs: https://ood01.comet.hpc.ncl.ac.uk
+**Documentation:** https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:interactive
+
+### Containers
+https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:containers
+
+
+see our wiki for [3 **Apptainer Examples** from beginner to complex!](https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=advanced:apptainer)
+
+### Backing up and moving data
+**Data to RDW**:
+https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=faq:rdw_transfer_how-to
+**RDW**: https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=faq:020
+**Code to GitHub**:
+https://hpc.researchcomputing.ncl.ac.uk/dokuwiki/doku.php?id=faq:007
+
