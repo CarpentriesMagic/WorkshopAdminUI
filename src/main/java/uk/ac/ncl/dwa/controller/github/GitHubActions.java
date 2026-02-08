@@ -225,19 +225,19 @@ public class GitHubActions {
                         if (line.startsWith("helper:")) line = "helper: " + helperlist;
                         if (line.startsWith("instructor:")) line = "instructor: " + instructorlist;
                         if (line.startsWith("email:")) line = "email: " + contact_emails;
-                        if (line.startsWith("venue")) line = line.replaceFirst("FIXME", organisation);
+                        if (line.startsWith("venue")) line = "venue:" + quote( organisation) ;
                         if (line.startsWith("humandate"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("humandate"));
+                            line = "humandate: " + quote((String)columnValues.get("humandate"));
                         if (line.startsWith("humantime"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("humantime"));
+                            line = "startdate: " + quote((String)columnValues.get("humantime"));
                         if (line.startsWith("startdate"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("startdate"));
+                            line = "startdate: " + (String)columnValues.get("startdate");
                         if (line.startsWith("enddate"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("enddate"));
+                            line = "enddate: " + (String)columnValues.get("enddate");
                         if (line.startsWith("language"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("language"));
+                            line = "language: " + quote((String)columnValues.get("language"));
                         if (line.startsWith("country"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("country"));
+                            line = "country: " + quote((String)columnValues.get("country"));
                         if (line.startsWith("enddate"))
                             line = line.replaceFirst("FIXME", (String)columnValues.get("enddate"));
                         if (line.startsWith("address"))
@@ -353,5 +353,9 @@ public class GitHubActions {
             return "2";
         }
         return "0";//sb2.toString();
+    }
+
+    private static String quote(String s) {
+        return "\"" + s + "\"";
     }
 }
