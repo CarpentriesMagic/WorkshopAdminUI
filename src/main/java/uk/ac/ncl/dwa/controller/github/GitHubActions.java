@@ -222,41 +222,37 @@ public class GitHubActions {
                     String line = indexScanner.nextLine();
                     if (line.startsWith("8")) skip = !skip;
                     if (!skip) {
-                        if (line.startsWith("helper:")) line = "helper: " + helperlist;
-                        if (line.startsWith("instructor:")) line = "instructor: " + instructorlist;
-                        if (line.startsWith("email:")) line = "email: " + contact_emails;
-                        if (line.startsWith("venue")) line = "venue:" + quote( organisation) ;
-                        if (line.startsWith("humandate"))
+                        if (line.startsWith("helper: ")) line = "helper: " + helperlist;
+                        if (line.startsWith("instructor: ")) line = "instructor: " + instructorlist;
+                        if (line.startsWith("email: ")) line = "email: " + contact_emails;
+                        if (line.startsWith("venue: ")) line = "venue: " + quote( organisation) ;
+                        if (line.startsWith("humandate: "))
                             line = "humandate: " + quote((String)columnValues.get("humandate"));
-                        if (line.startsWith("humantime"))
-                            line = "startdate: " + quote((String)columnValues.get("humantime"));
-                        if (line.startsWith("startdate"))
+                        if (line.startsWith("humantime: "))
+                            line = "humantime: " + quote((String)columnValues.get("humantime"));
+                        if (line.startsWith("startdate: "))
                             line = "startdate: " + (String)columnValues.get("startdate");
-                        if (line.startsWith("enddate"))
+                        if (line.startsWith("enddate: "))
                             line = "enddate: " + (String)columnValues.get("enddate");
-                        if (line.startsWith("language"))
+                        if (line.startsWith("language: "))
                             line = "language: " + quote((String)columnValues.get("language"));
-                        if (line.startsWith("country"))
+                        if (line.startsWith("country: "))
                             line = "country: " + quote((String)columnValues.get("country"));
-                        if (line.startsWith("enddate"))
-                            line = line.replaceFirst("FIXME", (String)columnValues.get("enddate"));
-                        if (line.startsWith("address"))
-                            line = line.replaceFirst("FIXME", (String)roomValues.get("description"));
-                        if (line.startsWith("latitude"))
-                            line = line.replaceFirst("45", (String)roomValues.get("latitude"));
-                        if (line.startsWith("longitude"))
-                            line = line.replaceFirst("-1", (String)roomValues.get("longitude"));
-                        if (line.startsWith("what3words"))
-                            line = line.replaceFirst("what3words: ", "what3words: " +
-                                    (String)roomValues.get("what_three_words"));
-                        if (line.startsWith("eventbrite")) {
+                        if (line.startsWith("address: "))
+                            line = "description: " + quote((String)roomValues.get("description"));
+                        if (line.startsWith("latitude: "))
+                            line = "latitude: " + quote((String)roomValues.get("latitude"));
+                        if (line.startsWith("longitude: "))
+                            line = "longitude: " + quote((String)roomValues.get("longitude"));
+                        if (line.startsWith("what3words: "))
+                            line = "what3words: " + quote((String)roomValues.get("what_three_words"));
+                        if (line.startsWith("eventbrite: ")) {
                             String eventbrite = (roomValues.get("eventbrite") == null ?
                                     "" : (String)roomValues.get("eventbrite"));
-                            line = line.replaceFirst("eventbrite: ", "eventbrite: " + eventbrite);
+                            line = "eventbrite: " + eventbrite;
                         }
                         if (line.startsWith("collaborative_notes"))
-                            line = line.replaceFirst("collaborative_notes: ",
-                                    "collaborative_notes: " + collabdoc);
+                            line = "collaborative_notes: " + collabdoc;
                         if (!line.startsWith("8")) sb.append(line).append("\n");
                         if (line.startsWith("This workshop is teaching a lesson in ")) {
                             logger.info("Include incubator schedule: " + columnValues.get("schedule"));
