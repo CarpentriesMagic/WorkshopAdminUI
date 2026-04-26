@@ -9,6 +9,7 @@ import uk.ac.ncl.dwa.model.PersonTableModel;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -45,17 +46,36 @@ public class HelperTable extends JTable implements Serializable {
 
 
     }
-
     public void loadInstructors() {
+        logger.info("Loading helpers");
         /*
-         * ComboBox for selecting helpers
-         * certvalue 1 for instructors, 2 for helpers, 0 for everybody else
+         * ComboBox for selecting instructor
          */
         String[] instructors = People.selectedList(2);
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);
-        JComboBox<String> instructorComboBox = new JComboBox<>(instructors);
+
+        JComboBox<String> instructorComboBox = new JComboBox<>(instructors) {
+            @Override
+            public Dimension getSize() {
+                Dimension size = super.getSize();
+                if (!isPopupVisible()) {
+                    int maxWidth = 0;
+                    FontMetrics fm = getFontMetrics(getFont());
+
+                    for (int i = 0; i < getItemCount(); i++) {
+                        int itemWidth = fm.stringWidth(getItemAt(i)) + 30; // padding
+                        maxWidth = Math.max(maxWidth, itemWidth);
+                    }
+
+                    size.width = Math.max(size.width, maxWidth);
+                }
+                return size;
+            }
+        };
+
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
     }
+
 
     @Override
     public HelperTableModel getModel() {

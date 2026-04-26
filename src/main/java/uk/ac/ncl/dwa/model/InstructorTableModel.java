@@ -48,8 +48,9 @@ public class InstructorTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        if (col < 2)
-        return true;
+//        if (col < 2)
+//        return true;
+        if (instructors.get(row).getStatus() == 's') return false;
         else return false;
     }
 

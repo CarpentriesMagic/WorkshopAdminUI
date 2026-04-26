@@ -9,6 +9,7 @@ import uk.ac.ncl.dwa.model.RoomTableModel;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -51,7 +52,26 @@ public class InstructorTable extends JTable implements Serializable {
          */
         String[] instructors = People.selectedList(1);
         TableColumn instructorColumn = this.getColumnModel().getColumn(1);
-        JComboBox<String> instructorComboBox = new JComboBox<>(instructors);
+
+        JComboBox<String> instructorComboBox = new JComboBox<>(instructors) {
+            @Override
+            public Dimension getSize() {
+                Dimension size = super.getSize();
+                if (!isPopupVisible()) {
+                    int maxWidth = 0;
+                    FontMetrics fm = getFontMetrics(getFont());
+
+                    for (int i = 0; i < getItemCount(); i++) {
+                        int itemWidth = fm.stringWidth(getItemAt(i)) + 30; // padding
+                        maxWidth = Math.max(maxWidth, itemWidth);
+                    }
+
+                    size.width = Math.max(size.width, maxWidth);
+                }
+                return size;
+            }
+        };
+
         instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
     }
 

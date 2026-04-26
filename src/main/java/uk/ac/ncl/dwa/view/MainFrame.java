@@ -15,7 +15,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
     private final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
     public MainFrame() {
-        this.setTitle("CarpentriesMagic Workshop Admin");
+        this.setTitle("CarpentriesMagic Workshop Admin Version #####");
         this.setLayout(new BorderLayout());
         MainTabbedPane mainTabbedPane = new MainTabbedPane();
         mainTabbedPane.addChangeListener(new ChangeListener() {

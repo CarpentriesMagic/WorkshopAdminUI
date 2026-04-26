@@ -15,7 +15,7 @@
     </properties>
 
     <build>
-        <finalName>dwa</finalName>
+        <finalName>WorkshopAdmin</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
