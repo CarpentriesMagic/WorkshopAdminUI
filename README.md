@@ -104,6 +104,8 @@ To create a workshop website you need to have a GitHub account. You also need to
 connect to GitHub with a rsa **ssh** key pair and a token that gives you permission to delete
 a repository.
 
+Save your GitHub token to `~/.ssh/gh_token`
+
 The last tab `Website creation` has three buttons and one dropdown box:
 1. The dropdown box is for selecting a workshop for which you want to create a website.
 2. The `Generate` button will create a repository using the Carpentries workshop-template. The repository will be created
@@ -126,6 +128,22 @@ flowchart LR
     PushToGitHub["Push changes to GitHub"]    
 
 ```
+
+### Including a Custom Schedule in the workshop website
+The html you provide in a custom schedule file will be inserted into `index.md` at the appropriate point to render instead of the standard schedule.
+
+1. Save the html for your workshop schedule to `WorkshopAdminUI/schedules` directory
+2. File name for the custom schedule must match the schedule field for the workshop e.g. `git.html` for `git`
+
+## Creating a Collaborative Document in Hackmd.io
+To create a document in hackmd, you need a hackmd.io account and an API key.
+
+Save your HackMD API key to `~/.ssh/hmd_token`
+
+1. Save your hackmd template to `WorkshopAdminUI/HackMD_Templates`directory
+2. File name for the collab document template must match the schedule field for the workshop e.g. `git.md` for `git`
+
+
 
 # Architecture
 
