@@ -15,6 +15,7 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+.idea/db-forest-config.xml
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml

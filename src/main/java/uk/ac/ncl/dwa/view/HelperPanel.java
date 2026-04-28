@@ -72,7 +72,7 @@ public class HelperPanel extends JPanel implements ActionListener {
                 });
             }
             case "Add" -> {
-                logger.info("Adding new Person");
+                logger.info("Adding new Helper");
                 helpers.add(helpers.size(), new Helper());
                 lastRow(helperTable, scrollPane);
             }
