@@ -5,14 +5,12 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.database.DBHandler;
 import uk.ac.ncl.dwa.model.HelperTableModel;
 import uk.ac.ncl.dwa.model.People;
-import uk.ac.ncl.dwa.model.PersonTableModel;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
 
 public class HelperTable extends JTable implements Serializable {
     @Serial
@@ -30,12 +28,12 @@ public class HelperTable extends JTable implements Serializable {
         getColumnModel().getColumn(1).setPreferredWidth(100);
         getColumnModel().getColumn(2).setPreferredWidth(200);
 
-        loadWorkshops();
-        loadInstructors();
+        loadWorkshopSlugs();
+        loadHelpers();
         setRowHeight(20);
     }
 
-    public void loadWorkshops() {
+    public void loadWorkshopSlugs() {
         /*
          * ComboBox for selecting workshop slug
          */
@@ -46,15 +44,15 @@ public class HelperTable extends JTable implements Serializable {
 
 
     }
-    public void loadInstructors() {
+    public void loadHelpers() {
         logger.info("Loading helpers");
         /*
          * ComboBox for selecting instructor
          */
         String[] instructors = People.selectedList(2);
-        TableColumn instructorColumn = this.getColumnModel().getColumn(1);
+        TableColumn helperColumn = this.getColumnModel().getColumn(1);
 
-        JComboBox<String> instructorComboBox = new JComboBox<>(instructors) {
+        JComboBox<String> helperCombobox = new JComboBox<>(instructors) {
             @Override
             public Dimension getSize() {
                 Dimension size = super.getSize();
@@ -73,7 +71,7 @@ public class HelperTable extends JTable implements Serializable {
             }
         };
 
-        instructorColumn.setCellEditor(new DefaultCellEditor(instructorComboBox));
+        helperColumn.setCellEditor(new DefaultCellEditor(helperCombobox));
     }
 
 

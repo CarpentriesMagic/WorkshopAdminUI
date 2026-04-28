@@ -86,8 +86,8 @@ public class HelperPanel extends JPanel implements ActionListener {
 
             }
             case "Refresh" -> {
-                helperTable.loadWorkshops();
-                helperTable.loadInstructors();
+                helperTable.loadWorkshopSlugs();
+                helperTable.loadHelpers();
             }
         }
         
