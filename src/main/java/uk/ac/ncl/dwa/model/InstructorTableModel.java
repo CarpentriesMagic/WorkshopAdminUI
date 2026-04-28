@@ -51,7 +51,7 @@ public class InstructorTableModel extends AbstractTableModel {
 //        if (col < 2)
 //        return true;
         if (instructors.get(row).getStatus() == 's') return false;
-        else return false;
+        else return true;
     }
 
     @Override
