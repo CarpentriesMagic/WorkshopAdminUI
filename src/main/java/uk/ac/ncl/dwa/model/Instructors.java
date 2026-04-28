@@ -44,9 +44,9 @@ public class Instructors  extends ArrayList<Instructor> {
     }
 
     public boolean insertInstructor(Instructor instructor) {
-        if (DBHandler.getInstance().insert("instructors",
-                new String[]{instructor.getPerson_id(),
-                        instructor.getSlug()})) {
+        logger.info("Inserting instructor {}", instructor.getName());
+        String[] values = {instructor.getPerson_id(), instructor.getSlug()};
+        if (DBHandler.getInstance().insert("instructors", values)) {
             instructor.setStatus('s');
             return true;
         } else {
@@ -69,12 +69,11 @@ public class Instructors  extends ArrayList<Instructor> {
      * Add a new setting (also add to insertedRows array for later saving to database)
      *
      * @param index   index at which the specified element is to be inserted
-     * @param element element to be inserted
      */
-    @Override
-    public void add(int index, Instructor element) {
-        super.add(index, element);
-    }
+//    @Override
+//    public void add(int index, Instructor element) {
+//        super.add(index, element);
+//    }
 
     @Override
     public Instructor remove(int index) {
