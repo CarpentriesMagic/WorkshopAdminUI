@@ -76,7 +76,7 @@ public class InstructorPanel extends JPanel implements ActionListener {
                 repaint();
             }
             case "Add" -> {
-                // Add action
+                logger.info("Adding new Instructor");
                 instructors.add(instructors.size(), new Instructor());
                 lastRow(instructorTable, scrollPane);
             }
