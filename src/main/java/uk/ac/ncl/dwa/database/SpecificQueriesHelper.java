@@ -120,17 +120,18 @@ public class SpecificQueriesHelper {
     }
 
     public static String getAllStatus(String table, String start_date, String end_date) {
-        String[] columnNames = new String[]{"count", "firstname", "lastname", "email"};
-        String sql = "select count(*) as count, p.firstname as firstname, p.lastname as lastname, p.email from "
-                + table + " as i " + "join people as p on i.person_id = p.person_id where i.slug > \"" +
-                start_date +  "\" group by i.person_id order by p.firstname";
+        String[] columnNames = new String[]{"title", "firstname", "lastname", "email", "count"};
+        String sql = "select count(case when  i.slug > \"" + start_date + "\" then 1 end) as count, p.title as title, p.firstname as firstname, p.lastname as lastname, p.email from "
+                + table + " as i " +
+                "join people as p on i.person_id = p.person_id " +
+                " group by i.person_id order by count";
         logger.info(sql);
         List<Object> counts = DBHandler.getInstance().query(sql, columnNames);
         StringBuilder sb = new StringBuilder();
         counts.forEach(record -> {
             HashMap<String, Object> r = (HashMap<String, Object>) record;
-            sb.append(r.get("count") + "\t" + r.get("firstname") + "\t" + r.get("lastname") + "\t" + r.get("email") +
-                    "\n");
+            sb.append(r.get("title") + "\t" + r.get("firstname") + "\t" + r.get("lastname") + "\t" + r.get("email") +
+                    "\t" + r.get("count") + "\n");
         });
         return sb.toString();
 
