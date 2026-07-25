@@ -90,15 +90,6 @@ public class Main {
                 WorkshopAdmin workshopAdmin = new WorkshopAdmin();
                 logger.info("Running GUI");
                 workshopAdmin.runGUI();
-                /**
-                if (cmd.hasOption("g")) {
-                    logger.info("Running GUI");
-                    workshopAdmin.runGUI();
-                } else {
-                    logger.info("Running GUI");
-                    workshopAdmin.runGUI();
-                }
-                 **/
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
