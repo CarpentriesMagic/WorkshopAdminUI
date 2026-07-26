@@ -174,6 +174,14 @@ public class GitHubActions {
         return "0";
     }
 
+    /**
+     * This method clones the specified repository to your local drive and then update the index
+     * file with the appropriated customised values as read from the database.
+     * @param owner The owner of the repository
+     * @param repo The name of the repository
+     * @param username The username to use for updating the repository
+     * @return
+     */
     public static String cloneRepository(String owner, String repo, String username) {
         String remoteUrl = "https://github.com/" + owner + "/" + repo + ".git";
         remoteUrl = "git@github.com:" + owner + "/" + repo + ".git";
@@ -219,7 +227,7 @@ public class GitHubActions {
                 String instructorlist = getInstructors(repo);
                 boolean skip = false;
                 while (indexScanner.hasNext()) {
-                    String line = indexScanner.nextLine();
+                    String line = indexScanner.nextLine().trim();
                     if (line.startsWith("8")) skip = !skip;
                     if (!skip) {
                         if (line.startsWith("helper: ")) line = "helper: " + helperlist;
@@ -265,7 +273,23 @@ public class GitHubActions {
                             line = scheduleLines;
                             sb.append(line).append("\n");
                         }
-
+                        if (line.startsWith("<dt class=\"col-sm-2 col-md-2 py-2 px-3 bg-body-light text-body-secondary fw-bold\">Requirements</dt>")) {
+                            // READ AND DELETE THE FOLLOWING 17 LINES AND REPLACE WITH THE CONTENTS OF THE requirements.inc file
+                            logger.info("Replace the requirements section with the contents of the includes/requirements.inc file");
+                            while (!line.startsWith("</div>")) {
+                                line = indexScanner.nextLine().trim();
+                            }
+                            // Read the file to be included
+                            Scanner sc = new Scanner(new File("includes/requirements.inc"));
+                            StringBuilder requirementsLines = new StringBuilder();
+                            while (sc.hasNext()) {
+                                requirementsLines.append(sc.nextLine()).append("\n");
+                            }
+                            requirementsLines.append("</div>\n");
+                            sc.close();
+                            line = requirementsLines.toString();
+                            sb.append(line).append("\n");
+                        }
                     }
                 }
                 schedule = (String)columnValues.get("schedule") + ".html";
