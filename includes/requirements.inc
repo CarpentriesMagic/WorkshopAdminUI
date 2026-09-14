@@ -1,17 +1,18 @@
-        <dd class="col py-2 px-3 mx-0 mb-0">
-            {% comment %}
-            SPECIAL REQUIREMENTS
+       <dd class="col py-2 px-3 mx-0 mb-0">
 
-            Modify the block below if there are any special requirements.
-            {% endcomment %}
             <p id="requirements">
-            {% if online == "false" %}
-                Participants must bring a laptop with a
-                Linux
-            {% else %}
-                Participants must have access to a computer with a
-                Mac, Linux, or Windows operating system (not a tablet, Chromebook, etc.) that they have administrative privileges on.
-            {% endif %}
-            They should have a few specific software packages installed (listed <a href="#setup">below</a>).
-            </p>
+
+				Windows PCs are available in the training room.  Log in with your University credentials.
+				<br />
+				<strong>Newcastle University Managed Windows Laptops:</strong> The University provides 'packaged' software, which can be installed without admin rights on your managed laptop or workstation.
+				<ol>
+					<li>Open 'Software Center' from the start button and search for the software you need </li>
+					<li>Click 'install'</li>
+					<li>After install is completed, the new software can be launched from the start menu.</li>
+				</ol>
+				If you can't see the software you need, log a ticket at <a href="https://nuservice.ncl.ac.uk">https://nuservice.ncl.ac.uk</a> to request that it is added to Software Center. You'll need to provide the PC name.
+			</p>
+
+            Participants are welcome to bring and use their own laptop, provided they have admin rights have a few specific software packages installed (listed <a href="#setup">below</a>) before the workshop.
+
         </dd>
