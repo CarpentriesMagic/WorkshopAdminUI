@@ -246,8 +246,10 @@ public class GitHubActions {
                             line = "language: " + quote((String)columnValues.get("language"));
                         if (line.startsWith("country: "))
                             line = "country: " + quote((String)columnValues.get("country"));
-                        if (line.startsWith("address: "))
-                            line = "description: " + quote((String)roomValues.get("description"));
+                        if (line.startsWith("address: ")) {
+                            line = "address: " + quote((String) roomValues.get("description"));
+                            logger.info(">> Replace address with {}", line);
+                        }
                         if (line.startsWith("latitude: "))
                             line = "latitude: " + quote((String)roomValues.get("latitude"));
                         if (line.startsWith("longitude: "))
