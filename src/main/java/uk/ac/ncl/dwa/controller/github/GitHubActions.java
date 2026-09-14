@@ -175,7 +175,7 @@ public class GitHubActions {
     }
 
     /**
-     * This method clones the specified repository to your local drive and then update the index
+     * This method clones the specified repository to your local drive and then updates the index
      * file with the appropriated customised values as read from the database.
      * @param owner The owner of the repository
      * @param repo The name of the repository
