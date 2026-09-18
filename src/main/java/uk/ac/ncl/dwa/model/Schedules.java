@@ -30,8 +30,8 @@ public class Schedules extends ArrayList<Schedule> {
     }
 
     public void loadFromDatabase() {
-        String[] columnNames = Setting.columnNames;
-        List<Object> schedules = DBHandler.getInstance().select("settings", columnNames, "", "", true);
+        String[] columnNames = Schedules.columnNames;
+        List<Object> schedules = DBHandler.getInstance().select("schedules", columnNames, "", "", true);
         for (Object o : schedules) {
             HashMap<String,Object> settingObject = (HashMap<String, Object>) o;
             Schedule schedule = new Schedule((String)settingObject.get(columnNames[0]));
