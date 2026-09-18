@@ -409,6 +409,10 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         //}
     }
 
+    /**
+     * Retrieve workshops filtered on a start and end date, in either ascending or descending order using the date in the slug
+     * @param ascending If true return workshops in ascending order, if false workshops are returned in descending order
+     */
     public void setWorkshopOrder(boolean ascending) {
         String start = tf_filterFrom.getText();
         String end = tf_filterTo.getText();
