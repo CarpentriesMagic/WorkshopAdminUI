@@ -223,6 +223,10 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         String room_id = workshopTableModel.getValueAt(getSelectedRow(), 6).toString();
         String room_info = SpecificQueriesHelper.getRoomInfo(room_id);
         String lesson = workshopTableModel.getValueAt(getSelectedRow(), 11).toString();
+        String carpentry_code = workshopTableModel.getValueAt(getSelectedRow(), 14).toString();
+        String curriculum_code = workshopTableModel.getValueAt(getSelectedRow(), 15).toString();
+        String flavour_id = workshopTableModel.getValueAt(getSelectedRow(), 16).toString();
+        String schedule_id = workshopTableModel.getValueAt(getSelectedRow(), 18).toString();
         if (pre == null || pre.isEmpty()) {
             pre = settings.get("pre_survey") + slug;
         }
@@ -241,7 +245,13 @@ public class WorkshopTable extends JTable implements ListSelectionListener {
         stringBuilder.append("<b>Slug:</b>\t\t").append(slug).append("<br/>");
         stringBuilder.append(makeLink("<b>Internal ID</b>", internaldoc));
         stringBuilder.append("<b>Title:</b>\t\t").append(workshopTableModel.getValueAt(getSelectedRow(), 1).toString()).append("<br/>");
-        stringBuilder.append(makeLink("<b>Lesson site:</b>\t\t",lesson));
+        if (carpentry_code.equals("incubator"))
+            stringBuilder.append(makeLink("<b>Lesson site:</b>\t\t",lesson));
+        else {
+            String codekey = curriculum_code + "_" + schedule_id;
+            logger.info("Finding lesson url {}",codekey);
+            stringBuilder.append(makeLink("<b>Lesson site:</b>\t\t",settings.get(codekey)));
+        }
         stringBuilder.append(makeLink("<b>Collaborative Doc:</b>", collabdoc));
         stringBuilder.append(makeGitHubPagesLink(organisation, slug));
         stringBuilder.append("<b>Room</b>:<br/>").append(room_info);
