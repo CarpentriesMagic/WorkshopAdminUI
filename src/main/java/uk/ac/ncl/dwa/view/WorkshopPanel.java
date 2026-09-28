@@ -33,7 +33,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
     private JTextField tf_filterFrom = new JTextField("", 10);
     private JTextField tf_filterTo = new JTextField("", 10);
     private boolean workshopOrder = true;
-
+    private final JFrame mainFrame =
+            (JFrame) SwingUtilities.getWindowAncestor(this);
     public WorkshopPanel(Settings settings) {
         super();
         workshopEntryTextArea.setContentType("text/html");
@@ -71,6 +72,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         JButton btn_filter = new JButton("Filter");
         JButton btn_collab = new JButton("Collab Doc");
         JButton btn_delDoc = new JButton("Delete Doc");
+        JButton btn_notes = new JButton("Notes");
 
         btn_save.addActionListener(this);
         btn_add.addActionListener(this);
@@ -86,6 +88,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_collab.addActionListener(this);
         btn_delDoc.addActionListener(this);
         btn_del.addActionListener(this);
+        btn_notes.addActionListener(this);
         //workshopTable.getTableHeader().setReorderingAllowed(true);
         JTableHeader header = workshopTable.getTableHeader();
         header.addMouseListener(new TableHeaderMouseListener(this));
@@ -103,6 +106,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         btn_filter.setToolTipText("Filter the workshops to only display those between specified dates.");
         btn_collab.setToolTipText("Create collaborative HackMD document");
         btn_delDoc.setToolTipText("Delete collaborative HackMD document");
+        btn_notes.setToolTipText("Create a notes for the selected workshop");
 
         leftButtonPanel.add(btn_save);
         leftButtonPanel.add(btn_add);
@@ -113,6 +117,8 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         rightButtonPanel.add(btn_gen);
         rightButtonPanel.add(btn_del3);
         rightButtonPanel.add(btn_clone);
+        rightButtonPanel.add(btn_collab);
+        rightButtonPanel.add(btn_notes);
 
         filterPanel.add(new JLabel("From:"));
         filterPanel.add(tf_filterFrom);
@@ -141,7 +147,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     desktop.browse(event.getURL().toURI()); // Open the URI in the default browser
                 } catch (IOException | URISyntaxException e) {
                     System.err.println("Error opening link: " + e.getMessage());
-                    e.printStackTrace();
+                    logger.info(e.getMessage());
                 }
             } else {
                 System.out.println("Desktop API is not supported on this platform.");
@@ -156,11 +162,36 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
         String organisation = DBHandler.getInstance().selectString("settings",
                 "value", "keyValue=\"organisation\"");
         int[] selectedRows = workshopTable.getSelectedRows();
+        logger.info("Selected rows: " + selectedRows.length);
 
-        //if (selectedRows != null) {
             switch (e.getActionCommand()) {
+                case "Notes" -> {
+                    if  (selectedRows.length != 0 ) {
+
+                        int rowIndex = selectedRows[0];
+                        String slug = (String) workshopTable.getValueAt(rowIndex, 0);
+
+                        JDialog dialog = new JDialog(mainFrame, "Modal Text Window", true);
+
+                        JTextArea textArea = new JTextArea();
+                        textArea.setLineWrap(true);
+                        textArea.setWrapStyleWord(true);
+
+                        dialog.add(new JScrollPane(textArea));
+                        dialog.setSize(500, 400);
+                        dialog.setLocationRelativeTo(mainFrame);
+
+                        dialog.setVisible(true);
+
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Please select a workshop first\n",
+                                "Error",  JOptionPane.ERROR_MESSAGE);
+                    }
+                }
                 case "Generate" -> {
-                    if  (selectedRows != null) {
+                    if  (selectedRows.length != 0) {
                         int rowIndex = selectedRows[0];
                         String ret = createFromTemplate(organisation,
                                 (String) workshopTable.getValueAt(rowIndex, 0));
@@ -184,11 +215,13 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             }
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                        JOptionPane.showMessageDialog(this,
+                                "Please select a workshop first\n",
+                                "Error",  JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 case "Delete Local Clone" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         int rowIndex = selectedRows[0];
                         String slug = (String) workshopTable.getValueAt(rowIndex, 0);
                         File file = FileUtils.getFile(slug);
@@ -204,11 +237,13 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             JOptionPane.showMessageDialog(this, "Failed to delete local clone of " + slug + "\n", "Delete", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                        JOptionPane.showMessageDialog(this,
+                                "Please select a workshop first\n",
+                                "Error",  JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 case "Delete GitHub Repository" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         int rowIndex = selectedRows[0];
                         String ret = deleteRepository(organisation, (String) workshopTable.getValueAt(rowIndex, 0));
                         switch (ret) {
@@ -228,11 +263,13 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             }
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                        JOptionPane.showMessageDialog(this,
+                                "Please select a workshop first\n",
+                                "Error",  JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 case "Clone" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         for (int rowIndex : selectedRows) {
                             String ret = cloneRepository(organisation,
                                     (String) workshopTable.getValueAt(rowIndex, 0), organisation);
@@ -271,13 +308,13 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             }
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this,
+                        JOptionPane.showMessageDialog(this,
                                 "Please select a workshop first\n",
                                 "Error",  JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 case "Events" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         try {
                             PrintWriter writer = new PrintWriter(new FileWriter("events.csv", true));
                             for (int rowIndex : selectedRows) {
@@ -286,9 +323,9 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                                 String location = (String) workshopTable.getValueAt(rowIndex, 6);
                                 String file = (String) workshopTable.getValueAt(rowIndex, 18);
                                 Scanner sc = new Scanner(new File("descriptions/" + file + ".txt"));
-                                String description = "";
+                                StringBuilder description = new StringBuilder();
                                 while (sc.hasNextLine()) {
-                                    description += sc.nextLine().trim();
+                                    description.append(sc.nextLine().trim());
                                 }
                                 String slug = (String) workshopTable.getValueAt(rowIndex, 0);
                                 writer.println(date + ", Training, " + title + ", " + "\"" + description + "\", " + location
@@ -300,11 +337,11 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             throw new RuntimeException(ex);
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                        JOptionPane.showMessageDialog(this, "Please select a workshop first\n");
                     }
                 }
                 case "Delete" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         int row = workshopTable.getSelectedRow();
                         if (row != -1) {
                             logger.info("Delete row {}", row);
@@ -315,13 +352,13 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                             JOptionPane.showMessageDialog(this, "No row selected");
                         }
                     } else {
-                        JOptionPane.showConfirmDialog(this, "Please select a workshop first\n");
+                        JOptionPane.showMessageDialog(this, "Please select a workshop first\n");
                     }
                 }
                 case "Save" -> {
                     workshops.forEach(workshop -> {
                         logger.info(workshop.getSlug());
-                        if (workshop.getSlug() == null || workshop.getSlug().equals("")) {
+                        if (workshop.getSlug() == null || workshop.getSlug().isEmpty()) {
                             JOptionPane.showMessageDialog(this, "Record with empty slug could not be saved. Fix and save again. Other records should all be saved.", "Error", JOptionPane.ERROR_MESSAGE);
                         } else {
                             switch (workshop.getStatus()) {
@@ -367,7 +404,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     workshopTable.getModel().fireTableDataChanged();
                 }
                 case "Collab Doc" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         int row = workshopTable.getSelectedRow();
                         if (row != -1) {
                             logger.info("Create HackMD for {} workshop with slug: {}", workshops.get(row).getSchedule(), workshops.get(row).getSlug());
@@ -390,7 +427,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                     }
                 }
                 case "Delete Doc" -> {
-                    if (selectedRows != null) {
+                    if (selectedRows.length != 0) {
                         int row = workshopTable.getSelectedRow();
                         if (row != -1) {
                             logger.info("Delete HackMD for {} workshop with slug: {}", workshops.get(row).getSchedule(), workshops.get(row).getSlug());
@@ -406,7 +443,6 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
 
         workshopTable.revalidate();
         workshopTable.repaint();
-        //}
     }
 
     /**
