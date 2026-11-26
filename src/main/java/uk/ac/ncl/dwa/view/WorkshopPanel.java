@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ncl.dwa.controller.HackmdCreateNote;
 import uk.ac.ncl.dwa.database.DBHandler;
+import uk.ac.ncl.dwa.model.Note;
 import uk.ac.ncl.dwa.model.Settings;
 import uk.ac.ncl.dwa.model.Workshop;
 import uk.ac.ncl.dwa.model.Workshops;
@@ -171,7 +172,7 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                         int rowIndex = selectedRows[0];
                         String slug = (String) workshopTable.getValueAt(rowIndex, 0);
 
-                        JDialog dialog = new JDialog(mainFrame, "Modal Text Window", true);
+                        JDialog dialog = new JDialog(mainFrame, "Notes", true);
 
                         JTextArea textArea = new JTextArea();
                         textArea.setLineWrap(true);
@@ -181,8 +182,36 @@ public class WorkshopPanel extends JPanel implements ActionListener, HyperlinkLi
                         dialog.setSize(500, 400);
                         dialog.setLocationRelativeTo(mainFrame);
 
-                        dialog.setVisible(true);
+                        Note loadedNote = new Note();
+                        loadedNote.setNoteID(slug);
+                        loadedNote.loadNote();
+                        if (loadedNote.getNote() != null) {
+                            textArea.setText(loadedNote.getNote());
+                            textArea.setCaretPosition(textArea.getText().length());
+                        }
 
+                        dialog.setVisible(true);
+                        int response = JOptionPane.showConfirmDialog(this, "Save the notes to the database?", "Save", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (response == 0) {
+                            String note = textArea.getText();
+                            if (note.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "0: Please enter some notes", "Error", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                // Save note to a database
+                                Note newNote = new Note(note, slug);
+                                newNote.setNote(note);
+                                newNote.setNoteID(slug);
+                                if (newNote.insertNote()) {
+                                    JOptionPane.showMessageDialog(this, "Notes for " + slug + "saved", "Notes saved", JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+                                    if (newNote.updateNote()) {
+                                        JOptionPane.showMessageDialog(this, "Notes for " + slug + "saved", "Notes saved", JOptionPane.INFORMATION_MESSAGE);
+                                    } else {
+                                        JOptionPane.showMessageDialog(this, "Failed to save notes for " + slug, "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }
+                            }
+                        }
                         
                     } else {
                         JOptionPane.showMessageDialog(this,

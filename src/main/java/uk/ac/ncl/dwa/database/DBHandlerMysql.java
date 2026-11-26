@@ -85,18 +85,37 @@ public class DBHandlerMysql extends DBHandler {
         String[] setString;
         if (columns.length != values.length) {
             throw new RuntimeException("Columns and values arrays do not match!");
-        } else {
-            setString = new String[columns.length];
-            for (int i=0; i<columns.length; i++) {
-                setString[i] = String.format("%s='%s'",columns[i],values[i]);
+        }
+        StringBuilder setClause = new StringBuilder();
+        for (int i = 0; i < columns.length; i++) {
+            if (i > 0) setClause.append(", ");
+            setClause.append(columns[i]).append(" = ?");
+        }
+        String sql = String.format("UPDATE %s SET %s WHERE %s",
+                tableName, setClause, where[0]);
+        sql = sql.replaceFirst("WHERE (.+)$", "WHERE $1");
+        logger.info(sql);
+        try (Connection conn = DriverManager.getConnection(connectionString);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            // Bind SET values
+            int paramIndex = 1;
+            for (int i = 0; i < values.length; i++) {
+                statement.setString(paramIndex++, values[i]);
             }
 
+            // Bind WHERE values (adjust based on your where clause format)
+            // e.g. if where[0] = "notes_id = ?" then:
+            statement.setString(paramIndex, where[0]); // assuming where[1] is the value
+
+            int rows = statement.executeUpdate();
+            logger.info("Rows updated: " + rows);
+            return rows > 0;
+
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+            return false;
         }
-        String setS = String.join(",", setString);
-        logger.info(setS);
-        String sql = String.format("UPDATE %s SET %s WHERE %s",
-                tableName, String.join(",", setString), where[0]);
-        return executeSQL(sql);
     }
 
     private boolean executeSQL(String sql) {
@@ -160,10 +179,12 @@ public class DBHandlerMysql extends DBHandler {
     @Override
     public String selectString(String tableName, String column, String where) {
         List<Object>  objectList = select(tableName, new String[]{column}, where, "", true);
-        String ret;
-        Object o = objectList.get(0);
-        HashMap<String, Object> object = (HashMap<String, Object>) o;
-        ret = object.get(column).toString();
+        String ret = null;
+        if (!objectList.isEmpty()) { // Prevent array out of bounds error
+            Object o = objectList.get(0);
+            HashMap<String, Object> object = (HashMap<String, Object>) o;
+            ret = object.get(column).toString();
+        }
         return ret;
     }
 

@@ -1,3 +1,6 @@
+# 74.1
+- Notes wouldn't save if they contained `'`. This should now be fixed.
+
 # 74
 
 - Fixed missing address on web page
@@ -6,4 +9,4 @@
 a key/value pair has to be added in the settings panel for each lesson. The
 key will be a combination of the `curriculum` and `schedule` columns of the
 workshop, e.g. `swc-gapminder_unix`. The value would be the URL of the lesson.
-- 
+- Add notes for workshops
