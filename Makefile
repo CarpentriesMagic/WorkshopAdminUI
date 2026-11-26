@@ -12,6 +12,7 @@ else
 	@zip assets.zip workshopadmin.properties.bu assets/sqlite-jdbc-3.50.3.0.jar logging.properties HackMD_Templates/* schedules/* emptydatabase.sqlite
 	@mv target/WorkshopAdmin-jar-with-dependencies.jar target/WorkshopAdmin.jar
 	@gh release create $(rel) target/WorkshopAdmin.jar assets.zip --generate-notes -F assets/Release_Notes.md
+	@cb release create $(rel) --notes "$(catassets/Release_notes.md)" --repo CarpentriesMagic/WorkshopAdminUI --title "$(rel)" target/WorkshopAdmin.jar assets.zip 
 	@rm assets.zip
 	@sed -i "18s|${rel}|#####|" src/main/java/uk/ac/ncl/dwa/view/MainFrame.java
 	@rm release.txt
